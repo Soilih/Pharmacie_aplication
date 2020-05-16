@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="Pharmacie" type="id"/>
+    <item name="Horaire" type="id"/>
+    <item name="Propos" type="id"/>
+    <item name="Annuaire" type="id"/>
+    <item name="quitter" type="id"/>
+    <item name="textview" type="id"/>
+    <item name="textview3" type="id"/>
+</resources>
