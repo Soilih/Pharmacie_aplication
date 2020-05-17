@@ -14,8 +14,8 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".Admin"
-            android:label="welcome">
+            android:name=".MainActivity"
+            android:label="Wonono_Aplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,18 +30,22 @@
             android:label="Liste des Pharmacies" />
         <activity
             android:name=".Update"
-            android:label="Mise à jour des Pharmacie" />
+            android:label="Mise à jour des Pharmacies" />
         <activity
             android:name=".Delete"
-            android:label="Delete" />
+            android:label="Delete Pharmacie " />
         <activity
             android:name=".Horaire"
-            android:label="Disponibile des pharmacies" />
-        <activity android:name=".Contact" android:label="Gestion Annuaire  des Pharmacies "/>
+            android:label="Disponibiles des pharmacies" />
         <activity
-            android:name=".MainActivity"
-            android:label="Espace Admin" />
-        <activity android:name=".Propos" android:label="About-US"></activity>
+            android:name=".Contact"
+            android:label="Gestion des Annuaires  " />
+
+        <activity
+            android:name=".Admin"
+            android:label="Enregistrement Phramacie " />
+
+        <activity android:name=".Propos" android:label="A propos "></activity>
     </application>
 
 </manifest>

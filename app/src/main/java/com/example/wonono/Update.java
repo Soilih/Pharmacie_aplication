@@ -41,8 +41,6 @@ public class Update extends AppCompatActivity implements View.OnClickListener {
         u_detail = (EditText) findViewById(R.id.update_detail);
         u_id = (EditText) findViewById(R.id.id_mod);
         u_ville = (EditText) findViewById(R.id.ville);
-
-        //
         btn_search = (Button) findViewById(R.id.recherche);
         btn_update = (Button) findViewById(R.id.update_pharmacie);
         aSwitch2 = (Switch) findViewById(R.id.switch2);
@@ -97,6 +95,8 @@ public class Update extends AppCompatActivity implements View.OnClickListener {
 
                 }
                 break;
+
+                //recherche une pharmacie en saisissant l'id
 
             case R.id.recherche:
                 id = u_id.getText().toString().trim();

@@ -55,7 +55,6 @@ public class Delete extends AppCompatActivity {
 
 
     }
-
     public void DeletePharmacie(){
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override

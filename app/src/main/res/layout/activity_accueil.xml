@@ -8,18 +8,12 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-
-    <SearchView
-        android:id="@+id/search_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorAccent"/>
-
     <ListView
         android:id="@+id/list_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:background="?android:attr/textColorHighlightInverse"
+        android:cacheColorHint="@android:color/holo_blue_bright" />
 
 
 </LinearLayout>

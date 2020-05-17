@@ -49,9 +49,10 @@ public class Admin extends AppCompatActivity {
         Acces_Accueil = (Button) findViewById(R.id.Accueil);
         //j'ai appeler la methode pour ajouter dans la base de donnes
         AddData();
-        //j'appelle la methode
+        //j'appelle cette methode pour lister les pharmacie
         View_Pharmacie();
-        //appel de la methode de suppression
+        //si on clique cette boutton on passse à l'activiter permettant de suprimer
+        //une pharmacie
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,8 +60,9 @@ public class Admin extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        });
-
+         });
+        //si on clique cette boutton on passse à l'activité permettant de modifier une
+        //une pharmacie
        update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +71,7 @@ public class Admin extends AppCompatActivity {
                 finish();
             }
         });
-
+        //si on clique cette boutton on accede à l'espace client
         Acces_Accueil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +85,7 @@ public class Admin extends AppCompatActivity {
 
 
     }
-    //au clique du button ajouter
+    //Mehode d'ajout d'une pharmacie
     public void AddData() {
         inserer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,16 +131,14 @@ public class Admin extends AppCompatActivity {
                         buffer.append(resultat.getString(5) +"\n" );
                     }
                     showMessage("Liste de pharmacie " , buffer.toString());
-                    Toast.makeText(Admin.this , "okkkk " , Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
     }
+    //methode qui permet d'afficher un modal au clique du boutton lire plus et
+    //appeler la methode View_Pharmacie()
 
-
-
-
-    //methode d'affichage
     public   void showMessage(String title , String Message ){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -146,13 +146,6 @@ public class Admin extends AppCompatActivity {
         builder.setMessage(Message);
         builder.show();
     }
-
-    //fonction permet qui rechercher une pharmacie
-
-
-
-
-
 }
 
 

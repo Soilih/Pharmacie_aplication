@@ -9,12 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    //declration des variables
-    //creation de la base de donnes
+    //creation de la base de donnés
     private  static  final String DATABASE_NAME ="SanteDatabase.db";
     public  static final int DATABASE_VERSION = 1;
-
+     //creation de la table Pharmacie
     private static final String TABLE_NAME ="Pharmacie";
+
+    //creation des attributs(tuples)
     private static final String COL_1 ="id";
     private static  final String COL_2 ="nom";
     private static  final String COL_3 ="telephone";
@@ -43,8 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //======================================Insertion d'une pharmacie =====================================================//
 
-    //Code qui permet d'ajouter dans la base
-    //de donnés SQL
+    //Dans cette portion de code permet d'ajouter ne pharmacie dans la base de donnés
     public  boolean insertPharmacie(String nom , String tel , String email  ,  String detail , String ville ){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -62,24 +62,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //methode permettant  d'afficher sous forme d'une liste les pharmacies
 
     public Cursor List_Pharmacie(){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(); //connexion à la base de donnés et ecriture de la base
         Cursor resultat  = db.rawQuery("SELECT * FROM  "+ TABLE_NAME , null);
         return resultat;
     }
 
-    //==================================Supression d'une pharmacie =========================================================//
+    //============================Supression d'une pharmacie =========================================================//
 
-    //je cree une mehode qui permet de suprimer
-    public Integer delete_Pharmacie(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME ,  "id = ?" , new String[]{id});
-    }
+            //je cree une mehode qui permet de suprimer une pharmacie
+            //en saisisant l'id de la pharmacie dans le champs de text
+            public Integer delete_Pharmacie(String id){
+                SQLiteDatabase db = this.getWritableDatabase();
+                return db.delete(TABLE_NAME ,  "id = ?" , new String[]{id});
+            }
 
     //======================================Update pharmacie =====================================================//
 
-    //methode qui permet de modifier une pharmacie
+    //methode qui permet de modifier une pharmacie selon l4id
 
-    public boolean Update_pharmacie(Long id , String nom , String telephone , String email , String detail , String ville ){
+    public boolean Update_pharmacie(Long id , String nom , String telephone
+            , String email , String detail , String ville )
+    {
         SQLiteDatabase  db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_1 , id);
@@ -94,12 +97,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    //====================================Recherche d'une pharmacie =======================================================//
-    //je cree des methode qui permet desectionner nom , email , tel , detail dans la base
-    //de donnees
-
-
-    public Cursor search_pharmacie(String id){
+    //====================================Recherche d'une pharmacie à prtir de son id pour pouvoir modifier  =======================================================//
+     //je cree des methode qui permet desectionner nom , email , tel , detail dans la base
+     public Cursor search_pharmacie(String id){
         SQLiteDatabase db = this.getWritableDatabase();
         String query ="SELECT * FROM "+TABLE_NAME +"WHERE id=' "+id + " '";
         Cursor cursor =db.rawQuery(query , null);
@@ -107,24 +107,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+     //Recuperer le nom de à partir du formulaire de modifcation
+            public String getNom(long l1)
+            {
+                SQLiteDatabase  db = this.getReadableDatabase();
+                String[] columns = new String[]{COL_1 , COL_2 , COL_3 , COL_4 , COL_5 , COL_6};
+                Cursor cursor = db.query(TABLE_NAME , columns , COL_1 + " = " +l1 ,
+                        null , null ,null ,null);
+                if(cursor != null){
+                    cursor.moveToFirst();
+                    String nom = cursor.getString(1);
+                    return nom;
 
+                }
+                return null;
+            }
 
-
-    //====================================Recherche d'une pharmacie par son id =======================================================//
-    public String getNom(long l1)
-    {
-        SQLiteDatabase  db = this.getReadableDatabase();
-        String[] columns = new String[]{COL_1 , COL_2 , COL_3 , COL_4 , COL_5 , COL_6};
-        Cursor cursor = db.query(TABLE_NAME , columns , COL_1 + " = " +l1 ,null , null ,null ,null);
-        if(cursor != null){
-            cursor.moveToFirst();
-            String nom = cursor.getString(1);
-            return nom;
-
-        }
-        return null;
-    }
-    //====================================Recherche d'une pharmacie par son id =======================================================//
+    //Recuperer le mail  de à partir du formulaire de modifcation
     public String getEmail(long l1)
     {
         SQLiteDatabase  db = this.getReadableDatabase();
@@ -138,8 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return null;
     }
-
-    //====================================Recherche d'une pharmacie par son id =======================================================//
+    //Recuperer le telephone de à partir du formulaire de modifcation
     public String getTel(long l1)
     {
         SQLiteDatabase  db = this.getReadableDatabase();
@@ -154,9 +152,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-
-    //====================================Recherche d'une pharmacie par son id =======================================================//
-    public String getDetail(long l1)
+    //Recuperer le Detail de à partir du formulaire de modifcation
+     public String getDetail(long l1)
     {
         SQLiteDatabase  db = this.getReadableDatabase();
         String[] columns = new String[]{COL_1 , COL_2 , COL_3 , COL_4 , COL_5 , COL_6};
@@ -169,6 +166,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return null;
     }
+
+
+    //Recuperer la ville de à partir du formulaire de modifcation
 
     public String getville(long l1)
     {
@@ -183,21 +183,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return null;
     }
-    //=============== Recherche par nom ===================//
 
-          /*public Cursor Search_pharmacie_Name(String text){
-            SQLiteDatabase db = this.getWritableDatabase();
-            String query = "SELECT * FROM  "+TABLE_NAME +"  WHERE "+ COL_2 +" like '%"+text+ "%' ";
-            Cursor cursor = db.rawQuery(query , null);
-
-            return cursor;
-
-
-
-          } */
-    //=============== Annuaire  ===================//
-
-          public String  getAnnuaire(){
+    //=============== fonction qui permet d'afficher l'Annuaire des pharmacie  ===================//
+        public String  getAnnuaire(){
            SQLiteDatabase db = this.getReadableDatabase();
               String[] columns = new String[]{COL_1 , COL_2 , COL_3 , COL_4 , COL_5 , COL_6};
             Cursor cursor = db.query(TABLE_NAME , columns , null , null , null , null , null);
@@ -223,7 +211,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    //======================================horaires =====================================================//
+    //======================================Methode permettant de savoir les horaire de
+    // et les disponibilite des pharmacie =====================================================//
 
     public String  getHoraire(){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -248,6 +237,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return result;
+    }
+
+
+    //=============== Recherche par VILLE ===================//
+
+    public Cursor Search_pharmacie_Name(String text){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM  "+TABLE_NAME +"  WHERE "+ COL_2 +" like '%"+text+ "%' ";
+        Cursor cursor = db.rawQuery(query , null);
+
+        return cursor;
+
+
+
     }
 
 

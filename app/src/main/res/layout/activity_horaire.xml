@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7BAF7D"
+    android:background="@android:drawable/divider_horizontal_bright"
     tools:context=".Horaire">
 
     <TextView
         android:id="@+id/textview3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/colorAccent"
         android:fontFamily="serif"
         android:text="TextView"
+
         android:textColor="@color/cardview_dark_background"
         android:textSize="18dp"
         tools:ignore="MissingConstraints"

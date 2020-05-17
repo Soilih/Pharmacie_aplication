@@ -1,26 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:id="@+id/Accueil"
-        android:title="Home">
-    </item>
-    <item android:id="@+id/Pharmacie"
+   <item android:id="@+id/Pharmacie"
         android:title="Pharmacie">
     </item>
     <item android:id="@+id/Horaire"
-        android:title="Horaire">
+        android:title="Disponibilite ">
     </item>
     <item android:id="@+id/Annuaire"
-        android:title="Annuaire">
-    </item>
+        android:title="Annuaire"/>
 
-    <item android:id="@+id/Propos"
-        android:title="Propos"/>
+    <item android:id="@+id/propos"
+     android:title="A propos"/>
 
-    <item android:id="@+id/quitter"
+
+     <item android:id="@+id/quitter"
         android:title="Quitter"/>
-
-
-
-
-
 </menu>

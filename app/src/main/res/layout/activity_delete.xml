@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_launcher_background"
     tools:context=".Delete">
 
     <EditText
         android:id="@+id/id_pharmacie"
         android:layout_width="407dp"
         android:layout_height="59dp"
+        android:background="#FFFFFF"
         android:ems="10"
         android:hint="saisir l'id pharmacie à suprimer"
         android:inputType="numberDecimal"
@@ -22,8 +24,9 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="332dp"
-        android:layout_height="60dp"
+        android:layout_width="296dp"
+        android:layout_height="63dp"
+        android:background="@android:color/holo_red_light"
         android:text="Suprimer une pharmacie"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,11 +39,12 @@
         android:id="@+id/switch1"
         android:layout_width="340dp"
         android:layout_height="38dp"
+        android:background="@color/colorAccent"
         android:text="Activer pour retouner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.225"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.577" />
+        app:layout_constraintVertical_bias="0.8" />
 </androidx.constraintlayout.widget.ConstraintLayout>

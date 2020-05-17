@@ -45,10 +45,12 @@ public class Espace_Client extends AppCompatActivity {
                 Intent intent3 = new Intent(getApplicationContext() , Horaire.class);
                 startActivity(intent3);
                 break;
-            case R.id.Propos:
-                Intent intent5 = new Intent(getApplicationContext(), Propos.class);
-                startActivity(intent5);
-                Toast.makeText(Espace_Client.this, "A propos de l'aplication ", Toast.LENGTH_SHORT).show();
+
+            case R.id.propos:
+                Intent intent6 = new Intent(getApplicationContext(), Propos.class);
+                startActivity(intent6);
+                finish();
+
                 break;
             case R.id.Annuaire:
                 Intent intent = new Intent(getApplicationContext(), Contact.class);

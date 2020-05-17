@@ -4,50 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorControlActivated"
     tools:context=".Admin">
+
+
     <EditText
-            android:id="@+id/nom"
-            android:layout_width="347dp"
-            android:layout_height="48dp"
-            android:ems="10"
-            android:hint="saisir nom"
-            android:inputType="textPersonName"
+        android:id="@+id/nom"
+        android:layout_width="322dp"
+        android:layout_height="46dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:hint="saisir nom"
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.406"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.061" />
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.416"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.049" />
 
-        <EditText
-            android:id="@+id/telephone"
-            android:layout_width="347dp"
-            android:layout_height="51dp"
-            android:ems="10"
-            android:hint="saisir telephone"
-            android:inputType="phone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.452"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.163" />
+    <EditText
+        android:id="@+id/telephone"
+        android:layout_width="331dp"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="saisir telephone"
+        android:inputType="phone"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.16" />
 
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="356dp"
-            android:layout_height="52dp"
-            android:ems="10"
-            android:hint="Email "
-            android:inputType="textEmailAddress"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.413"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.276" />
-
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="334dp"
+        android:layout_height="55dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:hint="Email "
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.272" />
 
     <EditText
         android:id="@+id/detail"
@@ -57,15 +64,15 @@
         android:background="#FFFFFF"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="description  (decrire l'adresse du pharmacie , les horaires , les jours disponibles ) "
+        android:hint="Decrire en Bref la pharmacie : l'adresse complet(numero , nom  de rue , code postale , les horaires et le planning hebdomadaire   "
         android:inputType="textMultiLine"
         android:shadowColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.406"
+        app:layout_constraintHorizontal_bias="0.44"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.607" />
+        app:layout_constraintVertical_bias="0.563" />
 
     <Button
         android:id="@+id/inserer"
@@ -119,25 +126,26 @@
         app:layout_constraintVertical_bias="0.871" />
 
     <Button
-            android:id="@+id/Accueil"
-            android:layout_width="343dp"
-            android:layout_height="51dp"
-            android:background="@android:color/holo_orange_dark"
-            android:text="Acceder à l'espace client"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.421"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.963" />
+        android:id="@+id/Accueil"
+        android:layout_width="343dp"
+        android:layout_height="51dp"
+        android:background="@android:color/holo_orange_dark"
+        android:text="Acceder à l'espace client"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.421"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.963" />
 
     <EditText
         android:id="@+id/ville"
         android:layout_width="339dp"
         android:layout_height="60dp"
+        android:background="#FFFFFF"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Saisir la Ville"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/Accueil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

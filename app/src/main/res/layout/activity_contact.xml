@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorControlActivated"
     tools:context=".Contact">
 
     <TextView
@@ -16,18 +17,19 @@
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.005"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.125" />
+        app:layout_constraintVertical_bias="0.207" />
 
     <EditText
         android:id="@+id/phone"
-        android:layout_width="407dp"
-        android:layout_height="45dp"
+        android:layout_width="401dp"
+        android:layout_height="54dp"
+        android:background="#FFFFFF"
         android:ems="10"
-        android:inputType="phone"
         android:hint="Saisir le numero de la pharmacie "
+        android:inputType="phone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
