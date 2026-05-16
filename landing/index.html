@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flowstack — AI project management for modern teams</title>
+  <meta name="description" content="Flowstack turns scattered tasks into focused work. Plan, ship, and review with AI copilots that understand your team." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Open Sans"', 'system-ui', 'sans-serif'],
+            display: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50:  '#FAF5FF',
+              100: '#F3E8FF',
+              200: '#E9D5FF',
+              300: '#D8B4FE',
+              400: '#A78BFA',
+              500: '#8B5CF6',
+              600: '#7C3AED',
+              700: '#6D28D9',
+              900: '#4C1D95',
+            },
+            cta: {
+              500: '#F97316',
+              600: '#EA580C',
+            },
+            ink: {
+              900: '#0F172A',
+              700: '#334155',
+              600: '#475569',
+              400: '#94A3B8',
+              200: '#E2E8F0',
+              100: '#F1F5F9',
+            },
+          },
+          boxShadow: {
+            'glass': '0 8px 32px rgba(76, 29, 149, 0.10)',
+            'glass-lg': '0 20px 60px rgba(76, 29, 149, 0.18)',
+          },
+          animation: {
+            'float-slow': 'float 9s ease-in-out infinite',
+            'float-slower': 'float 13s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%':     { transform: 'translateY(-14px)' },
+            },
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Open Sans', system-ui, sans-serif; color: #0F172A; background: #FAF5FF; }
+    h1,h2,h3,h4 { font-family: 'Poppins', system-ui, sans-serif; letter-spacing: -0.01em; }
+
+    .glass {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 8px 32px rgba(76, 29, 149, 0.10);
+    }
+    .glass-strong {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 50%, #F97316 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .grid-bg {
+      background-image:
+        radial-gradient(circle at 20% 10%, rgba(167,139,250,0.35), transparent 40%),
+        radial-gradient(circle at 85% 0%, rgba(249,115,22,0.18), transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(124,58,237,0.18), transparent 50%);
+    }
+    .dot-pattern {
+      background-image: radial-gradient(rgba(76,29,149,0.12) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-700 focus:text-white focus:rounded-md">Skip to content</a>
+
+  <!-- Navbar -->
+  <header class="fixed top-4 left-4 right-4 z-40">
+    <nav aria-label="Primary" class="glass-strong rounded-2xl mx-auto max-w-6xl px-4 sm:px-6 py-3 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-500 rounded-lg">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-cta-500 shadow-glass">
+          <svg viewBox="0 0 24 24" class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 7l8-4 8 4-8 4-8-4z"/><path d="M4 12l8 4 8-4"/><path d="M4 17l8 4 8-4"/>
+          </svg>
+        </span>
+        <span class="font-display font-bold text-ink-900 text-lg">Flowstack</span>
+      </a>
+
+      <ul class="hidden md:flex items-center gap-7 text-sm font-medium text-ink-700">
+        <li><a href="#features" class="hover:text-brand-700 transition-colors duration-200 cursor-pointer">Features</a></li>
+        <li><a href="#workflow" class="hover:text-brand-700 transition-colors duration-200 cursor-pointer">How it works</a></li>
+        <li><a href="#testimonials" class="hover:text-brand-700 transition-colors duration-200 cursor-pointer">Customers</a></li>
+        <li><a href="#pricing" class="hover:text-brand-700 transition-colors duration-200 cursor-pointer">Pricing</a></li>
+      </ul>
+
+      <div class="flex items-center gap-2">
+        <a href="#" class="hidden sm:inline-flex text-sm font-medium text-ink-700 px-3 py-2 rounded-lg hover:bg-brand-50 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-500">Sign in</a>
+        <a href="#cta" class="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-cta-500 hover:bg-cta-600 px-4 py-2 rounded-lg shadow-glass transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-cta-500 focus-visible:ring-offset-2">
+          Get started
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden grid-bg">
+      <div aria-hidden="true" class="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-brand-300/40 blur-3xl animate-float-slow"></div>
+      <div aria-hidden="true" class="absolute -bottom-32 -right-16 h-96 w-96 rounded-full bg-cta-500/20 blur-3xl animate-float-slower"></div>
+
+      <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-7">
+            <span class="inline-flex items-center gap-2 glass rounded-full px-3 py-1.5 text-xs font-semibold text-brand-700">
+              <span class="h-1.5 w-1.5 rounded-full bg-cta-500"></span>
+              New — AI Standups in private beta
+            </span>
+
+            <h1 class="mt-6 font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.05] text-ink-900">
+              Turn scattered tasks into <span class="gradient-text">focused work</span>.
+            </h1>
+
+            <p class="mt-5 text-lg text-ink-600 max-w-xl leading-relaxed">
+              Flowstack is the AI project workspace for product teams who ship.
+              Plan sprints, triage issues, and write specs together — with copilots that already know your context.
+            </p>
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+              <a href="#cta" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-cta-500 hover:bg-cta-600 text-white font-semibold shadow-glass-lg transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-cta-500 focus-visible:ring-offset-2">
+                Start free trial
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+              </a>
+              <a href="#workflow" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl glass text-ink-900 font-semibold hover:bg-white/80 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-500">
+                <svg viewBox="0 0 24 24" class="h-4 w-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+                Watch the 2-min demo
+              </a>
+            </div>
+
+            <dl class="mt-10 grid grid-cols-3 gap-4 max-w-md">
+              <div>
+                <dt class="text-xs font-medium text-ink-600 uppercase tracking-wide">Teams</dt>
+                <dd class="mt-1 font-display font-bold text-2xl text-ink-900">12k+</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-medium text-ink-600 uppercase tracking-wide">Faster ship</dt>
+                <dd class="mt-1 font-display font-bold text-2xl text-ink-900">3.8x</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-medium text-ink-600 uppercase tracking-wide">Uptime</dt>
+                <dd class="mt-1 font-display font-bold text-2xl text-ink-900">99.99%</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Hero visual: stacked glass cards -->
+          <div class="lg:col-span-5 relative">
+            <div class="relative h-[460px]">
+              <div class="absolute inset-0 dot-pattern rounded-3xl opacity-60" aria-hidden="true"></div>
+
+              <!-- Card: Sprint board -->
+              <div class="absolute top-2 left-2 right-8 glass-strong rounded-2xl p-4 shadow-glass-lg animate-float-slow">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 rounded-full bg-cta-500"></span>
+                    <span class="text-xs font-semibold text-ink-700">Sprint 24 · In progress</span>
+                  </div>
+                  <span class="text-[10px] font-medium text-ink-600">12/18 done</span>
+                </div>
+                <div class="mt-3 h-2 w-full rounded-full bg-ink-100 overflow-hidden">
+                  <div class="h-full w-2/3 rounded-full bg-gradient-to-r from-brand-500 to-cta-500"></div>
+                </div>
+                <ul class="mt-4 space-y-2 text-sm">
+                  <li class="flex items-center gap-2 text-ink-700">
+                    <svg class="h-4 w-4 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    Implement billing webhook
+                  </li>
+                  <li class="flex items-center gap-2 text-ink-700">
+                    <svg class="h-4 w-4 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    Onboarding tour copy
+                  </li>
+                  <li class="flex items-center gap-2 text-ink-900 font-medium">
+                    <span class="h-4 w-4 rounded-full border-2 border-cta-500"></span>
+                    Triage support backlog
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Card: AI Copilot -->
+              <div class="absolute bottom-6 left-10 right-2 glass-strong rounded-2xl p-4 shadow-glass-lg animate-float-slower">
+                <div class="flex items-start gap-3">
+                  <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-cta-500">
+                    <svg viewBox="0 0 24 24" class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+                  </span>
+                  <div>
+                    <p class="text-xs font-semibold text-brand-700">Flow AI</p>
+                    <p class="mt-1 text-sm text-ink-900 leading-relaxed">
+                      I drafted the standup. <span class="font-medium">3 blockers</span> on Billing v2.
+                      Should I open issues and assign owners?
+                    </p>
+                    <div class="mt-3 flex gap-2">
+                      <button class="text-xs font-semibold px-3 py-1.5 rounded-md bg-cta-500 text-white hover:bg-cta-600 transition-colors duration-200 cursor-pointer">Do it</button>
+                      <button class="text-xs font-semibold px-3 py-1.5 rounded-md bg-white text-ink-700 hover:bg-brand-50 border border-ink-200 transition-colors duration-200 cursor-pointer">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social proof / Logos -->
+    <section aria-labelledby="logos" class="py-10">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <p id="logos" class="text-center text-xs font-semibold uppercase tracking-[0.18em] text-ink-600">Trusted by product teams at</p>
+        <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-6 items-center">
+          <!-- Inline neutral wordmarks (no real brands to avoid fake logos) -->
+          <span class="text-center font-display font-bold text-ink-400 tracking-tight text-lg">Northwind</span>
+          <span class="text-center font-display font-bold text-ink-400 tracking-tight text-lg">Lumen·io</span>
+          <span class="text-center font-display font-bold text-ink-400 tracking-tight text-lg">Parallax</span>
+          <span class="text-center font-display font-bold text-ink-400 tracking-tight text-lg">Helix Labs</span>
+          <span class="text-center font-display font-bold text-ink-400 tracking-tight text-lg">Quantra</span>
+          <span class="text-center font-display font-bold text-ink-400 tracking-tight text-lg">Tessera</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+          <span class="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">Built for momentum</span>
+          <h2 class="mt-3 font-display font-bold text-3xl sm:text-4xl text-ink-900">Everything your team needs in one calm workspace.</h2>
+          <p class="mt-4 text-ink-600 text-lg leading-relaxed">No more tab juggling. Flowstack unifies planning, docs, and AI assistance so the next thing to do is always one click away.</p>
+        </div>
+
+        <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Feature 1 -->
+          <article class="glass rounded-2xl p-6 transition-colors duration-200 hover:bg-white/85 cursor-pointer">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M9 4v16"/></svg>
+            </span>
+            <h3 class="mt-5 font-display font-semibold text-lg text-ink-900">Adaptive sprints</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">Plan in days, weeks, or whenever. Flow adjusts capacity as work shifts — no more rigid Jira boards.</p>
+          </article>
+          <!-- Feature 2 -->
+          <article class="glass rounded-2xl p-6 transition-colors duration-200 hover:bg-white/85 cursor-pointer">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+            </span>
+            <h3 class="mt-5 font-display font-semibold text-lg text-ink-900">AI Copilot</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">Drafts specs, summarises threads, and triages bugs in your team's voice — grounded in your real workspace.</p>
+          </article>
+          <!-- Feature 3 -->
+          <article class="glass rounded-2xl p-6 transition-colors duration-200 hover:bg-white/85 cursor-pointer">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h16"/></svg>
+            </span>
+            <h3 class="mt-5 font-display font-semibold text-lg text-ink-900">Docs that link to work</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">Specs and decisions live next to the tasks they shape. Every doc is a living source of truth.</p>
+          </article>
+          <!-- Feature 4 -->
+          <article class="glass rounded-2xl p-6 transition-colors duration-200 hover:bg-white/85 cursor-pointer">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0 -18 0"/><path d="M12 7v5l3 2"/></svg>
+            </span>
+            <h3 class="mt-5 font-display font-semibold text-lg text-ink-900">Async standups</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">Auto-generated daily updates from real activity. Skip the meeting, keep the alignment.</p>
+          </article>
+          <!-- Feature 5 -->
+          <article class="glass rounded-2xl p-6 transition-colors duration-200 hover:bg-white/85 cursor-pointer">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V6a2 2 0 0 1 2-2h8l6 6v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 4v6h6"/></svg>
+            </span>
+            <h3 class="mt-5 font-display font-semibold text-lg text-ink-900">Integrations galore</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">GitHub, Linear, Figma, Slack, Notion — bidirectional sync, no flaky webhooks.</p>
+          </article>
+          <!-- Feature 6 -->
+          <article class="glass rounded-2xl p-6 transition-colors duration-200 hover:bg-white/85 cursor-pointer">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
+            <h3 class="mt-5 font-display font-semibold text-lg text-ink-900">Enterprise security</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">SOC 2 Type II, SAML SSO, SCIM, audit logs, and data residency in the US or EU.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="workflow" class="py-20 sm:py-28 grid-bg">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+          <span class="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">How it works</span>
+          <h2 class="mt-3 font-display font-bold text-3xl sm:text-4xl text-ink-900">From kickoff to ship in three steps.</h2>
+        </div>
+
+        <ol class="mt-14 grid md:grid-cols-3 gap-5">
+          <li class="glass-strong rounded-2xl p-6 relative">
+            <span class="absolute -top-4 left-6 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white font-display font-bold shadow-glass">1</span>
+            <h3 class="mt-3 font-display font-semibold text-lg text-ink-900">Connect your stack</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">Plug in GitHub, Slack, and Figma in under 2 minutes. Flow imports your projects, issues, and people.</p>
+          </li>
+          <li class="glass-strong rounded-2xl p-6 relative">
+            <span class="absolute -top-4 left-6 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white font-display font-bold shadow-glass">2</span>
+            <h3 class="mt-3 font-display font-semibold text-lg text-ink-900">Let AI map the work</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">Flow proposes sprints, owners, and risks. Approve, tweak, or override — you're always in control.</p>
+          </li>
+          <li class="glass-strong rounded-2xl p-6 relative">
+            <span class="absolute -top-4 left-6 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-cta-500 text-white font-display font-bold shadow-glass">3</span>
+            <h3 class="mt-3 font-display font-semibold text-lg text-ink-900">Ship, learn, repeat</h3>
+            <p class="mt-2 text-ink-600 leading-relaxed">Weekly insights show what's blocking you. Flow nudges before things slip, not after.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+          <span class="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">Loved by builders</span>
+          <h2 class="mt-3 font-display font-bold text-3xl sm:text-4xl text-ink-900">Teams ship faster with Flowstack.</h2>
+        </div>
+
+        <div class="mt-12 grid md:grid-cols-3 gap-5">
+          <figure class="glass rounded-2xl p-6">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 text-cta-500" fill="currentColor" aria-hidden="true"><path d="M7 7h4v4H7c0 2 2 3 4 3v3c-4 0-7-2-7-6V7zm9 0h4v4h-4c0 2 2 3 4 3v3c-4 0-7-2-7-6V7z"/></svg>
+            <blockquote class="mt-4 text-ink-900 leading-relaxed">
+              "We cut planning meetings by 60% in the first month. Flow's AI standups are eerily on-point."
+            </blockquote>
+            <figcaption class="mt-5 flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-cta-500 text-white font-display font-semibold">M</span>
+              <div>
+                <p class="font-semibold text-ink-900 text-sm">Maya Okonkwo</p>
+                <p class="text-xs text-ink-600">Head of Product · Lumen·io</p>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="glass rounded-2xl p-6">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 text-cta-500" fill="currentColor" aria-hidden="true"><path d="M7 7h4v4H7c0 2 2 3 4 3v3c-4 0-7-2-7-6V7zm9 0h4v4h-4c0 2 2 3 4 3v3c-4 0-7-2-7-6V7z"/></svg>
+            <blockquote class="mt-4 text-ink-900 leading-relaxed">
+              "Finally a tool that doesn't feel built by accountants. The docs-meet-tasks model just clicks."
+            </blockquote>
+            <figcaption class="mt-5 flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-brand-300 text-white font-display font-semibold">D</span>
+              <div>
+                <p class="font-semibold text-ink-900 text-sm">Diego Marín</p>
+                <p class="text-xs text-ink-600">Staff Engineer · Parallax</p>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="glass rounded-2xl p-6">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 text-cta-500" fill="currentColor" aria-hidden="true"><path d="M7 7h4v4H7c0 2 2 3 4 3v3c-4 0-7-2-7-6V7zm9 0h4v4h-4c0 2 2 3 4 3v3c-4 0-7-2-7-6V7z"/></svg>
+            <blockquote class="mt-4 text-ink-900 leading-relaxed">
+              "Migrated 80 people off three tools in a weekend. The integrations actually work both ways."
+            </blockquote>
+            <figcaption class="mt-5 flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-cta-500 to-brand-400 text-white font-display font-semibold">S</span>
+              <div>
+                <p class="font-semibold text-ink-900 text-sm">Sophie Tran</p>
+                <p class="text-xs text-ink-600">VP Engineering · Tessera</p>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-20 sm:py-28">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+          <span class="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">Pricing</span>
+          <h2 class="mt-3 font-display font-bold text-3xl sm:text-4xl text-ink-900">Simple plans that scale with you.</h2>
+          <p class="mt-3 text-ink-600">Start free. Upgrade when your team grows. No surprise invoices.</p>
+        </div>
+
+        <div class="mt-12 grid md:grid-cols-3 gap-5 items-stretch">
+          <!-- Starter -->
+          <article class="glass rounded-2xl p-7 flex flex-col">
+            <h3 class="font-display font-semibold text-lg text-ink-900">Starter</h3>
+            <p class="mt-1 text-sm text-ink-600">For solo builders and small squads.</p>
+            <p class="mt-6 flex items-baseline gap-1">
+              <span class="font-display font-extrabold text-4xl text-ink-900">$0</span>
+              <span class="text-ink-600 text-sm">/ user / month</span>
+            </p>
+            <ul class="mt-6 space-y-3 text-sm text-ink-700 flex-1">
+              <li class="flex gap-2"><svg class="h-5 w-5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Up to 5 members</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Unlimited projects</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Basic AI assistance</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Community support</li>
+            </ul>
+            <a href="#cta" class="mt-8 inline-flex justify-center items-center px-5 py-3 rounded-xl border border-ink-200 bg-white text-ink-900 font-semibold hover:bg-brand-50 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-500">Start free</a>
+          </article>
+
+          <!-- Team (featured) -->
+          <article class="rounded-2xl p-7 flex flex-col relative bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-glass-lg">
+            <span class="absolute -top-3 right-6 inline-flex items-center px-3 py-1 rounded-full bg-cta-500 text-white text-[10px] font-bold uppercase tracking-wider">Most popular</span>
+            <h3 class="font-display font-semibold text-lg">Team</h3>
+            <p class="mt-1 text-sm text-brand-200">For growing product orgs.</p>
+            <p class="mt-6 flex items-baseline gap-1">
+              <span class="font-display font-extrabold text-4xl">$12</span>
+              <span class="text-brand-200 text-sm">/ user / month</span>
+            </p>
+            <ul class="mt-6 space-y-3 text-sm text-brand-100 flex-1">
+              <li class="flex gap-2"><svg class="h-5 w-5 text-cta-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Everything in Starter</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-cta-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Full AI Copilot &amp; standups</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-cta-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Advanced integrations</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-cta-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Priority email support</li>
+            </ul>
+            <a href="#cta" class="mt-8 inline-flex justify-center items-center px-5 py-3 rounded-xl bg-cta-500 hover:bg-cta-600 text-white font-semibold transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-cta-500 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-700">Try Team free for 14 days</a>
+          </article>
+
+          <!-- Enterprise -->
+          <article class="glass rounded-2xl p-7 flex flex-col">
+            <h3 class="font-display font-semibold text-lg text-ink-900">Enterprise</h3>
+            <p class="mt-1 text-sm text-ink-600">Security, scale, and a real human.</p>
+            <p class="mt-6 flex items-baseline gap-1">
+              <span class="font-display font-extrabold text-4xl text-ink-900">Custom</span>
+            </p>
+            <ul class="mt-6 space-y-3 text-sm text-ink-700 flex-1">
+              <li class="flex gap-2"><svg class="h-5 w-5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Everything in Team</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>SAML SSO &amp; SCIM</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Audit logs &amp; data residency</li>
+              <li class="flex gap-2"><svg class="h-5 w-5 text-brand-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Dedicated success manager</li>
+            </ul>
+            <a href="#cta" class="mt-8 inline-flex justify-center items-center px-5 py-3 rounded-xl border border-ink-200 bg-white text-ink-900 font-semibold hover:bg-brand-50 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-500">Talk to sales</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="cta" class="py-20 sm:py-28">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden rounded-3xl p-10 sm:p-14 bg-gradient-to-br from-brand-700 via-brand-600 to-brand-900 text-white shadow-glass-lg">
+          <div aria-hidden="true" class="absolute -top-16 -right-10 h-72 w-72 rounded-full bg-cta-500/40 blur-3xl"></div>
+          <div aria-hidden="true" class="absolute -bottom-16 -left-10 h-72 w-72 rounded-full bg-brand-400/40 blur-3xl"></div>
+
+          <div class="relative grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 class="font-display font-bold text-3xl sm:text-4xl leading-tight">
+                Less coordination, more shipping.
+              </h2>
+              <p class="mt-3 text-brand-100 max-w-md leading-relaxed">Bring your team into Flowstack today. 14-day free trial on every plan, no credit card required.</p>
+            </div>
+
+            <form class="flex flex-col sm:flex-row gap-3" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Check your inbox';">
+              <label for="email" class="sr-only">Work email</label>
+              <input id="email" name="email" type="email" required placeholder="you@company.com"
+                class="flex-1 px-4 py-3 rounded-xl bg-white/95 text-ink-900 placeholder-ink-400 border border-white/20 focus-visible:ring-2 focus-visible:ring-cta-500 focus-visible:outline-none" />
+              <button type="submit"
+                class="px-5 py-3 rounded-xl bg-cta-500 hover:bg-cta-600 text-white font-semibold transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-cta-500 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-700">
+                Start free trial
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-ink-200/70 bg-white/40">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-4 gap-8 text-sm">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-cta-500">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7l8-4 8 4-8 4-8-4z"/><path d="M4 12l8 4 8-4"/><path d="M4 17l8 4 8-4"/></svg>
+          </span>
+          <span class="font-display font-bold text-ink-900 text-lg">Flowstack</span>
+        </div>
+        <p class="mt-3 text-ink-600 max-w-sm leading-relaxed">The AI project workspace for teams who ship. Made with care, far too much coffee, and a strong opinion about meetings.</p>
+      </div>
+
+      <div>
+        <h4 class="font-display font-semibold text-ink-900">Product</h4>
+        <ul class="mt-3 space-y-2 text-ink-600">
+          <li><a class="hover:text-brand-700 transition-colors duration-200 cursor-pointer" href="#features">Features</a></li>
+          <li><a class="hover:text-brand-700 transition-colors duration-200 cursor-pointer" href="#pricing">Pricing</a></li>
+          <li><a class="hover:text-brand-700 transition-colors duration-200 cursor-pointer" href="#workflow">How it works</a></li>
+          <li><a class="hover:text-brand-700 transition-colors duration-200 cursor-pointer" href="#">Changelog</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-display font-semibold text-ink-900">Company</h4>
+        <ul class="mt-3 space-y-2 text-ink-600">
+          <li><a class="hover:text-brand-700 transition-colors duration-200 cursor-pointer" href="#">About</a></li>
+          <li><a class="hover:text-brand-700 transition-colors duration-200 cursor-pointer" href="#">Careers</a></li>
+          <li><a class="hover:text-brand-700 transition-colors duration-200 cursor-pointer" href="#">Privacy</a></li>
+          <li><a class="hover:text-brand-700 transition-colors duration-200 cursor-pointer" href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-ink-200/70">
+      <p class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-5 text-xs text-ink-600">© 2026 Flowstack, Inc. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
