@@ -9,26 +9,27 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
 :root {
-  --G: #0E7C66; --GD: #0a5e4d; --GL: #34d399; --GXL: #6ee7b7;
+  --G: #0E7C66; --GD: #0a5e4d; --GL: #e1f5ee; --GXL: #f0faf7;
   --B: #0B2545; --BD: #061632; --BM: #1a3a6e;
   --GOLD: #F4C430; --GOLD-D: #d9a90f;
-  --T: #1D2939; --MUT: #94a3b8; --LT: #F2F4F7; --BDR: #E4E7EC;
+  --T: #1D2939; --MUT: #667085; --LT: #F2F4F7; --BDR: #E4E7EC;
   --W: #fff; --ERR: #F04438; --OK: #12B76A;
-
+  --shadow: 0 2px 16px rgba(11,37,69,.07);
+  --shadow-md: 0 8px 32px rgba(11,37,69,.13);
+  --shadow-lg: 0 24px 64px rgba(11,37,69,.2);
   --ease-out: cubic-bezier(.22, 1, .36, 1);
-  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
   --ease-soft: cubic-bezier(.4, 0, .2, 1);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
   font-family:'Manrope',sans-serif;color:var(--T);
-  background:#061632;color:#fff;
+  background:#f8fafc;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   overflow-x:hidden;
   min-height:100svh;
@@ -37,221 +38,126 @@ body{
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 button{font-family:inherit}
-:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(52,211,153,.4)}
+:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(14,124,102,.32)}
 
 /* ============================================
-   AURORA BACKGROUND
+   SOFT BACKGROUND — static gradient, no motion
    ============================================ */
-.aurora{
-  position:fixed;inset:0;z-index:0;overflow:hidden;
+.bg{
+  position:fixed;inset:0;z-index:0;
   background:
-    radial-gradient(ellipse 100% 80% at 50% -10%, #1e3a8a 0%, transparent 55%),
-    radial-gradient(ellipse 70% 60% at 0% 100%, #0a5e4d 0%, transparent 55%),
-    radial-gradient(ellipse 70% 60% at 100% 100%, #1e293b 0%, transparent 55%),
-    linear-gradient(180deg, #0b1a3a 0%, #061632 50%, #050b1d 100%);
+    radial-gradient(70% 60% at 50% -10%, rgba(14,124,102,.10) 0%, transparent 60%),
+    radial-gradient(50% 50% at 0% 100%, rgba(244,196,48,.06) 0%, transparent 60%),
+    radial-gradient(60% 60% at 100% 100%, rgba(11,37,69,.06) 0%, transparent 60%),
+    linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
-.aurora-blob{
-  position:absolute;border-radius:50%;
-  filter:blur(80px);
-  mix-blend-mode:screen;
-  animation:auroraDrift 22s ease-in-out infinite alternate;
-  will-change:transform;
-}
-.ab-1{width:520px;height:520px;background:rgba(20,184,166,.45);top:-100px;left:-120px;animation-duration:24s}
-.ab-2{width:460px;height:460px;background:rgba(244,196,48,.18);top:30%;right:-100px;animation-duration:28s;animation-delay:-6s}
-.ab-3{width:600px;height:600px;background:rgba(99,102,241,.32);bottom:-200px;left:30%;animation-duration:32s;animation-delay:-12s}
-.ab-4{width:340px;height:340px;background:rgba(14,124,102,.55);top:50%;left:50%;transform:translate(-50%,-50%);animation-duration:18s;animation-delay:-3s}
-@keyframes auroraDrift{
-  0%   {transform:translate3d(0,0,0) scale(1) rotate(0)}
-  50%  {transform:translate3d(40px,-30px,0) scale(1.08) rotate(8deg)}
-  100% {transform:translate3d(-30px,40px,0) scale(.96) rotate(-6deg)}
-}
-
-/* Subtle noise overlay for premium feel */
-.aurora-grain{
-  position:fixed;inset:0;z-index:1;pointer-events:none;
-  opacity:.18;mix-blend-mode:overlay;
-  background-image:radial-gradient(rgba(255,255,255,.5) 1px, transparent 1px);
-  background-size:3px 3px;
-}
-
-/* Grid overlay */
-.aurora-grid{
-  position:fixed;inset:0;z-index:1;pointer-events:none;
+.bg-grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 75%);
-  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 75%);
+    linear-gradient(rgba(11,37,69,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,37,69,.04) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 80%);
 }
 
 /* ============================================
-   FLOATING PILLS (unique pharmacy touch)
+   FLOATING PHARMACY ICONS — slow, subtle
    ============================================ */
-.pills{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
-.pill{
+.float-icons{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fi{
   position:absolute;
-  width:32px;height:14px;border-radius:14px;
-  opacity:.22;
-  animation:floatPill linear infinite;
+  color:rgba(14,124,102,.085);
+  animation:floatSlow linear infinite;
   will-change:transform;
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
 }
-.pill::before{
-  content:'';position:absolute;left:0;top:0;width:50%;height:100%;
-  border-radius:14px 0 0 14px;
-}
-.pill.p1{background:#34d399}.pill.p1::before{background:#10b981}
-.pill.p2{background:#f4c430}.pill.p2::before{background:#fde68a}
-.pill.p3{background:#67e8f9}.pill.p3::before{background:#22d3ee}
-.pill.p4{background:#fda4af}.pill.p4::before{background:#fb7185}
-.pill.p5{background:#a78bfa}.pill.p5::before{background:#8b5cf6}
-@keyframes floatPill{
-  0%{transform:translate3d(0, 110vh, 0) rotate(0)}
-  100%{transform:translate3d(60px, -10vh, 0) rotate(720deg)}
+.fi svg{width:100%;height:100%;display:block}
+@keyframes floatSlow{
+  0%   {transform:translate3d(0, 110vh, 0) rotate(0deg)}
+  100% {transform:translate3d(40px, -15vh, 0) rotate(180deg)}
 }
 
 /* ============================================
    PAGE WRAPPER
    ============================================ */
-.shell{
-  position:relative;z-index:10;min-height:100svh;
-  display:flex;flex-direction:column;
-}
+.shell{position:relative;z-index:10;min-height:100svh;display:flex;flex-direction:column}
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:clamp(18px,2.5vw,28px) clamp(20px,4vw,44px);
+  padding:clamp(18px,2.5vw,26px) clamp(20px,4vw,44px);
   position:relative;z-index:11;
 }
 .brand{
   display:inline-flex;align-items:center;gap:12px;
   font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.02em;
+  color:var(--B);
 }
 .brand-mark{
   width:40px;height:40px;border-radius:11px;
-  background:linear-gradient(135deg,#34d399,#0E7C66 60%,#0a5e4d);
+  background:linear-gradient(135deg, var(--G) 0%, var(--GD) 100%);
   display:inline-flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-  box-shadow:0 8px 22px rgba(14,124,102,.45),inset 0 1px 0 rgba(255,255,255,.18);
+  box-shadow:0 6px 16px rgba(14,124,102,.28),inset 0 1px 0 rgba(255,255,255,.18);
 }
-.brand-mark::after{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at 30% 25%, rgba(255,255,255,.4) 0%, transparent 50%);
-}
-.brand-mark svg{width:18px;height:18px;color:white;position:relative;z-index:1}
-.brand .holo{
-  background:linear-gradient(120deg,#fff 0%,#34d399 25%,#fff 50%,#F4C430 75%,#fff 100%);
-  background-size:300% 100%;
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  animation:holo 6s linear infinite;
-}
-.brand .pharma{color:rgba(255,255,255,.55);font-weight:600}
-@keyframes holo{0%{background-position:0% 0%}100%{background-position:300% 0%}}
+.brand-mark svg{width:18px;height:18px;color:white}
+.brand .loca{color:var(--B)}
+.brand .pharma{color:var(--G)}
 
 .back-link{
   display:inline-flex;align-items:center;gap:8px;
-  font-size:13px;font-weight:700;color:rgba(255,255,255,.65);
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  font-size:13px;font-weight:700;color:var(--MUT);
+  background:white;border:1px solid var(--BDR);
   padding:9px 16px;border-radius:100px;
-  transition:background .25s,color .25s,transform .25s var(--ease-spring),border-color .25s;
-  font-family:'Plus Jakarta Sans',sans-serif;backdrop-filter:blur(10px);
+  transition:background .25s,color .25s,border-color .25s,transform .25s var(--ease-out);
+  font-family:'Plus Jakarta Sans',sans-serif;
 }
-.back-link:hover{background:rgba(255,255,255,.12);color:white;transform:translateX(-3px);border-color:rgba(255,255,255,.2)}
+.back-link:hover{background:var(--LT);color:var(--B);border-color:#cdd5e1;transform:translateX(-2px)}
 .back-link i{font-size:11px}
 
 /* ============================================
-   MAIN — centered glass card
+   MAIN — centered card
    ============================================ */
 .main{
   flex:1;display:flex;align-items:center;justify-content:center;
   padding:20px clamp(16px,3vw,32px) 40px;
 }
-.card-stack{position:relative;width:100%;max-width:480px;perspective:1400px}
-
-/* Decorative back card (depth) */
-.card-stack::before,
-.card-stack::after{
-  content:'';position:absolute;inset:14px 28px;border-radius:24px;
-  background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
-  border:1px solid rgba(255,255,255,.05);
-  z-index:0;pointer-events:none;
-  transition:transform .6s var(--ease-out);
-}
-.card-stack::before{transform:translateY(20px) scale(.94)}
-.card-stack::after{transform:translateY(38px) scale(.88);opacity:.6}
-
 .card{
-  position:relative;z-index:2;
-  background:linear-gradient(155deg, rgba(20,30,55,.78) 0%, rgba(15,25,45,.7) 100%);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:28px;
-  padding:clamp(24px,3vw,40px);
-  backdrop-filter:blur(28px) saturate(140%);
-  -webkit-backdrop-filter:blur(28px) saturate(140%);
+  position:relative;z-index:2;width:100%;max-width:460px;
+  background:white;
+  border:1px solid var(--BDR);
+  border-radius:24px;
+  padding:clamp(26px,3vw,40px);
   box-shadow:
-    0 40px 80px -20px rgba(0,0,0,.6),
-    0 0 0 1px rgba(255,255,255,.04) inset,
-    0 1px 0 rgba(255,255,255,.1) inset;
-  transition:transform .35s var(--ease-out);
-  will-change:transform;
-  overflow:hidden;
-  animation:cardIn .9s var(--ease-out) both;
+    0 1px 2px rgba(11,37,69,.04),
+    0 12px 32px -8px rgba(11,37,69,.10),
+    0 24px 60px -20px rgba(11,37,69,.12);
+  animation:fadeUp .55s var(--ease-out) both;
 }
-@keyframes cardIn{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-/* Animated border gradient (the special touch) */
-.card::before{
-  content:'';position:absolute;inset:-2px;border-radius:30px;
-  background:conic-gradient(from 0deg,
-    transparent 0%,
-    rgba(52,211,153,.6) 12%,
-    transparent 25%,
-    rgba(244,196,48,.45) 50%,
-    transparent 65%,
-    rgba(99,102,241,.55) 88%,
-    transparent 100%);
-  z-index:-1;
-  filter:blur(8px);
-  opacity:.55;
-  animation:borderSpin 16s linear infinite;
-}
-@keyframes borderSpin{to{transform:rotate(360deg)}}
-
-/* Live status pill */
-.live-pill{
+/* Top status pill */
+.status-pill{
   display:inline-flex;align-items:center;gap:8px;
   font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
-  background:rgba(52,211,153,.12);color:#34d399;
-  border:1px solid rgba(52,211,153,.28);
+  background:var(--GL);color:var(--G);
+  border:1px solid rgba(14,124,102,.18);
   padding:5px 12px;border-radius:100px;
-  margin-bottom:24px;
+  margin-bottom:22px;
   font-family:'Plus Jakarta Sans',sans-serif;
 }
-.live-pill .live-dot{
-  width:7px;height:7px;background:#34d399;border-radius:50%;position:relative;
-}
-.live-pill .live-dot::after{
-  content:'';position:absolute;inset:0;border-radius:50%;background:#34d399;
-  animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite;
-}
-@keyframes ping{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.4);opacity:0}}
+.status-pill .d{width:6px;height:6px;background:var(--G);border-radius:50%;box-shadow:0 0 0 3px rgba(14,124,102,.15)}
 
 /* Greeting */
 .greeting{
-  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(255,255,255,.45);margin-bottom:6px;
-  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--MUT);font-weight:500;margin-bottom:4px;
 }
-.greeting .now{color:#34d399}
+.greeting strong{color:var(--B);font-weight:800;font-family:'Plus Jakarta Sans',sans-serif}
 
 .title{
   font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:clamp(28px,3vw,36px);font-weight:900;line-height:1.1;letter-spacing:-.025em;
-  color:white;margin-bottom:8px;
+  font-size:clamp(26px,2.6vw,32px);font-weight:900;line-height:1.15;letter-spacing:-.02em;
+  color:var(--B);margin-bottom:8px;
 }
 .subtitle{
-  font-size:14px;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:28px;
+  font-size:14px;color:var(--MUT);line-height:1.55;margin-bottom:28px;
 }
 
 /* Alerts */
@@ -259,92 +165,64 @@ button{font-family:inherit}
   display:flex;align-items:center;gap:10px;
   padding:12px 14px;border-radius:12px;
   font-size:13px;font-weight:600;margin-bottom:18px;
-  animation:slideIn .4s var(--ease-out);
 }
-.alert.err{background:rgba(240,68,56,.1);color:#fda4af;border:1px solid rgba(240,68,56,.28)}
-.alert.ok {background:rgba(18,183,106,.1); color:#86efac;border:1px solid rgba(18,183,106,.28)}
+.alert.err{background:rgba(240,68,56,.07);color:#a8201a;border:1px solid rgba(240,68,56,.2)}
+.alert.ok {background:rgba(18,183,106,.07); color:#0a7141;border:1px solid rgba(18,183,106,.2)}
 .alert i{flex-shrink:0;font-size:14px}
-@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
 /* ============================================
-   FIELDS — scan-line + animated border
+   FIELDS — clean, no scan-line robot stuff
    ============================================ */
 .field{position:relative;margin-bottom:14px}
 .field-wrap{
   position:relative;
-  background:rgba(255,255,255,.04);
-  border:1.5px solid rgba(255,255,255,.08);
-  border-radius:14px;
-  transition:border-color .3s,background .3s;
-  overflow:hidden;
-}
-.field-wrap::before{
-  content:'';position:absolute;inset:0;border-radius:14px;
-  background:linear-gradient(90deg,transparent,rgba(52,211,153,.45),transparent);
-  transform:translateX(-100%);transition:transform .8s var(--ease-soft);
-  pointer-events:none;
-  height:1.5px;top:auto;bottom:0;width:100%;
-  background:linear-gradient(90deg,transparent,#34d399,transparent);
+  background:#fafbfc;
+  border:1.5px solid var(--BDR);
+  border-radius:12px;
+  transition:border-color .25s var(--ease-soft), background .25s, box-shadow .25s;
 }
 .field-wrap:focus-within{
-  background:rgba(255,255,255,.07);
-  border-color:rgba(52,211,153,.5);
+  background:white;
+  border-color:var(--G);
+  box-shadow:0 0 0 4px rgba(14,124,102,.1);
 }
-.field-wrap:focus-within::before{transform:translateX(100%)}
-
-/* Scan line for email (unique pharmacy id-card feel) */
-.field-wrap.scan::after{
-  content:'';position:absolute;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,#34d399 30%,#34d399 70%,transparent);
-  top:0;opacity:0;pointer-events:none;
-  box-shadow:0 0 12px #34d399;
-}
-.field-wrap.scan:focus-within::after{
-  animation:scanLine 1.4s var(--ease-soft);
-}
-@keyframes scanLine{
-  0%   {top:0;   opacity:.9}
-  90%  {opacity:.9}
-  100% {top:calc(100% - 2px); opacity:0}
-}
-
 .field-input{
   width:100%;padding:18px 16px 8px;
-  font-size:15px;font-family:'Manrope',sans-serif;color:white;
+  font-size:15px;font-family:'Manrope',sans-serif;color:var(--T);
   background:transparent;border:none;outline:none;
   font-weight:500;
 }
 .field-input::placeholder{color:transparent}
-.field-input.has-icon{padding-left:48px}
+.field-input.has-icon{padding-left:46px}
 .field-icon{
   position:absolute;left:16px;top:50%;transform:translateY(-50%);
-  color:rgba(255,255,255,.45);font-size:15px;pointer-events:none;
-  transition:color .25s,transform .25s var(--ease-spring);
+  color:var(--MUT);font-size:15px;pointer-events:none;
+  transition:color .25s;
   z-index:1;
 }
-.field-wrap:focus-within .field-icon{color:#34d399;transform:translateY(-50%) scale(1.08)}
+.field-wrap:focus-within .field-icon{color:var(--G)}
 
 .field-label{
-  position:absolute;left:48px;top:50%;transform:translateY(-50%);
-  font-size:14px;color:rgba(255,255,255,.5);font-weight:500;pointer-events:none;
-  transition:top .25s var(--ease-out),font-size .25s,color .25s,letter-spacing .25s,transform .25s,opacity .2s;
+  position:absolute;left:46px;top:50%;transform:translateY(-50%);
+  font-size:14px;color:var(--MUT);font-weight:500;pointer-events:none;
+  transition:top .25s var(--ease-out),font-size .25s,color .25s,letter-spacing .25s,transform .25s;
   font-family:'Manrope',sans-serif;
 }
 .field-input:focus + .field-label,
 .field-input:not(:placeholder-shown) + .field-label{
-  top:8px;transform:translateY(0);
-  font-size:10px;color:#34d399;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  top:7px;transform:translateY(0);
+  font-size:10px;color:var(--G);font-weight:800;letter-spacing:.1em;text-transform:uppercase;
 }
 
 /* Toggle pw */
 .field-toggle{
   position:absolute;right:8px;top:50%;transform:translateY(-50%);
   width:36px;height:36px;border-radius:9px;border:none;background:transparent;
-  color:rgba(255,255,255,.45);cursor:pointer;font-size:14px;
+  color:var(--MUT);cursor:pointer;font-size:14px;
   display:flex;align-items:center;justify-content:center;
   transition:color .2s,background .2s;z-index:2;
 }
-.field-toggle:hover{color:#34d399;background:rgba(52,211,153,.08)}
+.field-toggle:hover{color:var(--G);background:var(--LT)}
 
 /* Row : remember / forgot */
 .row{
@@ -353,57 +231,51 @@ button{font-family:inherit}
 }
 .checkbox{
   display:inline-flex;align-items:center;gap:10px;cursor:pointer;
-  font-size:13px;color:rgba(255,255,255,.7);font-weight:600;user-select:none;
+  font-size:13px;color:var(--T);font-weight:600;user-select:none;
 }
 .checkbox input{position:absolute;opacity:0;width:0;height:0}
 .checkbox .box{
   width:18px;height:18px;border-radius:6px;
-  border:1.5px solid rgba(255,255,255,.2);
-  background:rgba(255,255,255,.05);
+  border:1.5px solid var(--BDR);background:white;
   display:inline-flex;align-items:center;justify-content:center;
-  transition:background .25s,border-color .25s,transform .15s var(--ease-spring);
+  transition:background .2s,border-color .2s;
   flex-shrink:0;
 }
-.checkbox .box i{font-size:10px;color:#0B2545;opacity:0;transform:scale(.5);transition:opacity .15s,transform .2s var(--ease-spring)}
-.checkbox input:checked ~ .box{background:#34d399;border-color:#34d399}
-.checkbox input:checked ~ .box i{opacity:1;transform:scale(1)}
-.checkbox input:focus-visible ~ .box{box-shadow:0 0 0 3px rgba(52,211,153,.25)}
+.checkbox .box i{font-size:10px;color:white;opacity:0;transition:opacity .15s}
+.checkbox input:checked ~ .box{background:var(--G);border-color:var(--G)}
+.checkbox input:checked ~ .box i{opacity:1}
+.checkbox input:focus-visible ~ .box{box-shadow:0 0 0 3px rgba(14,124,102,.22)}
 .forgot{
-  font-size:13px;color:#34d399;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;color:var(--G);font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;
   position:relative;transition:color .2s;
 }
-.forgot::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:#34d399;transform:scaleX(0);transform-origin:right;transition:transform .25s var(--ease-out)}
-.forgot:hover{color:#6ee7b7}
+.forgot::after{
+  content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--G);
+  transform:scaleX(0);transform-origin:right;transition:transform .25s var(--ease-out);
+}
+.forgot:hover{color:var(--GD)}
 .forgot:hover::after{transform:scaleX(1);transform-origin:left}
 
 /* Submit */
 .submit{
-  width:100%;padding:16px;border:none;border-radius:14px;cursor:pointer;
+  width:100%;padding:15px;border:none;border-radius:13px;cursor:pointer;
   color:white;font-size:15px;font-weight:900;
   font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.01em;
-  display:flex;align-items:center;justify-content:center;gap:12px;
-  transition:transform .25s var(--ease-spring),box-shadow .3s,filter .3s;
-  position:relative;overflow:hidden;isolation:isolate;
-  background:linear-gradient(135deg,#10b981 0%,#0E7C66 60%,#065f46 100%);
-  background-size:200% 200%;animation:btnGradient 4s ease infinite;
-  box-shadow:0 14px 28px -8px rgba(16,185,129,.55),0 1px 0 rgba(255,255,255,.15) inset;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:background .25s, transform .2s var(--ease-out), box-shadow .25s;
+  position:relative;overflow:hidden;
+  background:var(--G);
+  box-shadow:0 6px 18px -4px rgba(14,124,102,.45);
 }
-@keyframes btnGradient{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.submit::before{
-  content:'';position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.3) 50%,transparent 70%);
-  transform:translateX(-100%);transition:transform .8s var(--ease-out);
-}
-.submit:hover::before{transform:translateX(100%)}
-.submit:hover{transform:translateY(-2px);box-shadow:0 22px 44px -10px rgba(16,185,129,.7)}
+.submit:hover{background:var(--GD);transform:translateY(-1px);box-shadow:0 12px 28px -6px rgba(14,124,102,.55)}
 .submit:active{transform:translateY(0)}
-.submit i.fa-arrow-right{transition:transform .3s var(--ease-out)}
-.submit:hover i.fa-arrow-right{transform:translateX(5px)}
+.submit i.fa-arrow-right{transition:transform .25s var(--ease-out)}
+.submit:hover i.fa-arrow-right{transform:translateX(4px)}
 .submit.loading{pointer-events:none}
 .submit.loading .submit-txt,
 .submit.loading i.fa-arrow-right{visibility:hidden}
 .submit .spinner{
-  position:absolute;width:22px;height:22px;border-radius:50%;
+  position:absolute;width:20px;height:20px;border-radius:50%;
   border:2.5px solid rgba(255,255,255,.3);border-top-color:white;
   opacity:0;animation:spin .9s linear infinite;
 }
@@ -413,60 +285,52 @@ button{font-family:inherit}
 /* Divider */
 .divider{
   display:flex;align-items:center;gap:14px;margin:22px 0;
-  font-size:10px;color:rgba(255,255,255,.4);font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  font-size:10px;color:var(--MUT);font-weight:800;letter-spacing:.16em;text-transform:uppercase;
 }
-.divider::before,
-.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent)}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--BDR)}
 
 /* Social */
-.social{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.social{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
 .soc-btn{
   display:flex;align-items:center;justify-content:center;gap:9px;
-  padding:13px;border-radius:12px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  color:rgba(255,255,255,.9);font-size:13px;font-weight:700;cursor:pointer;
+  padding:12px;border-radius:12px;
+  background:white;border:1.5px solid var(--BDR);
+  color:var(--T);font-size:13px;font-weight:700;cursor:pointer;
   font-family:'Plus Jakarta Sans',sans-serif;
-  transition:background .25s,border-color .25s,transform .25s var(--ease-spring);
+  transition:background .25s,border-color .25s,transform .2s var(--ease-out);
 }
-.soc-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+.soc-btn:hover{background:var(--LT);border-color:#cdd5e1;transform:translateY(-1px)}
 .soc-btn .ico{width:18px;height:18px;display:inline-block}
-.soc-btn.google .ico{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffffff' d='M21.35 11.1H12v3.2h5.35c-.23 1.5-1.7 4.4-5.35 4.4-3.22 0-5.85-2.66-5.85-5.95S8.78 6.8 12 6.8c1.83 0 3.06.78 3.76 1.45l2.56-2.46C16.78 4.3 14.62 3.4 12 3.4 7.03 3.4 3 7.43 3 12.4S7.03 21.4 12 21.4c6.93 0 9.35-4.85 9.35-7.35 0-.5-.05-.93-.13-1.35z'/></svg>") center/contain no-repeat}
-.soc-btn.facebook .ico{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffffff' d='M22 12.07C22 6.51 17.52 2 12 2S2 6.51 2 12.07C2 17.09 5.66 21.25 10.44 22v-7.02H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.47H15.2c-1.24 0-1.63.77-1.63 1.56v1.88h2.77l-.44 2.91h-2.33V22C18.34 21.25 22 17.09 22 12.07z'/></svg>") center/contain no-repeat}
+.soc-btn.google .ico{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%234285F4' d='M21.35 11.1H12v3.2h5.35c-.23 1.5-1.7 4.4-5.35 4.4-3.22 0-5.85-2.66-5.85-5.95S8.78 6.8 12 6.8c1.83 0 3.06.78 3.76 1.45l2.56-2.46C16.78 4.3 14.62 3.4 12 3.4 7.03 3.4 3 7.43 3 12.4S7.03 21.4 12 21.4c6.93 0 9.35-4.85 9.35-7.35 0-.5-.05-.93-.13-1.35z'/></svg>") center/contain no-repeat}
+.soc-btn.facebook .ico{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%231877F2' d='M22 12.07C22 6.51 17.52 2 12 2S2 6.51 2 12.07C2 17.09 5.66 21.25 10.44 22v-7.02H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.47H15.2c-1.24 0-1.63.77-1.63 1.56v1.88h2.77l-.44 2.91h-2.33V22C18.34 21.25 22 17.09 22 12.07z'/></svg>") center/contain no-repeat}
 
-.signup{text-align:center;font-size:13px;color:rgba(255,255,255,.55)}
-.signup a{color:#34d399;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;position:relative}
-.signup a::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:#34d399;transform:scaleX(0);transform-origin:right;transition:transform .25s var(--ease-out)}
+.signup{text-align:center;font-size:13px;color:var(--MUT)}
+.signup a{color:var(--G);font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;position:relative}
+.signup a::after{
+  content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--G);
+  transform:scaleX(0);transform-origin:right;transition:transform .25s var(--ease-out);
+}
 .signup a:hover::after{transform:scaleX(1);transform-origin:left}
 
-/* Card meta strip (bottom edge) */
-.card-meta{
+/* Trust strip */
+.trust{
   margin-top:24px;padding-top:18px;
-  border-top:1px dashed rgba(255,255,255,.1);
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
-  font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);
-  letter-spacing:.06em;
+  border-top:1px solid var(--BDR);
+  display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
+  font-size:11px;color:var(--MUT);font-weight:600;
 }
-.card-meta .key{color:rgba(255,255,255,.6);font-weight:600}
+.trust span{display:inline-flex;align-items:center;gap:6px}
+.trust i{color:var(--G);font-size:11px}
 
-/* Footer (page bottom) */
+/* Footer */
 .foot{
   padding:18px clamp(20px,4vw,44px);
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
-  font-size:11px;color:rgba(255,255,255,.35);position:relative;z-index:11;
-  font-family:'JetBrains Mono',monospace;letter-spacing:.04em;
+  font-size:11px;color:var(--MUT);position:relative;z-index:11;
 }
-.foot strong{color:#fda4af;font-weight:700}
+.foot strong{color:var(--ERR);font-weight:700}
 .foot a{transition:color .2s}
-.foot a:hover{color:#34d399}
-
-/* Shake error animation */
-@keyframes shake{
-  10%,90% {transform:translateX(-1px)}
-  20%,80% {transform:translateX(2px)}
-  30%,50%,70% {transform:translateX(-4px)}
-  40%,60% {transform:translateX(4px)}
-}
-.card.shake{animation:shake .5s var(--ease-soft)}
+.foot a:hover{color:var(--G)}
 
 /* ============================================
    RESPONSIVE
@@ -478,13 +342,10 @@ button{font-family:inherit}
   .brand-mark svg{width:15px;height:15px}
   .back-link{padding:7px 12px;font-size:12px}
   .main{padding:8px 14px 24px}
-  .card{padding:22px 18px;border-radius:22px}
-  .card::before{border-radius:24px}
-  .card-stack::before,.card-stack::after{display:none}
-  .title{font-size:24px}
+  .card{padding:22px 18px;border-radius:20px}
+  .title{font-size:23px}
   .subtitle{font-size:13px;margin-bottom:22px}
-  .live-pill{font-size:10px;padding:4px 10px;margin-bottom:18px}
-  .greeting{margin-bottom:4px;font-size:10px}
+  .status-pill{font-size:10px;padding:4px 10px;margin-bottom:18px}
   .field-input{padding:16px 14px 6px;font-size:14px}
   .field-input.has-icon{padding-left:44px}
   .field-icon{left:14px}
@@ -492,145 +353,175 @@ button{font-family:inherit}
   .submit{padding:14px;font-size:14px}
   .social{grid-template-columns:1fr 1fr}
   .foot{padding:14px 16px;font-size:10px}
+  .trust{gap:12px;font-size:10px}
 }
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
-  .aurora-blob,.pill,.card::before,.submit{animation:none!important}
+  .fi{display:none}
 }
 </style>
 </head>
 
 <body>
 
-<!-- AURORA BACKGROUND -->
-<div class="aurora" aria-hidden="true">
-  <div class="aurora-blob ab-1"></div>
-  <div class="aurora-blob ab-2"></div>
-  <div class="aurora-blob ab-3"></div>
-  <div class="aurora-blob ab-4"></div>
-</div>
-<div class="aurora-grain" aria-hidden="true"></div>
-<div class="aurora-grid" aria-hidden="true"></div>
+<!-- SOFT BG -->
+<div class="bg" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
 
-<!-- FLOATING PILLS -->
-<div class="pills" aria-hidden="true" id="pills"></div>
+<!-- FLOATING PHARMA ICONS -->
+<div class="float-icons" aria-hidden="true" id="floatIcons"></div>
+
+<!-- SVG SYMBOL LIBRARY (referenced by floating icons) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Pill capsule -->
+    <symbol id="ic-pill" viewBox="0 0 64 64">
+      <rect x="6" y="22" width="52" height="20" rx="10" fill="currentColor"/>
+      <rect x="6" y="22" width="26" height="20" rx="10" fill="currentColor" opacity=".5"/>
+    </symbol>
+    <!-- Capsule (vertical) -->
+    <symbol id="ic-cap" viewBox="0 0 64 64">
+      <rect x="22" y="6" width="20" height="52" rx="10" fill="currentColor"/>
+      <rect x="22" y="6" width="20" height="26" rx="10" fill="currentColor" opacity=".5"/>
+    </symbol>
+    <!-- Medical cross -->
+    <symbol id="ic-cross" viewBox="0 0 64 64">
+      <path d="M24 6h16v18h18v16H40v18H24V40H6V24h18z" fill="currentColor"/>
+    </symbol>
+    <!-- Heart -->
+    <symbol id="ic-heart" viewBox="0 0 64 64">
+      <path d="M32 56s-22-12-22-28a12 12 0 0 1 22-7 12 12 0 0 1 22 7c0 16-22 28-22 28z" fill="currentColor"/>
+    </symbol>
+    <!-- Stethoscope (simple) -->
+    <symbol id="ic-steth" viewBox="0 0 64 64">
+      <path d="M14 8v18c0 8 7 14 14 14s14-6 14-14V8h-6v18a8 8 0 0 1-16 0V8z" fill="currentColor"/>
+      <circle cx="50" cy="46" r="8" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M28 40v8" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <!-- Mortar & pestle (pharmacy) -->
+    <symbol id="ic-mortar" viewBox="0 0 64 64">
+      <path d="M10 26h44l-6 24a6 6 0 0 1-6 4H22a6 6 0 0 1-6-4z" fill="currentColor"/>
+      <rect x="34" y="6" width="6" height="22" rx="2" fill="currentColor" transform="rotate(20 37 17)"/>
+    </symbol>
+    <!-- Plus icon (subtle) -->
+    <symbol id="ic-plus" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M32 18v28M18 32h28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+    <!-- Brand cross (header) -->
+    <symbol id="ic-brand" viewBox="0 0 24 24">
+      <path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
 
 <div class="shell">
 
-  <!-- TOP BAR -->
   <header class="topbar">
     <a href="/" class="brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg>
-      </span>
-      <span><span class="holo">Loca</span><span class="pharma">pharma</span></span>
+      <span class="brand-mark"><svg><use href="#ic-brand"/></svg></span>
+      <span><span class="loca">Loca</span><span class="pharma">pharma</span></span>
     </a>
     <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i>Accueil</a>
   </header>
 
-  <!-- MAIN -->
   <main class="main">
-    <div class="card-stack">
-      <div class="card" id="loginCard">
+    <div class="card" id="loginCard">
 
-        <div class="live-pill">
-          <span class="live-dot"></span>
-          <span id="liveText">5 pharmacies de garde — maintenant</span>
+      <span class="status-pill"><span class="d"></span>Plateforme officielle · Comores</span>
+
+      <p class="greeting">— <strong id="greeting">Bienvenue</strong> sur votre espace.</p>
+      <h1 class="title">Reconnectez-vous<br>à votre santé.</h1>
+      <p class="subtitle">Entrez vos identifiants pour accéder à votre espace personnel Locapharma.</p>
+
+      {% if error is defined and error %}
+        <div class="alert err" role="alert">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+        </div>
+      {% endif %}
+
+      {% if app is defined %}
+        {% for message in app.flashes('success') %}
+          <div class="alert ok"><i class="fa-solid fa-circle-check"></i><span>{{ message }}</span></div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" action="{{ path('app_login') }}" id="loginForm" novalidate>
+
+        <div class="field">
+          <div class="field-wrap">
+            <i class="fa-solid fa-envelope field-icon"></i>
+            <input
+              type="email" id="inputEmail" name="_username"
+              class="field-input has-icon"
+              placeholder=" " autocomplete="email" inputmode="email" autofocus required
+              value="{{ last_username|default('') }}"
+            >
+            <label for="inputEmail" class="field-label">Adresse email</label>
+          </div>
         </div>
 
-        <div class="greeting" id="greeting">— Bonsoir &nbsp;·&nbsp; <span class="now" id="nowTime">--:--</span></div>
-        <h1 class="title">Reconnectez-vous<br>à votre santé.</h1>
-        <p class="subtitle">Entrez vos identifiants pour accéder à votre espace personnel Locapharma.</p>
-
-        {% if error is defined and error %}
-          <div class="alert err" role="alert">
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+        <div class="field">
+          <div class="field-wrap">
+            <i class="fa-solid fa-lock field-icon"></i>
+            <input
+              type="password" id="inputPassword" name="_password"
+              class="field-input has-icon"
+              placeholder=" " autocomplete="current-password" required minlength="6"
+            >
+            <label for="inputPassword" class="field-label">Mot de passe</label>
+            <button type="button" class="field-toggle" id="pwToggle" aria-label="Afficher / masquer le mot de passe">
+              <i class="fa-regular fa-eye"></i>
+            </button>
           </div>
-        {% endif %}
+        </div>
 
-        {% if app is defined %}
-          {% for message in app.flashes('success') %}
-            <div class="alert ok"><i class="fa-solid fa-circle-check"></i><span>{{ message }}</span></div>
-          {% endfor %}
-        {% endif %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <form method="post" action="{{ path('app_login') }}" id="loginForm" novalidate>
+        <div class="row">
+          <label class="checkbox">
+            <input type="checkbox" name="_remember_me" checked>
+            <span class="box"><i class="fa-solid fa-check"></i></span>
+            <span>Rester connecté</span>
+          </label>
+          {# TODO: path('app_forgot_password_request') #}
+          <a href="#" class="forgot">Mot de passe oublié ?</a>
+        </div>
 
-          <div class="field">
-            <div class="field-wrap scan">
-              <i class="fa-solid fa-envelope field-icon"></i>
-              <input
-                type="email" id="inputEmail" name="_username"
-                class="field-input has-icon"
-                placeholder=" " autocomplete="email" inputmode="email" autofocus required
-                value="{{ last_username|default('') }}"
-              >
-              <label for="inputEmail" class="field-label">Adresse email</label>
-            </div>
-          </div>
+        <button type="submit" class="submit" id="submitBtn">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="submit-txt">Se connecter</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
 
-          <div class="field">
-            <div class="field-wrap">
-              <i class="fa-solid fa-lock field-icon"></i>
-              <input
-                type="password" id="inputPassword" name="_password"
-                class="field-input has-icon"
-                placeholder=" " autocomplete="current-password" required minlength="6"
-              >
-              <label for="inputPassword" class="field-label">Mot de passe</label>
-              <button type="button" class="field-toggle" id="pwToggle" aria-label="Afficher / masquer le mot de passe">
-                <i class="fa-regular fa-eye"></i>
-              </button>
-            </div>
-          </div>
+        <div class="divider"><span>ou continuer avec</span></div>
 
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-          <div class="row">
-            <label class="checkbox">
-              <input type="checkbox" name="_remember_me" checked>
-              <span class="box"><i class="fa-solid fa-check"></i></span>
-              <span>Rester connecté</span>
-            </label>
-            {# TODO: path('app_forgot_password_request') #}
-            <a href="#" class="forgot">Mot de passe oublié ?</a>
-          </div>
-
-          <button type="submit" class="submit" id="submitBtn">
-            <span class="spinner" aria-hidden="true"></span>
-            <span class="submit-txt">Continuer</span>
-            <i class="fa-solid fa-arrow-right"></i>
+        <div class="social">
+          <button type="button" class="soc-btn google" onclick="showToast('Connexion Google bientôt disponible')">
+            <span class="ico"></span>Google
           </button>
-
-          <div class="divider"><span>ou continuer avec</span></div>
-
-          <div class="social">
-            <button type="button" class="soc-btn google" onclick="showToast('Connexion Google bientôt disponible')">
-              <span class="ico"></span>Google
-            </button>
-            <button type="button" class="soc-btn facebook" onclick="showToast('Connexion Facebook bientôt disponible')">
-              <span class="ico"></span>Facebook
-            </button>
-          </div>
-
-          <p class="signup">
-            Nouveau ici ? <a href="#">Créer un compte</a>
-            &nbsp;·&nbsp; <a href="#">Pharmacien ?</a>
-          </p>
-        </form>
-
-        <div class="card-meta">
-          <span><span class="key">SESSION</span> #LOC-<span id="sessId">XXXXX</span></span>
-          <span><span class="key">SECURE</span> TLS 1.3 · CSRF ✓</span>
+          <button type="button" class="soc-btn facebook" onclick="showToast('Connexion Facebook bientôt disponible')">
+            <span class="ico"></span>Facebook
+          </button>
         </div>
 
+        <p class="signup">
+          Nouveau ici ? <a href="#">Créer un compte</a>
+          &nbsp;·&nbsp; <a href="#">Pharmacien ?</a>
+        </p>
+      </form>
+
+      <div class="trust">
+        <span><i class="fa-solid fa-shield-halved"></i>Connexion sécurisée</span>
+        <span><i class="fa-solid fa-lock"></i>Données chiffrées</span>
+        <span><i class="fa-solid fa-circle-check"></i>Ordre des Pharmaciens</span>
       </div>
+
     </div>
   </main>
 
-  <!-- BOTTOM FOOTER -->
   <footer class="foot">
     <span>© 2026 Locapharma · Technopole Numérique des Comores</span>
     <span>SAMU <strong>773</strong> · <a href="#">Aide</a> · <a href="#">CGU</a></span>
@@ -639,99 +530,64 @@ button{font-family:inherit}
 </div>
 
 <!-- TOAST -->
-<div id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(11,37,69,.95);color:white;padding:13px 24px;border-radius:100px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.5);opacity:0;transition:opacity .3s,transform .3s var(--ease-spring);pointer-events:none;z-index:1000;border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px)"></div>
+<div id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0B2545;color:white;padding:13px 22px;border-radius:100px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 12px 32px rgba(11,37,69,.35);opacity:0;transition:opacity .3s, transform .3s cubic-bezier(.22,1,.36,1);pointer-events:none;z-index:1000"></div>
 
 <script>
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isTouch = matchMedia('(hover: none)').matches;
 
 // ============================================
-// 1) Time-aware greeting
+// 1) Time-aware greeting (no live ticking)
 // ============================================
 (function(){
-  const g = document.getElementById('greeting');
-  const t = document.getElementById('nowTime');
-  if(!g) return;
-  function tick(){
-    const d = new Date();
-    const h = d.getHours();
-    let label;
-    if(h < 5)        label = 'Bonne nuit';
-    else if(h < 12)  label = 'Bonjour';
-    else if(h < 18)  label = 'Bon après-midi';
-    else             label = 'Bonsoir';
-    const hh = String(d.getHours()).padStart(2,'0');
-    const mm = String(d.getMinutes()).padStart(2,'0');
-    g.innerHTML = '— ' + label + ' &nbsp;·&nbsp; <span class="now">' + hh + ':' + mm + '</span>';
-  }
-  tick(); setInterval(tick, 30000);
-})();
-
-// ============================================
-// 2) Live "guard pharmacies right now" counter
-// ============================================
-(function(){
-  const el = document.getElementById('liveText');
+  const el = document.getElementById('greeting');
   if(!el) return;
-  // Demo: rotate between realistic numbers to feel "live"
-  const seeds = [4, 5, 5, 6, 5, 4];
-  let i = 0;
-  setInterval(() => {
-    i = (i + 1) % seeds.length;
-    el.textContent = seeds[i] + ' pharmacies de garde — maintenant';
-  }, 4500);
+  const h = new Date().getHours();
+  if(h < 5)        el.textContent = 'Bonne nuit';
+  else if(h < 12)  el.textContent = 'Bonjour';
+  else if(h < 18)  el.textContent = 'Bon après-midi';
+  else             el.textContent = 'Bonsoir';
 })();
 
 // ============================================
-// 3) Fake session ID for that "premium ID card" vibe
-// ============================================
-(function(){
-  const s = Math.random().toString(36).substring(2, 7).toUpperCase();
-  document.getElementById('sessId').textContent = s;
-})();
-
-// ============================================
-// 4) Floating pills background
+// 2) Floating pharmacy icons (slow, subtle)
 // ============================================
 (function(){
   if(reduceMotion) return;
-  const root = document.getElementById('pills');
-  const types = ['p1','p2','p3','p4','p5'];
-  const N = window.innerWidth < 640 ? 8 : 16;
+  const root = document.getElementById('floatIcons');
+  if(!root) return;
+  // Icon set (matches the SVG <symbol> ids above)
+  const ICONS = ['ic-pill','ic-cap','ic-cross','ic-heart','ic-steth','ic-mortar','ic-plus'];
+  // Tint variations — kept very low opacity for a calm feel
+  const TINTS = [
+    'rgba(14,124,102,.085)',   // teal
+    'rgba(14,124,102,.07)',
+    'rgba(244,196,48,.07)',    // soft gold
+    'rgba(11,37,69,.05)',      // navy
+    'rgba(14,124,102,.06)',
+  ];
+  const N = window.innerWidth < 640 ? 6 : 12;
   for(let i = 0; i < N; i++){
-    const el = document.createElement('div');
-    el.className = 'pill ' + types[Math.floor(Math.random() * types.length)];
-    const left = Math.random() * 100;
-    const dur = 14 + Math.random() * 18;
-    const delay = -Math.random() * dur;
-    const scale = .6 + Math.random() * 1.2;
-    el.style.cssText = `left:${left}%; animation-duration:${dur}s; animation-delay:${delay}s; transform:scale(${scale})`;
-    root.appendChild(el);
+    const wrap = document.createElement('div');
+    wrap.className = 'fi';
+    const size  = 28 + Math.random() * 36;          // 28-64px
+    const left  = Math.random() * 100;              // 0-100% x
+    const dur   = 55 + Math.random() * 50;          // 55-105s (very slow)
+    const delay = -Math.random() * dur;             // staggered start
+    const tint  = TINTS[Math.floor(Math.random() * TINTS.length)];
+    const icon  = ICONS[Math.floor(Math.random() * ICONS.length)];
+    wrap.style.cssText =
+      'left:' + left + '%; ' +
+      'width:' + size + 'px; height:' + size + 'px; ' +
+      'animation-duration:' + dur + 's; ' +
+      'animation-delay:' + delay + 's; ' +
+      'color:' + tint + ';';
+    wrap.innerHTML = '<svg><use href="#' + icon + '"/></svg>';
+    root.appendChild(wrap);
   }
 })();
 
 // ============================================
-// 5) 3D mouse-tilt on card
-// ============================================
-(function(){
-  if(reduceMotion || isTouch) return;
-  const card = document.getElementById('loginCard');
-  if(!card) return;
-  let raf = 0;
-  document.addEventListener('mousemove', e => {
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    const x = (e.clientX - cx) / cx;
-    const y = (e.clientY - cy) / cy;
-    if(raf) cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(() => {
-      card.style.transform = `rotateX(${(-y * 2.2).toFixed(2)}deg) rotateY(${(x * 2.6).toFixed(2)}deg) translateY(0)`;
-    });
-  });
-})();
-
-// ============================================
-// 6) Password show/hide
+// 3) Password show/hide
 // ============================================
 (function(){
   const btn = document.getElementById('pwToggle');
@@ -745,24 +601,19 @@ const isTouch = matchMedia('(hover: none)').matches;
 })();
 
 // ============================================
-// 7) Form submit -> loading state
+// 4) Form submit -> loading state
 // ============================================
 (function(){
   const f = document.getElementById('loginForm');
   const b = document.getElementById('submitBtn');
   if(!f || !b) return;
-  f.addEventListener('submit', (e) => {
-    if(!f.checkValidity()){
-      document.getElementById('loginCard').classList.add('shake');
-      setTimeout(() => document.getElementById('loginCard').classList.remove('shake'), 600);
-      return;
-    }
-    b.classList.add('loading');
+  f.addEventListener('submit', () => {
+    if(f.checkValidity()) b.classList.add('loading');
   });
 })();
 
 // ============================================
-// 8) Toast helper
+// 5) Toast helper
 // ============================================
 function showToast(msg){
   const t = document.getElementById('toast');
