@@ -19,13 +19,7 @@
   --GOLD:#F4C430; --GOLD-D:#d9a90f;
   --T:#1D2939; --MUT:#667085; --LT:#F2F4F7; --BDR:#E4E7EC;
   --W:#fff; --ERR:#F04438; --OK:#12B76A;
-
-  /* Page bg : pas trop blanc, légèrement grisé/bleuté */
-  --page:#eef2f7;
-  --page-2:#e6ecf3;
-  /* Card bg : blanc mais doux, pas pur 100% blanc */
-  --card:#fcfcfd;
-
+  --page:#eef2f7; --page-2:#e6ecf3; --card:#fcfcfd;
   --ease-out:cubic-bezier(.22, 1, .36, 1);
   --ease-spring:cubic-bezier(.34, 1.56, .64, 1);
   --ease-soft:cubic-bezier(.4, 0, .2, 1);
@@ -37,8 +31,7 @@ body{
   background:var(--page);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   overflow-x:hidden;
-  min-height:100svh;
-  position:relative;
+  min-height:100svh;position:relative;
 }
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
@@ -46,7 +39,7 @@ button{font-family:inherit}
 :focus-visible{outline:none;box-shadow:0 0 0 3px rgba(14,124,102,.32)}
 
 /* ============================================
-   BACKGROUND — light, static, soft
+   BG
    ============================================ */
 .bg{
   position:fixed;inset:0;z-index:0;pointer-events:none;
@@ -67,21 +60,18 @@ button{font-family:inherit}
 }
 
 /* ============================================
-   FLOATING PILLS — VISIBLE, SLOW
+   FLOATING PILLS
    ============================================ */
 .pills{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 .pill{
   position:absolute;
   width:42px;height:18px;border-radius:18px;
-  opacity:.6;
+  opacity:.55;
   animation:floatPill linear infinite;
   will-change:transform;
   box-shadow:0 6px 16px rgba(11,37,69,.10),inset 0 1px 0 rgba(255,255,255,.4);
 }
-.pill::before{
-  content:'';position:absolute;left:0;top:0;width:50%;height:100%;
-  border-radius:18px 0 0 18px;
-}
+.pill::before{content:'';position:absolute;left:0;top:0;width:50%;height:100%;border-radius:18px 0 0 18px}
 .pill.p1{background:#34d399}.pill.p1::before{background:#10b981}
 .pill.p2{background:#fbbf24}.pill.p2::before{background:#f59e0b}
 .pill.p3{background:#67e8f9}.pill.p3::before{background:#22d3ee}
@@ -94,12 +84,9 @@ button{font-family:inherit}
 }
 
 /* ============================================
-   PAGE WRAPPER
+   PAGE
    ============================================ */
-.shell{
-  position:relative;z-index:10;min-height:100svh;
-  display:flex;flex-direction:column;
-}
+.shell{position:relative;z-index:10;min-height:100svh;display:flex;flex-direction:column}
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
   padding:clamp(18px,2.5vw,28px) clamp(20px,4vw,44px);
@@ -137,14 +124,111 @@ button{font-family:inherit}
 .back-link i{font-size:11px}
 
 /* ============================================
-   MAIN — centered card
+   MAIN — grid : illustration | form
    ============================================ */
 .main{
-  flex:1;display:flex;align-items:center;justify-content:center;
-  padding:20px clamp(16px,3vw,32px) 40px;
+  flex:1;
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  align-items:center;
+  gap:clamp(20px,3vw,52px);
+  width:100%;max-width:1400px;margin:0 auto;
+  padding:20px clamp(16px,3vw,52px) 40px;
 }
-.card-stack{position:relative;width:100%;max-width:480px}
 
+/* ============================================
+   HERO ART — wavy motifs + blob frame
+   ============================================ */
+.hero-art{
+  position:relative;
+  width:100%;
+  height:clamp(480px, 68vh, 640px);
+  animation:fadeIn .9s var(--ease-out) both;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* Top wave bands */
+.wave-top{
+  position:absolute;top:-20px;left:-30px;right:-20px;
+  height:38%;z-index:1;pointer-events:none;
+  filter:drop-shadow(0 12px 28px rgba(14,124,102,.18));
+}
+
+/* Bottom wave bands */
+.wave-bot{
+  position:absolute;bottom:-30px;right:-20px;left:20%;
+  height:32%;z-index:1;pointer-events:none;
+  transform:scaleX(-1) scaleY(-1);
+  filter:drop-shadow(0 -8px 22px rgba(14,124,102,.12));
+}
+
+/* Blob frame with image */
+.blob-wrap{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%, -54%);
+  width:min(88%, 520px);
+  aspect-ratio:1 / .85;
+  z-index:2;
+  filter:drop-shadow(0 28px 50px rgba(11,37,69,.22));
+  animation:blobFloat 12s ease-in-out infinite alternate;
+}
+@keyframes blobFloat{
+  0%   {transform:translate(-50%, -54%) rotate(0deg)}
+  50%  {transform:translate(-50%, -56%) rotate(.6deg)}
+  100% {transform:translate(-50%, -52%) rotate(-.4deg)}
+}
+
+.blob-wrap svg{width:100%;height:100%;display:block;overflow:visible}
+
+/* Headline below the blob */
+.hero-headline{
+  position:absolute;
+  bottom:clamp(10px, 4vh, 36px);
+  left:clamp(0px, 2vw, 24px);
+  z-index:3;
+  max-width:90%;
+}
+.hero-headline h2{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(26px, 3vw, 38px);
+  font-weight:900;line-height:1.08;letter-spacing:-.025em;
+  color:var(--B);margin-bottom:8px;
+}
+.hero-headline h2 strong{
+  background:linear-gradient(120deg, var(--G) 0%, var(--GL) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;
+}
+.hero-headline p{
+  font-size:14px;color:var(--MUT);line-height:1.5;font-weight:500;
+}
+.hero-headline .chips{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.hero-headline .chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:white;border:1px solid var(--BDR);
+  padding:6px 12px;border-radius:100px;
+  font-size:11px;font-weight:700;color:var(--T);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  box-shadow:0 2px 8px rgba(11,37,69,.06);
+}
+.hero-headline .chip i{color:var(--G);font-size:11px}
+
+/* Floating decorations around blob */
+.deco{position:absolute;z-index:3;pointer-events:none}
+.deco.dot1{top:18%;right:8%;width:8px;height:8px;border-radius:50%;background:var(--GOLD);box-shadow:0 0 0 6px rgba(244,196,48,.18);animation:bob 7s ease-in-out infinite}
+.deco.dot2{bottom:32%;left:6%;width:10px;height:10px;border-radius:50%;background:var(--GL);box-shadow:0 0 0 5px rgba(52,211,153,.2);animation:bob 9s ease-in-out infinite reverse}
+.deco.dot3{top:42%;right:2%;width:6px;height:6px;border-radius:50%;background:var(--G);opacity:.55;animation:bob 11s ease-in-out infinite}
+.deco.spark{position:absolute;top:24%;left:14%;width:18px;height:18px;color:var(--GOLD);opacity:.7;animation:bob 8s ease-in-out infinite}
+.deco.plus{position:absolute;bottom:24%;right:14%;width:22px;height:22px;color:var(--G);opacity:.55;animation:bob 10s ease-in-out infinite reverse}
+@keyframes bob{
+  0%,100%{transform:translateY(0)}
+  50%    {transform:translateY(-10px)}
+}
+
+/* ============================================
+   FORM CARD — same as before
+   ============================================ */
+.card-stack{position:relative;width:100%;max-width:460px;justify-self:end}
 .card{
   position:relative;z-index:2;
   background:var(--card);
@@ -159,34 +243,25 @@ button{font-family:inherit}
   overflow:hidden;
 }
 @keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
-/* Subtle gold accent on top edge */
 .card::after{
   content:'';position:absolute;left:0;right:0;top:0;height:3px;
   background:linear-gradient(90deg, transparent 0%, var(--G) 30%, var(--GOLD) 70%, transparent 100%);
   opacity:.5;
 }
 
-/* Live status pill */
 .live-pill{
   display:inline-flex;align-items:center;gap:8px;
   font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
   background:#ecfdf5;color:var(--G);
   border:1px solid rgba(14,124,102,.2);
   padding:5px 12px;border-radius:100px;
-  margin-bottom:22px;
-  font-family:'Plus Jakarta Sans',sans-serif;
+  margin-bottom:22px;font-family:'Plus Jakarta Sans',sans-serif;
 }
-.live-pill .live-dot{
-  width:7px;height:7px;background:var(--G);border-radius:50%;
-  box-shadow:0 0 0 3px rgba(14,124,102,.18);
-}
+.live-pill .live-dot{width:7px;height:7px;background:var(--G);border-radius:50%;box-shadow:0 0 0 3px rgba(14,124,102,.18)}
 
-/* Greeting */
 .greeting{
   font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--MUT);margin-bottom:6px;
-  font-family:'JetBrains Mono',monospace;
+  color:var(--MUT);margin-bottom:6px;font-family:'JetBrains Mono',monospace;
 }
 .greeting .now{color:var(--G)}
 
@@ -195,23 +270,13 @@ button{font-family:inherit}
   font-size:clamp(26px,2.6vw,34px);font-weight:900;line-height:1.12;letter-spacing:-.025em;
   color:var(--B);margin-bottom:8px;
 }
-.subtitle{
-  font-size:14px;color:var(--MUT);line-height:1.55;margin-bottom:28px;
-}
+.subtitle{font-size:14px;color:var(--MUT);line-height:1.55;margin-bottom:28px}
 
-/* Alerts */
-.alert{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 14px;border-radius:12px;
-  font-size:13px;font-weight:600;margin-bottom:18px;
-}
+.alert{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;font-size:13px;font-weight:600;margin-bottom:18px}
 .alert.err{background:rgba(240,68,56,.08);color:#a8201a;border:1px solid rgba(240,68,56,.22)}
 .alert.ok {background:rgba(18,183,106,.08);color:#0a7141;border:1px solid rgba(18,183,106,.22)}
 .alert i{flex-shrink:0;font-size:14px}
 
-/* ============================================
-   FIELDS — clean, light
-   ============================================ */
 .field{position:relative;margin-bottom:14px}
 .field-wrap{
   position:relative;
@@ -228,15 +293,13 @@ button{font-family:inherit}
 .field-input{
   width:100%;padding:18px 16px 8px;
   font-size:15px;font-family:'Manrope',sans-serif;color:var(--T);
-  background:transparent;border:none;outline:none;
-  font-weight:500;
+  background:transparent;border:none;outline:none;font-weight:500;
 }
 .field-input::placeholder{color:transparent}
 .field-input.has-icon{padding-left:48px}
 .field-icon{
   position:absolute;left:16px;top:50%;transform:translateY(-50%);
-  color:var(--MUT);font-size:15px;pointer-events:none;
-  transition:color .25s;z-index:1;
+  color:var(--MUT);font-size:15px;pointer-events:none;transition:color .25s;z-index:1;
 }
 .field-wrap:focus-within .field-icon{color:var(--G)}
 
@@ -252,7 +315,6 @@ button{font-family:inherit}
   font-size:10px;color:var(--G);font-weight:800;letter-spacing:.12em;text-transform:uppercase;
 }
 
-/* Toggle pw */
 .field-toggle{
   position:absolute;right:8px;top:50%;transform:translateY(-50%);
   width:36px;height:36px;border-radius:9px;border:none;background:transparent;
@@ -262,39 +324,24 @@ button{font-family:inherit}
 }
 .field-toggle:hover{color:var(--G);background:rgba(14,124,102,.06)}
 
-/* Row : remember / forgot */
-.row{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  flex-wrap:wrap;margin:6px 0 22px;
-}
-.checkbox{
-  display:inline-flex;align-items:center;gap:10px;cursor:pointer;
-  font-size:13px;color:var(--T);font-weight:600;user-select:none;
-}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 22px}
+.checkbox{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:var(--T);font-weight:600;user-select:none}
 .checkbox input{position:absolute;opacity:0;width:0;height:0}
 .checkbox .box{
   width:18px;height:18px;border-radius:6px;
   border:1.5px solid var(--BDR);background:white;
   display:inline-flex;align-items:center;justify-content:center;
-  transition:background .2s,border-color .2s;
-  flex-shrink:0;
+  transition:background .2s,border-color .2s;flex-shrink:0;
 }
 .checkbox .box i{font-size:10px;color:white;opacity:0;transition:opacity .15s}
 .checkbox input:checked ~ .box{background:var(--G);border-color:var(--G)}
 .checkbox input:checked ~ .box i{opacity:1}
 .checkbox input:focus-visible ~ .box{box-shadow:0 0 0 3px rgba(14,124,102,.22)}
-.forgot{
-  font-size:13px;color:var(--G);font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;
-  position:relative;transition:color .2s;
-}
-.forgot::after{
-  content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--G);
-  transform:scaleX(0);transform-origin:right;transition:transform .25s var(--ease-out);
-}
+.forgot{font-size:13px;color:var(--G);font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;position:relative;transition:color .2s}
+.forgot::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--G);transform:scaleX(0);transform-origin:right;transition:transform .25s var(--ease-out)}
 .forgot:hover{color:var(--GD)}
 .forgot:hover::after{transform:scaleX(1);transform-origin:left}
 
-/* Submit */
 .submit{
   width:100%;padding:15px;border:none;border-radius:14px;cursor:pointer;
   color:white;font-size:15px;font-weight:900;
@@ -302,16 +349,14 @@ button{font-family:inherit}
   display:flex;align-items:center;justify-content:center;gap:10px;
   transition:background .25s, transform .2s var(--ease-out), box-shadow .25s;
   position:relative;overflow:hidden;
-  background:var(--G);
-  box-shadow:0 8px 20px -4px rgba(14,124,102,.5);
+  background:var(--G);box-shadow:0 8px 20px -4px rgba(14,124,102,.5);
 }
 .submit:hover{background:var(--GD);transform:translateY(-2px);box-shadow:0 14px 28px -6px rgba(14,124,102,.55)}
 .submit:active{transform:translateY(0)}
 .submit i.fa-arrow-right{transition:transform .25s var(--ease-out)}
 .submit:hover i.fa-arrow-right{transform:translateX(4px)}
 .submit.loading{pointer-events:none}
-.submit.loading .submit-txt,
-.submit.loading i.fa-arrow-right{visibility:hidden}
+.submit.loading .submit-txt,.submit.loading i.fa-arrow-right{visibility:hidden}
 .submit .spinner{
   position:absolute;width:20px;height:20px;border-radius:50%;
   border:2.5px solid rgba(255,255,255,.3);border-top-color:white;
@@ -320,14 +365,12 @@ button{font-family:inherit}
 .submit.loading .spinner{opacity:1}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Divider */
 .divider{
   display:flex;align-items:center;gap:14px;margin:22px 0;
   font-size:10px;color:var(--MUT);font-weight:800;letter-spacing:.16em;text-transform:uppercase;
 }
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--BDR)}
 
-/* Social */
 .social{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
 .soc-btn{
   display:flex;align-items:center;justify-content:center;gap:9px;
@@ -344,23 +387,16 @@ button{font-family:inherit}
 
 .signup{text-align:center;font-size:13px;color:var(--MUT)}
 .signup a{color:var(--G);font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;position:relative}
-.signup a::after{
-  content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--G);
-  transform:scaleX(0);transform-origin:right;transition:transform .25s var(--ease-out);
-}
+.signup a::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--G);transform:scaleX(0);transform-origin:right;transition:transform .25s var(--ease-out)}
 .signup a:hover::after{transform:scaleX(1);transform-origin:left}
 
-/* Card meta strip */
 .card-meta{
-  margin-top:24px;padding-top:18px;
-  border-top:1px dashed var(--BDR);
+  margin-top:24px;padding-top:18px;border-top:1px dashed var(--BDR);
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
-  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--MUT);
-  letter-spacing:.06em;
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--MUT);letter-spacing:.06em;
 }
 .card-meta .key{color:var(--T);font-weight:700}
 
-/* Footer */
 .foot{
   padding:18px clamp(20px,4vw,44px);
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
@@ -374,6 +410,11 @@ button{font-family:inherit}
 /* ============================================
    RESPONSIVE
    ============================================ */
+@media(max-width:1023px){
+  .main{grid-template-columns:1fr;padding:20px clamp(16px,3vw,28px) 40px}
+  .hero-art{display:none}
+  .card-stack{max-width:480px;justify-self:center;margin:0 auto}
+}
 @media(max-width:640px){
   .topbar{padding:14px 16px}
   .brand{font-size:18px}
@@ -398,35 +439,179 @@ button{font-family:inherit}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
-  .pill{display:none}
+  .pill,.deco{display:none}
+  .blob-wrap{animation:none}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LIGHT BG -->
 <div class="bg" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
-
-<!-- FLOATING PILLS (visible) -->
 <div class="pills" aria-hidden="true" id="pills"></div>
 
 <div class="shell">
 
-  <!-- TOP BAR -->
   <header class="topbar">
     <a href="/" class="brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg>
-      </span>
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg></span>
       <span><span class="loca">Loca</span><span class="pharma">pharma</span></span>
     </a>
     <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i>Accueil</a>
   </header>
 
-  <!-- MAIN -->
   <main class="main">
+
+    {# ============================================
+       LEFT — hero art : waves + blob frame + headline
+       (visible PC only — caché en mobile)
+       ============================================ #}
+    <div class="hero-art" aria-hidden="true">
+
+      {# ---- TOP WAVE BANDS ---- #}
+      <svg class="wave-top" viewBox="0 0 800 320" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="wTop1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0a5e4d"/>
+            <stop offset="100%" stop-color="#0E7C66"/>
+          </linearGradient>
+          <linearGradient id="wTop2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0E7C66"/>
+            <stop offset="100%" stop-color="#10b981"/>
+          </linearGradient>
+          <linearGradient id="wTop3" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#34d399"/>
+            <stop offset="100%" stop-color="#6ee7b7"/>
+          </linearGradient>
+        </defs>
+        {# back wave (darkest) #}
+        <path fill="url(#wTop1)" d="M -20 0 L 820 0 L 820 140 C 720 200 600 110 500 170 C 400 230 300 130 200 190 C 120 240 60 180 -20 220 Z"/>
+        {# mid wave #}
+        <path fill="url(#wTop2)" opacity=".88" d="M -20 0 L 820 0 L 820 100 C 720 160 600 70 500 130 C 400 190 300 90 200 150 C 120 200 60 140 -20 180 Z"/>
+        {# front wave (lightest) #}
+        <path fill="url(#wTop3)" opacity=".7" d="M -20 0 L 820 0 L 820 60 C 720 120 600 30 500 90 C 400 150 300 50 200 110 C 120 160 60 100 -20 140 Z"/>
+      </svg>
+
+      {# ---- CENTER BLOB FRAME WITH IMAGE ---- #}
+      <div class="blob-wrap">
+        <svg viewBox="0 0 520 440" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            {# Blob shape (organic) #}
+            <clipPath id="blobClip">
+              <path d="M 270 26
+                       C 360 18, 450 70, 480 160
+                       C 510 245, 480 330, 410 380
+                       C 345 425, 250 425, 175 395
+                       C 90 360, 35 290, 30 210
+                       C 25 130, 75 60, 165 35
+                       C 200 22, 240 30, 270 26 Z"/>
+            </clipPath>
+            {# Outer ring gradient #}
+            <linearGradient id="blobRing" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"   stop-color="#0a5e4d"/>
+              <stop offset="50%"  stop-color="#0E7C66"/>
+              <stop offset="100%" stop-color="#34d399"/>
+            </linearGradient>
+            {# Soft glow #}
+            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+            </filter>
+          </defs>
+
+          {# Outer larger blob (ring/border) — slightly bigger and gradient #}
+          <path d="M 268 12
+                   C 365 4, 462 60, 496 150
+                   C 528 240, 498 340, 425 392
+                   C 355 442, 250 442, 170 410
+                   C 75 372, 18 296, 14 210
+                   C 10 122, 64 48, 160 20
+                   C 198 6, 238 14, 268 12 Z"
+                fill="url(#blobRing)" opacity=".25"/>
+
+          {# Inner shadow/glow behind image #}
+          <path d="M 270 26
+                   C 360 18, 450 70, 480 160
+                   C 510 245, 480 330, 410 380
+                   C 345 425, 250 425, 175 395
+                   C 90 360, 35 290, 30 210
+                   C 25 130, 75 60, 165 35
+                   C 200 22, 240 30, 270 26 Z"
+                fill="#0E7C66"/>
+
+          {# THE IMAGE — clipped to the blob shape #}
+          <image
+            href="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=900&q=80"
+            x="0" y="0" width="520" height="440"
+            preserveAspectRatio="xMidYMid slice"
+            clip-path="url(#blobClip)"/>
+
+          {# Dark overlay for legibility #}
+          <path d="M 270 26
+                   C 360 18, 450 70, 480 160
+                   C 510 245, 480 330, 410 380
+                   C 345 425, 250 425, 175 395
+                   C 90 360, 35 290, 30 210
+                   C 25 130, 75 60, 165 35
+                   C 200 22, 240 30, 270 26 Z"
+                fill="url(#wTop1)" opacity=".25"/>
+
+          {# Sun/moon-like accent #}
+          <circle cx="375" cy="130" r="28" fill="#F4C430" opacity=".95"/>
+          <circle cx="375" cy="130" r="40" fill="#F4C430" opacity=".18"/>
+
+          {# Stars / sparkles inside the blob #}
+          <circle cx="130" cy="90"  r="2.5" fill="#fff" opacity=".9"/>
+          <circle cx="200" cy="60"  r="1.8" fill="#fff" opacity=".75"/>
+          <circle cx="430" cy="220" r="2.2" fill="#fff" opacity=".8"/>
+          <circle cx="100" cy="280" r="1.6" fill="#fff" opacity=".7"/>
+          <circle cx="320" cy="340" r="2"   fill="#fff" opacity=".75"/>
+          <circle cx="240" cy="120" r="1.5" fill="#fff" opacity=".6"/>
+
+          {# Diagonal sparkle streaks #}
+          <path d="M 85 110 L 95 100" stroke="#fff" stroke-width="1.5" opacity=".7" stroke-linecap="round"/>
+          <path d="M 410 280 L 420 270" stroke="#fff" stroke-width="1.5" opacity=".7" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      {# ---- BOTTOM WAVE BANDS (mirror) ---- #}
+      <svg class="wave-bot" viewBox="0 0 800 280" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="wBot1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="#0E7C66"/>
+            <stop offset="100%" stop-color="#0a5e4d"/>
+          </linearGradient>
+          <linearGradient id="wBot2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="#34d399"/>
+            <stop offset="100%" stop-color="#10b981"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#wBot1)" d="M -20 0 L 820 0 L 820 140 C 720 200 600 110 500 170 C 400 230 300 130 200 190 C 120 240 60 180 -20 220 Z"/>
+        <path fill="url(#wBot2)" opacity=".75" d="M -20 0 L 820 0 L 820 100 C 720 160 600 70 500 130 C 400 190 300 90 200 150 C 120 200 60 140 -20 180 Z"/>
+      </svg>
+
+      {# ---- DECORATIONS ---- #}
+      <span class="deco dot1"></span>
+      <span class="deco dot2"></span>
+      <span class="deco dot3"></span>
+      <svg class="deco spark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></svg>
+      <svg class="deco plus" viewBox="0 0 24 24" fill="currentColor"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg>
+
+      {# ---- HEADLINE ---- #}
+      <div class="hero-headline">
+        <h2>La santé <strong>numérique</strong><br>des Comores.</h2>
+        <p>Trouvez. Localisez. Commandez. 24/7</p>
+        <div class="chips">
+          <span class="chip"><i class="fa-solid fa-shield-halved"></i>Certifié</span>
+          <span class="chip"><i class="fa-regular fa-clock"></i>24/7</span>
+          <span class="chip"><i class="fa-solid fa-map-location-dot"></i>3 îles</span>
+        </div>
+      </div>
+    </div>
+
+    {# ============================================
+       RIGHT — login form card
+       ============================================ #}
     <div class="card-stack">
       <div class="card" id="loginCard">
 
@@ -457,12 +642,10 @@ button{font-family:inherit}
           <div class="field">
             <div class="field-wrap">
               <i class="fa-solid fa-envelope field-icon"></i>
-              <input
-                type="email" id="inputEmail" name="_username"
+              <input type="email" id="inputEmail" name="_username"
                 class="field-input has-icon"
                 placeholder=" " autocomplete="email" inputmode="email" autofocus required
-                value="{{ last_username|default('') }}"
-              >
+                value="{{ last_username|default('') }}">
               <label for="inputEmail" class="field-label">Adresse email</label>
             </div>
           </div>
@@ -470,11 +653,9 @@ button{font-family:inherit}
           <div class="field">
             <div class="field-wrap">
               <i class="fa-solid fa-lock field-icon"></i>
-              <input
-                type="password" id="inputPassword" name="_password"
+              <input type="password" id="inputPassword" name="_password"
                 class="field-input has-icon"
-                placeholder=" " autocomplete="current-password" required minlength="6"
-              >
+                placeholder=" " autocomplete="current-password" required minlength="6">
               <label for="inputPassword" class="field-label">Mot de passe</label>
               <button type="button" class="field-toggle" id="pwToggle" aria-label="Afficher / masquer le mot de passe">
                 <i class="fa-regular fa-eye"></i>
@@ -526,7 +707,6 @@ button{font-family:inherit}
     </div>
   </main>
 
-  <!-- FOOTER -->
   <footer class="foot">
     <span>© 2026 Locapharma · Technopole Numérique des Comores</span>
     <span>SAMU <strong>773</strong> · <a href="#">Aide</a> · <a href="#">CGU</a></span>
@@ -534,42 +714,27 @@ button{font-family:inherit}
 
 </div>
 
-<!-- TOAST -->
 <div id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0B2545;color:white;padding:13px 24px;border-radius:100px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 12px 32px rgba(11,37,69,.35);opacity:0;transition:opacity .3s,transform .3s cubic-bezier(.22,1,.36,1);pointer-events:none;z-index:1000"></div>
 
 <script>
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ============================================
-// 1) Time-aware greeting (computed once, no ticking)
-// ============================================
-(function(){
+(function(){ // greeting
   const g = document.getElementById('greeting');
   if(!g) return;
-  const d = new Date();
-  const h = d.getHours();
-  let label;
-  if(h < 5)        label = 'Bonne nuit';
-  else if(h < 12)  label = 'Bonjour';
-  else if(h < 18)  label = 'Bon après-midi';
-  else             label = 'Bonsoir';
+  const d = new Date(); const h = d.getHours();
+  let label = h<5?'Bonne nuit':h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir';
   const hh = String(d.getHours()).padStart(2,'0');
   const mm = String(d.getMinutes()).padStart(2,'0');
   g.innerHTML = '— ' + label + ' &nbsp;·&nbsp; <span class="now">' + hh + ':' + mm + '</span>';
 })();
 
-// ============================================
-// 2) Static fake session ID for ID-card vibe
-// ============================================
-(function(){
+(function(){ // session id
   const el = document.getElementById('sessId');
   if(el) el.textContent = Math.random().toString(36).substring(2, 7).toUpperCase();
 })();
 
-// ============================================
-// 3) Floating pills — visible, slow
-// ============================================
-(function(){
+(function(){ // floating pills
   if(reduceMotion) return;
   const root = document.getElementById('pills');
   if(!root) return;
@@ -579,22 +744,15 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     const el = document.createElement('div');
     el.className = 'pill ' + types[Math.floor(Math.random() * types.length)];
     const left  = Math.random() * 100;
-    const dur   = 40 + Math.random() * 35;   // 40-75s (lent)
+    const dur   = 40 + Math.random() * 35;
     const delay = -Math.random() * dur;
-    const scale = .7 + Math.random() * .8;   // 0.7 - 1.5
-    el.style.cssText =
-      'left:' + left + '%; ' +
-      'animation-duration:' + dur + 's; ' +
-      'animation-delay:' + delay + 's; ' +
-      'transform:scale(' + scale + ');';
+    const scale = .7 + Math.random() * .8;
+    el.style.cssText = 'left:' + left + '%; animation-duration:' + dur + 's; animation-delay:' + delay + 's; transform:scale(' + scale + ');';
     root.appendChild(el);
   }
 })();
 
-// ============================================
-// 4) Password show/hide
-// ============================================
-(function(){
+(function(){ // password toggle
   const btn = document.getElementById('pwToggle');
   const inp = document.getElementById('inputPassword');
   if(!btn || !inp) return;
@@ -605,21 +763,13 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   });
 })();
 
-// ============================================
-// 5) Form submit -> loading state
-// ============================================
-(function(){
+(function(){ // submit -> loading
   const f = document.getElementById('loginForm');
   const b = document.getElementById('submitBtn');
   if(!f || !b) return;
-  f.addEventListener('submit', () => {
-    if(f.checkValidity()) b.classList.add('loading');
-  });
+  f.addEventListener('submit', () => { if(f.checkValidity()) b.classList.add('loading'); });
 })();
 
-// ============================================
-// 6) Toast helper
-// ============================================
 function showToast(msg){
   const t = document.getElementById('toast');
   if(!t) return;
@@ -627,10 +777,7 @@ function showToast(msg){
   t.style.opacity = '1';
   t.style.transform = 'translateX(-50%) translateY(0)';
   clearTimeout(t._tm);
-  t._tm = setTimeout(() => {
-    t.style.opacity = '0';
-    t.style.transform = 'translateX(-50%) translateY(20px)';
-  }, 2600);
+  t._tm = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2600);
 }
 </script>
 
