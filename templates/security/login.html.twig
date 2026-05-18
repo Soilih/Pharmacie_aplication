@@ -483,16 +483,18 @@ img{display:block;max-width:100%}
         <a href="#">Créer un compte gratuit</a>
       </p>
 
-      {% if error %}
+      {% if error is defined and error %}
         <div class="auth-alert err" role="alert">
           <i class="fa-solid fa-circle-exclamation"></i>
           <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
         </div>
       {% endif %}
 
-      {% for message in app.flashes('success') %}
-        <div class="auth-alert ok"><i class="fa-solid fa-circle-check"></i><span>{{ message }}</span></div>
-      {% endfor %}
+      {% if app is defined %}
+        {% for message in app.flashes('success') %}
+          <div class="auth-alert ok"><i class="fa-solid fa-circle-check"></i><span>{{ message }}</span></div>
+        {% endfor %}
+      {% endif %}
 
       <form method="post" action="{{ path('app_login') }}" id="loginForm" novalidate>
 
@@ -502,7 +504,7 @@ img{display:block;max-width:100%}
             type="email" id="inputEmail" name="_username"
             class="field-input has-icon"
             placeholder=" " autocomplete="email" inputmode="email" autofocus required
-            value="{{ last_username }}"
+            value="{{ last_username|default('') }}"
           >
           <label for="inputEmail" class="field-label">Adresse email</label>
         </div>
