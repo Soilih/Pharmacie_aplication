@@ -1,0 +1,1750 @@
+{# templates/commande/index.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Commander — Locapharma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* ============================================
+   VARIABLES
+   ============================================ */
+:root{
+  --G:#0E7C66; --GD:#0a5e4d; --GL:#e1f5ee; --GXL:#f0faf7;
+  --B:#0B2545; --BM:#1a3a6e;
+  --GOLD:#F4C430; --GOLD-D:#d9a90f;
+  --T:#1D2939; --MUT:#667085; --LT:#F2F4F7; --BDR:#E4E7EC;
+  --W:#fff; --ERR:#F04438; --OK:#12B76A; --WARN:#F59E0B;
+
+  --shadow-sm: 0 1px 2px rgba(11,37,69,.05);
+  --shadow:    0 2px 16px rgba(11,37,69,.07);
+  --shadow-md: 0 8px 28px rgba(11,37,69,.10);
+  --shadow-lg: 0 18px 40px -8px rgba(11,37,69,.18);
+  --shadow-teal: 0 12px 32px -8px rgba(14,124,102,.45);
+
+  --ease-out: cubic-bezier(.22,1,.36,1);
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --ease-soft: cubic-bezier(.4,0,.2,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Manrope',sans-serif;color:var(--T);
+  background:#F0F4F9;overflow-x:hidden;min-height:100vh;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+button{font-family:inherit}
+:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(14,124,102,.36)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:var(--G);border-radius:3px}
+
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.02em}
+
+/* ============================================
+   SCREENS
+   ============================================ */
+.screen{display:none;animation:screenIn .35s var(--ease-out)}
+.screen.active{display:block}
+@keyframes screenIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============================================
+   SCREEN 1 — SEARCH HUB
+   ============================================ */
+.search-wrap{max-width:900px;margin:0 auto;padding:36px 5% 0}
+.search-hero{text-align:center;margin-bottom:28px;animation:fadeUp .55s var(--ease-out) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.sh-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--GL);color:var(--G);
+  border:1px solid rgba(14,124,102,.2);
+  padding:5px 14px;border-radius:100px;
+  font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:14px;font-family:'Plus Jakarta Sans',sans-serif;
+}
+.sh-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--G);box-shadow:0 0 0 3px rgba(14,124,102,.18)}
+.search-hero h1{font-size:clamp(24px,3.6vw,38px);font-weight:900;color:var(--B);margin-bottom:8px;letter-spacing:-.025em}
+.search-hero p{font-size:14px;color:var(--MUT);font-weight:500;max-width:520px;margin:0 auto;line-height:1.55}
+
+.search-box{
+  background:white;border-radius:20px;
+  box-shadow:var(--shadow-md);border:1px solid var(--BDR);
+  overflow:hidden;
+  animation:fadeUp .55s var(--ease-out) .1s both;
+  margin-bottom:16px;
+}
+.search-tabs{display:flex;border-bottom:1px solid var(--BDR);background:#FAFBFC}
+.stab{
+  flex:1;padding:14px;text-align:center;
+  font-size:13px;font-weight:800;color:var(--MUT);cursor:pointer;
+  transition:color .2s, background .2s, border-color .2s;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  border-bottom:3px solid transparent;
+}
+.stab.on{color:var(--G);border-bottom-color:var(--G);background:white}
+.stab i{font-size:14px}
+.search-input-wrap{display:flex;align-items:center}
+.search-input-wrap input{
+  flex:1;border:none;outline:none;
+  padding:18px 20px;font-size:15px;
+  font-family:'Manrope',sans-serif;color:var(--T);background:transparent;
+}
+.search-input-wrap input::placeholder{color:#A6B0BD}
+.search-submit{
+  background:linear-gradient(135deg,var(--G),var(--GD));color:white;
+  border:none;padding:0 28px;height:60px;
+  font-size:14px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;
+  cursor:pointer;display:flex;align-items:center;gap:8px;flex-shrink:0;
+  transition:background .25s, transform .2s var(--ease-out);
+}
+.search-submit:hover{background:var(--GD);transform:translateY(-1px)}
+.search-submit:active{transform:translateY(0)}
+
+.search-hint{
+  text-align:center;font-size:12px;color:var(--MUT);
+  margin-bottom:32px;animation:fadeUp .55s var(--ease-out) .2s both;
+}
+.search-hint .label{font-weight:700;color:var(--T);margin-right:4px}
+.search-hint span.chip{
+  display:inline-flex;align-items:center;gap:5px;
+  background:white;border:1px solid var(--BDR);
+  border-radius:100px;padding:5px 13px;margin:3px;
+  cursor:pointer;transition:border-color .2s, color .2s, background .2s, transform .2s var(--ease-spring);
+  font-weight:600;color:var(--T);
+}
+.search-hint span.chip:hover{border-color:var(--G);color:var(--G);background:var(--GXL);transform:translateY(-1px)}
+
+/* SECTION HEADER */
+.sec-head{
+  max-width:1300px;margin:0 auto;
+  padding:28px 5% 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.sec-head h2{
+  font-size:18px;font-weight:900;color:var(--B);
+  display:flex;align-items:center;gap:10px;
+}
+.sec-head h2 i{color:var(--G)}
+.sec-head p{font-size:13px;color:var(--MUT);font-weight:500;margin-top:2px}
+.badge-count{
+  background:var(--G);color:white;
+  font-size:10px;font-weight:800;border-radius:100px;
+  padding:3px 9px;font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+/* PHARMACY GRID */
+.ph-grid-wrap{max-width:1300px;margin:0 auto;padding:0 5% 56px}
+.ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.ph-card{
+  background:white;border-radius:18px;overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+  cursor:pointer;position:relative;
+  border:1px solid var(--BDR);
+}
+.ph-card:hover{box-shadow:var(--shadow-md);transform:translateY(-4px)}
+.ph-card-img{height:160px;overflow:hidden;background:var(--B);position:relative}
+.ph-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease-out)}
+.ph-card:hover .ph-card-img img{transform:scale(1.07)}
+.ph-card-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(11,37,69,.35) 100%);pointer-events:none}
+.ph-card-badge{
+  position:absolute;bottom:10px;left:10px;
+  padding:5px 11px;border-radius:100px;
+  font-size:10px;font-weight:800;letter-spacing:.04em;z-index:2;
+  box-shadow:0 4px 10px rgba(0,0,0,.18);
+  display:inline-flex;align-items:center;gap:5px;
+}
+.b-open{background:rgba(18,183,106,.95);color:white}
+.b-guard{background:rgba(244,196,48,.96);color:#5B3F00}
+.b-closed{background:rgba(240,68,56,.90);color:white}
+.ph-card-body{padding:14px}
+.ph-card-name{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15px;font-weight:800;color:var(--B);
+  margin-bottom:5px;line-height:1.3;letter-spacing:-.01em;
+}
+.ph-card-loc{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--MUT);margin-bottom:10px;font-weight:600}
+.ph-card-loc i{color:var(--G);font-size:10px}
+.ph-btn-view{
+  width:100%;padding:10px;border-radius:11px;
+  font-size:12px;font-weight:800;border:none;
+  background:var(--G);color:white;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  transition:background .2s, transform .2s var(--ease-spring);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.ph-btn-view:hover{background:var(--GD);transform:translateY(-1px)}
+
+@media(max-width:1100px){.ph-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.ph-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
+@media(max-width:640px){.ph-grid-wrap{padding:0 14px 100px}.ph-card-img{height:140px}}
+
+.empty-state{text-align:center;padding:60px 20px;animation:fadeUp .5s var(--ease-out) both}
+.empty-state i{font-size:54px;color:var(--BDR);margin-bottom:14px;display:block}
+.empty-state h3{font-size:17px;font-weight:800;color:var(--B);margin-bottom:7px}
+.empty-state p{font-size:13px;color:var(--MUT);max-width:280px;margin:0 auto;line-height:1.55}
+
+/* ============================================
+   SCREEN 2 — MED RESULTS
+   ============================================ */
+.med-wrap{max-width:880px;margin:0 auto;padding:24px 5% 140px}
+.back-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:700;color:var(--MUT);
+  cursor:pointer;padding:9px 16px;border-radius:10px;
+  background:white;border:1px solid var(--BDR);
+  transition:background .2s, color .2s, border-color .2s, transform .2s var(--ease-out);
+  font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:18px;
+}
+.back-btn:hover{background:var(--GL);color:var(--G);border-color:var(--G);transform:translateX(-2px)}
+
+.med-query-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg, var(--GL), white);
+  border:1px solid rgba(14,124,102,.3);
+  border-radius:14px;padding:12px 18px;
+  font-size:13px;font-weight:700;color:var(--T);
+  margin-bottom:18px;box-shadow:var(--shadow-sm);
+}
+.med-query-badge .ico{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--G);color:white;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+.med-query-badge .txt{flex:1}
+.med-query-badge .txt .q{font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:15px;color:var(--B);display:block;margin-bottom:2px}
+.med-query-badge .txt .c{font-size:11px;color:var(--MUT);font-weight:600}
+
+.med-limit-info{
+  background:#EFF6FF;border:1px solid #BFDBFE;border-radius:13px;
+  padding:12px 16px;font-size:12.5px;font-weight:600;color:#1E40AF;
+  display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.med-limit-info i{font-size:16px;flex-shrink:0}
+
+.med-limit-warn{
+  background:#FEF3C7;border:1px solid var(--WARN);border-radius:13px;
+  padding:12px 16px;font-size:12.5px;font-weight:700;color:#92400E;
+  display:none;align-items:center;gap:10px;margin-bottom:18px;
+  animation:shake .4s;
+}
+.med-limit-warn.show{display:flex}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  75%{transform:translateX(4px)}
+}
+
+.med-ph-card{
+  background:white;border-radius:16px;border:2px solid var(--BDR);
+  padding:16px;margin-bottom:12px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;
+  transition:border-color .25s, transform .25s var(--ease-out), box-shadow .25s, background .25s;
+  position:relative;
+}
+.med-ph-card:hover{border-color:var(--G);box-shadow:var(--shadow);transform:translateX(4px)}
+.med-ph-card.selected{
+  border-color:var(--G);background:var(--GXL);
+  box-shadow:var(--shadow-teal);
+}
+.med-ph-img{width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;background:var(--LT)}
+.med-ph-info{flex:1;min-width:0}
+.med-ph-name{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15px;font-weight:800;color:var(--B);margin-bottom:4px;
+  letter-spacing:-.01em;
+}
+.med-ph-loc{font-size:12px;color:var(--MUT);font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.med-ph-loc i{color:var(--G);font-size:11px}
+.med-ph-stock{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--GL);color:var(--G);
+  font-size:11px;font-weight:800;border-radius:100px;
+  padding:3px 11px;
+}
+.med-ph-stock i{font-size:10px}
+.med-ph-check{
+  width:34px;height:34px;border-radius:50%;
+  background:white;border:2px solid var(--BDR);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:transparent;
+  transition:background .25s, border-color .25s, color .25s, transform .25s var(--ease-spring);
+  flex-shrink:0;
+}
+.med-ph-card.selected .med-ph-check{
+  background:var(--G);border-color:var(--G);color:white;
+  transform:scale(1.08);
+}
+
+/* ============================================
+   FLOATING ORDER BUTTON
+   ============================================ */
+.float-cmd{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  z-index:600;
+  background:linear-gradient(135deg, var(--G), var(--GD));
+  color:white;border:none;
+  padding:16px 42px;border-radius:100px;
+  font-size:15px;font-weight:900;
+  font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;
+  transition:transform .35s var(--ease-spring), background .25s;
+  box-shadow:0 14px 36px -6px rgba(14,124,102,.55);
+  display:flex;align-items:center;gap:10px;white-space:nowrap;
+  opacity:0;visibility:hidden;
+}
+.float-cmd.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible}
+.float-cmd:hover{background:var(--GD);transform:translateX(-50%) translateY(-3px)}
+.fc-badge{
+  background:rgba(255,255,255,.28);
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:900;
+}
+
+/* ============================================
+   PHARMACY MODAL
+   ============================================ */
+.ph-modal{
+  position:fixed;inset:0;z-index:800;background:white;
+  transform:translateX(100%);
+  transition:transform .42s var(--ease-out);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.ph-modal.open{transform:translateX(0)}
+.pm-topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:0 22px;height:64px;flex-shrink:0;
+  background:white;border-bottom:1px solid var(--BDR);
+  box-shadow:0 2px 12px rgba(11,37,69,.06);z-index:2;
+}
+.pm-back{
+  width:40px;height:40px;background:var(--LT);
+  border:none;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:var(--B);cursor:pointer;
+  transition:background .2s, transform .25s var(--ease-spring);flex-shrink:0;
+}
+.pm-back:hover{background:var(--GL);color:var(--G);transform:scale(1.05)}
+.pm-titlebox{flex:1;min-width:0}
+.pm-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:900;color:var(--B);letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm-sub{font-size:11px;color:var(--MUT);font-weight:600;margin-top:1px}
+.pm-body{flex:1;overflow-y:auto;background:#F0F4F9;-webkit-overflow-scrolling:touch}
+
+.pm-hero{
+  position:relative;height:200px;overflow:hidden;background:var(--B);
+}
+.pm-hero img{width:100%;height:100%;object-fit:cover;opacity:.55}
+.pm-hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(11,37,69,.25) 0%, rgba(11,37,69,.75) 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:22px;
+}
+.pm-hero-overlay h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:900;color:white;margin-bottom:4px;letter-spacing:-.02em}
+.pm-hero-overlay .meta{font-size:13px;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:6px}
+.pm-hero-overlay .meta i{color:var(--GOLD);font-size:12px}
+.pm-hero .status{
+  position:absolute;top:16px;right:16px;
+  padding:6px 14px;border-radius:100px;
+  font-size:11px;font-weight:800;letter-spacing:.04em;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+
+.pm-section{
+  background:white;border-radius:20px;
+  margin:14px;padding:20px;box-shadow:var(--shadow);
+  border:1px solid var(--BDR);
+}
+.pm-section-title{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:900;color:var(--B);
+  margin-bottom:16px;display:flex;align-items:center;gap:9px;
+  padding-bottom:12px;border-bottom:2px solid var(--GL);
+  letter-spacing:-.01em;
+}
+.pm-section-title i{color:var(--G);font-size:13px}
+
+/* Medicament search inside pharmacy */
+.med-search-input{
+  position:relative;
+}
+.med-search-input input{
+  width:100%;padding:12px 14px 12px 42px;
+  border:1.5px solid var(--BDR);border-radius:12px;
+  font-size:14px;color:var(--T);background:#FAFBFC;
+  font-family:'Manrope',sans-serif;outline:none;
+  transition:border-color .2s, background .2s, box-shadow .2s;
+}
+.med-search-input input:focus{border-color:var(--G);background:white;box-shadow:0 0 0 4px rgba(14,124,102,.1)}
+.med-search-input i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--MUT);font-size:14px;pointer-events:none}
+.med-results-count{font-size:11px;color:var(--MUT);font-weight:700;margin-top:8px;letter-spacing:.04em}
+
+.med-list{max-height:340px;overflow-y:auto;margin-top:12px}
+.med-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 13px;
+  border:1px solid var(--BDR);
+  background:#FAFBFC;border-radius:12px;
+  margin-bottom:8px;cursor:pointer;
+  transition:background .2s, border-color .2s, transform .2s var(--ease-out);
+}
+.med-item:hover{background:var(--GXL);border-color:rgba(14,124,102,.2);transform:translateX(3px)}
+.med-item.selected{background:var(--GL);border-color:var(--G)}
+.med-item-name{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13.5px;font-weight:700;color:var(--T);
+  flex:1;line-height:1.3;
+}
+.med-item-rx{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 8px;border-radius:100px;flex-shrink:0;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+.med-item-rx.rx{background:#FEF3C7;color:#92400E;border:1px solid rgba(245,158,11,.3)}
+.med-item-rx.free{background:var(--GL);color:var(--G);border:1px solid rgba(14,124,102,.2)}
+.med-item-rx i{font-size:9px}
+.med-item-check{
+  width:22px;height:22px;border-radius:7px;
+  border:1.5px solid var(--BDR);background:white;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:transparent;flex-shrink:0;
+  transition:background .2s, border-color .2s, color .2s, transform .2s var(--ease-spring);
+}
+.med-item.selected .med-item-check{
+  background:var(--G);border-color:var(--G);color:white;transform:scale(1.08);
+}
+
+.selected-meds-preview{
+  background:linear-gradient(135deg, var(--GL), white);
+  border:1px solid rgba(14,124,102,.2);
+  border-radius:12px;padding:12px;margin-top:12px;
+  display:none;
+}
+.selected-meds-preview.show{display:block;animation:fadeUp .35s var(--ease-out)}
+.smp-title{font-size:11px;font-weight:800;color:var(--G);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.smp-tags{display:flex;flex-wrap:wrap;gap:6px}
+.med-tag{
+  background:white;border:1px solid var(--G);
+  font-size:11px;font-weight:700;color:var(--T);
+  padding:4px 10px 4px 12px;border-radius:100px;
+  display:inline-flex;align-items:center;gap:8px;
+  box-shadow:var(--shadow-sm);
+}
+.med-tag.rx{border-color:var(--WARN);background:#FFFBEB}
+.med-tag .rx-dot{width:6px;height:6px;border-radius:50%;background:var(--WARN)}
+.med-tag .x{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--LT);color:var(--MUT);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;cursor:pointer;transition:background .2s, color .2s;
+}
+.med-tag .x:hover{background:var(--ERR);color:white}
+
+/* Accessories grid — REAL IMAGES */
+.acc-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+}
+@media(max-width:540px){.acc-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+@media(max-width:380px){.acc-grid{grid-template-columns:repeat(2,1fr);gap:8px}}
+
+.acc-item{
+  position:relative;
+  border-radius:14px;overflow:hidden;
+  border:2px solid var(--BDR);background:white;
+  cursor:pointer;
+  transition:border-color .25s, transform .25s var(--ease-out), box-shadow .25s;
+}
+.acc-item:hover{border-color:var(--G);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.acc-item.selected{border-color:var(--G);background:var(--GXL);box-shadow:var(--shadow-teal)}
+.acc-img{
+  position:relative;height:120px;overflow:hidden;
+  background:linear-gradient(135deg, #F1F5F9, #E2E8F0);
+}
+.acc-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .5s var(--ease-out);
+}
+.acc-item:hover .acc-img img{transform:scale(1.08)}
+.acc-img .fallback{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:38px;color:var(--G);background:linear-gradient(135deg, var(--GL), white);
+  display:none;
+}
+.acc-img img.broken + .fallback{display:flex}
+.acc-check{
+  position:absolute;top:8px;right:8px;
+  width:26px;height:26px;border-radius:50%;
+  background:white;border:2px solid var(--BDR);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:transparent;
+  transition:background .2s, border-color .2s, color .2s, transform .25s var(--ease-spring);
+  box-shadow:var(--shadow-sm);
+}
+.acc-item.selected .acc-check{
+  background:var(--G);border-color:var(--G);color:white;transform:scale(1.12);
+}
+.acc-info{padding:10px}
+.acc-name{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:12px;font-weight:800;color:var(--B);margin-bottom:3px;
+  line-height:1.3;letter-spacing:-.01em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  min-height:31px;
+}
+.acc-price{font-size:11.5px;color:var(--G);font-weight:800;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* Pharmacy modal footer (sticky CTA) — HIDDEN by default */
+.pm-footer{
+  flex-shrink:0;background:white;border-top:1px solid var(--BDR);
+  padding:14px 20px env(safe-area-inset-bottom,0);
+  box-shadow:0 -4px 20px rgba(11,37,69,.08);
+  display:none;
+  animation:slideUpFooter .35s var(--ease-out);
+}
+.pm-footer.show{display:block}
+@keyframes slideUpFooter{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.pm-sel-info{
+  font-size:12px;color:var(--MUT);font-weight:600;
+  margin-bottom:10px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.pm-sel-count{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--G);font-weight:800;
+}
+.pm-sel-total{color:var(--B);font-weight:800;font-family:'Plus Jakarta Sans',sans-serif}
+.pm-cmd-btn{
+  width:100%;padding:15px;
+  background:linear-gradient(135deg, var(--G), var(--GD));color:white;
+  border:none;border-radius:13px;
+  font-size:15px;font-weight:900;
+  font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;
+  transition:background .25s, transform .2s var(--ease-out), box-shadow .25s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 8px 22px -4px rgba(14,124,102,.5);
+}
+.pm-cmd-btn:hover{background:var(--GD);transform:translateY(-2px);box-shadow:0 14px 28px -6px rgba(14,124,102,.6)}
+
+/* ============================================
+   SCREEN 3 — RECAP
+   ============================================ */
+.recap-wrap{max-width:760px;margin:0 auto;padding:28px 5% 60px}
+.recap-card{
+  background:white;border-radius:20px;
+  box-shadow:var(--shadow-md);overflow:hidden;
+  margin-bottom:18px;border:1px solid var(--BDR);
+  animation:fadeUp .5s var(--ease-out) both;
+}
+.recap-card-head{
+  padding:18px 22px;
+  background:linear-gradient(135deg, var(--B), var(--BM));
+  display:flex;align-items:center;gap:14px;
+}
+.recap-card-head .ico{
+  width:44px;height:44px;border-radius:13px;
+  background:rgba(255,255,255,.16);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:white;flex-shrink:0;
+  border:1px solid rgba(255,255,255,.14);
+}
+.recap-card-head .txt h3{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:16px;font-weight:900;color:white;margin-bottom:2px;letter-spacing:-.01em;
+}
+.recap-card-head .txt p{font-size:11.5px;color:rgba(255,255,255,.7);font-weight:600}
+
+.recap-ph-badge{
+  background:var(--GXL);border:1px solid rgba(14,124,102,.18);
+  border-radius:12px;padding:12px 16px;margin:14px 22px;
+  display:flex;align-items:center;gap:12px;
+}
+.recap-ph-badge i{color:var(--G);font-size:15px;flex-shrink:0}
+.recap-ph-badge strong{display:block;font-size:13px;font-weight:800;color:var(--B);font-family:'Plus Jakarta Sans',sans-serif}
+.recap-ph-badge span{font-size:11.5px;color:var(--MUT);font-weight:600}
+
+.recap-item{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--BDR)}
+.recap-item:last-of-type{border-bottom:0}
+.recap-item-ico{
+  width:46px;height:46px;border-radius:12px;
+  background:var(--GL);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--G);flex-shrink:0;
+}
+.recap-item-info{flex:1;min-width:0}
+.recap-item-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:800;color:var(--B);margin-bottom:3px;letter-spacing:-.01em}
+.recap-item-sub{font-size:11.5px;color:var(--MUT);font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.recap-item-sub .rx-pill{
+  background:#FEF3C7;color:#92400E;border:1px solid rgba(245,158,11,.3);
+  padding:2px 7px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+}
+.recap-item-price{font-size:13px;font-weight:800;color:var(--G);flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif}
+
+.recap-total{
+  padding:16px 22px;background:var(--GXL);
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px dashed var(--BDR);
+}
+.recap-total-lbl{font-size:13px;font-weight:700;color:var(--MUT)}
+.recap-total-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:900;color:var(--G);letter-spacing:-.01em}
+
+.recap-note{
+  background:#FEF9E7;border:1px solid var(--WARN);border-radius:13px;
+  padding:14px 16px;font-size:12.5px;color:#92400E;font-weight:600;
+  display:flex;align-items:flex-start;gap:10px;margin-top:14px;line-height:1.55;
+}
+.recap-note i{font-size:14px;flex-shrink:0;margin-top:2px}
+
+.recap-cta{
+  width:100%;padding:17px;
+  background:linear-gradient(135deg, var(--G), var(--GD));color:white;
+  border:none;border-radius:14px;
+  font-size:15px;font-weight:900;
+  font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;
+  transition:background .25s, transform .2s var(--ease-out), box-shadow .25s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 10px 28px -4px rgba(14,124,102,.4);
+  margin-top:18px;
+}
+.recap-cta:hover{background:var(--GD);transform:translateY(-2px);box-shadow:0 14px 32px -6px rgba(14,124,102,.55)}
+
+/* ============================================
+   SCREEN 4 — ORDER FORM (locked user info)
+   ============================================ */
+.form-wrap{max-width:760px;margin:0 auto;padding:28px 5% 80px}
+.form-card{
+  background:white;border-radius:20px;
+  box-shadow:var(--shadow-md);padding:24px;margin-bottom:18px;
+  border:1px solid var(--BDR);
+  animation:fadeUp .5s var(--ease-out) both;
+}
+.form-section-title{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:900;color:var(--B);margin-bottom:18px;
+  display:flex;align-items:center;gap:9px;
+  padding-bottom:12px;border-bottom:2px solid var(--GL);
+  letter-spacing:-.01em;
+}
+.form-section-title i{color:var(--G);font-size:13px}
+
+/* Locked user info rows */
+.user-info-locked{display:flex;flex-direction:column;gap:10px}
+.uir{
+  display:flex;align-items:center;gap:14px;
+  padding:14px;border-radius:13px;
+  background:linear-gradient(135deg, var(--GXL), white);
+  border:1px solid rgba(14,124,102,.16);
+  position:relative;
+}
+.uir-icon{
+  width:42px;height:42px;border-radius:12px;
+  background:white;color:var(--G);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  flex-shrink:0;border:1px solid var(--BDR);
+}
+.uir-content{flex:1;min-width:0}
+.uir-label{font-size:10px;font-weight:800;color:var(--MUT);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;font-family:'Plus Jakarta Sans',sans-serif}
+.uir-value{font-size:14px;font-weight:700;color:var(--B);font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.01em;word-break:break-word}
+.uir-verified{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--OK);font-size:11px;font-weight:800;
+  background:white;padding:5px 11px;border-radius:100px;
+  border:1px solid rgba(16,183,106,.3);flex-shrink:0;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+.uir-verified i{font-size:10px}
+
+.reassurance-note{
+  background:#FFF7E6;border:1px solid #FCD34D;border-radius:13px;
+  padding:14px 16px;margin-top:14px;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.reassurance-note i{font-size:18px;color:var(--GOLD-D);flex-shrink:0;margin-top:2px}
+.reassurance-note strong{display:block;font-size:13px;font-weight:800;color:#78350F;margin-bottom:4px;font-family:'Plus Jakarta Sans',sans-serif}
+.reassurance-note p{font-size:12.5px;color:#78350F;line-height:1.55;font-weight:500}
+.reassurance-note a{color:var(--G);font-weight:800;text-decoration:underline;text-underline-offset:2px}
+
+/* Delivery options */
+.delivery-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.delivery-options{grid-template-columns:1fr}}
+.del-opt{
+  border:2px solid var(--BDR);border-radius:14px;
+  padding:16px;cursor:pointer;
+  transition:border-color .25s, background .25s, transform .25s var(--ease-out);
+  display:flex;align-items:center;gap:12px;background:white;
+}
+.del-opt:hover{border-color:var(--G);background:var(--GXL)}
+.del-opt.on{border-color:var(--G);background:var(--GXL);box-shadow:var(--shadow-teal)}
+.del-opt-ico{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.del-opt-ico.pick{background:var(--GL);color:var(--G)}
+.del-opt-ico.deliv{background:#EFF6FF;color:#4285F4}
+.del-opt-txt strong{display:block;font-size:13px;font-weight:800;color:var(--B);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:2px;letter-spacing:-.01em}
+.del-opt-txt span{font-size:11.5px;color:var(--MUT);font-weight:600}
+
+/* Adresse + notes inputs */
+.form-group{margin-bottom:14px}
+.form-group:last-child{margin-bottom:0}
+.form-label{display:block;font-size:11px;font-weight:800;color:var(--T);margin-bottom:7px;letter-spacing:.05em;text-transform:uppercase;font-family:'Plus Jakarta Sans',sans-serif}
+.form-input{
+  width:100%;padding:13px 16px;
+  border:1.5px solid var(--BDR);border-radius:12px;
+  font-size:14px;color:var(--T);font-family:'Manrope',sans-serif;
+  background:#FAFBFC;transition:border-color .2s, background .2s, box-shadow .2s;
+  outline:none;
+}
+.form-input:focus{border-color:var(--G);background:white;box-shadow:0 0 0 4px rgba(14,124,102,.1)}
+.form-input::placeholder{color:#A6B0BD}
+.form-textarea{resize:vertical;min-height:90px}
+
+/* Ordonnance upload */
+.ord-upload{
+  border:2px dashed var(--BDR);border-radius:14px;padding:24px;text-align:center;
+  cursor:pointer;transition:border-color .2s, background .2s;
+  background:#FAFBFC;position:relative;
+}
+.ord-upload:hover{border-color:var(--G);background:var(--GXL)}
+.ord-upload.has-file{border-color:var(--G);background:var(--GL);border-style:solid}
+.ord-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ord-upload-ico{font-size:28px;color:var(--G);margin-bottom:8px}
+.ord-upload-txt{font-size:13px;font-weight:800;color:var(--B);margin-bottom:3px;font-family:'Plus Jakarta Sans',sans-serif}
+.ord-upload-sub{font-size:11px;color:var(--MUT);font-weight:500}
+.rx-required-banner{
+  background:#FEF3C7;border:1px solid var(--WARN);border-radius:13px;
+  padding:12px 16px;margin-bottom:14px;
+  display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:#92400E;font-weight:600;line-height:1.55;
+}
+.rx-required-banner i{font-size:15px;flex-shrink:0;margin-top:2px}
+
+/* Position notice */
+.position-notice{
+  background:#EFF6FF;border:1px solid #BFDBFE;border-radius:13px;
+  padding:14px 16px;display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;
+}
+.position-notice i{font-size:18px;color:#2563EB;flex-shrink:0;margin-top:2px}
+.position-notice strong{display:block;font-size:13px;font-weight:800;color:#1E3A8A;margin-bottom:3px;font-family:'Plus Jakarta Sans',sans-serif}
+.position-notice p{font-size:12.5px;color:#1E40AF;line-height:1.55;font-weight:500}
+
+/* Order summary mini */
+.order-summary-mini{
+  background:var(--GXL);border:1px solid rgba(14,124,102,.2);
+  border-radius:13px;padding:14px 18px;margin-bottom:16px;
+}
+.osm-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;color:var(--G);margin-bottom:10px;display:flex;align-items:center;gap:7px;letter-spacing:-.01em}
+.osm-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--T);font-weight:600;margin-bottom:6px}
+.osm-row span:first-child{flex:1;padding-right:10px}
+.osm-row.total{color:var(--B);font-weight:900;font-size:14px;border-top:1px solid rgba(14,124,102,.2);padding-top:8px;margin-top:8px;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* Terms checkbox */
+.terms-wrap{
+  background:white;border:2px solid var(--BDR);border-radius:14px;
+  padding:16px;margin-bottom:18px;
+  transition:border-color .25s, background .25s;
+}
+.terms-wrap.checked{border-color:var(--G);background:var(--GXL)}
+.terms-checkbox{
+  display:flex;align-items:flex-start;gap:12px;cursor:pointer;user-select:none;
+}
+.terms-checkbox input{position:absolute;opacity:0;width:0;height:0}
+.terms-checkbox .box{
+  width:22px;height:22px;border-radius:7px;
+  border:2px solid var(--BDR);background:white;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:transparent;flex-shrink:0;margin-top:1px;
+  transition:background .2s, border-color .2s, color .2s, transform .2s var(--ease-spring);
+}
+.terms-checkbox input:checked ~ .box{background:var(--G);border-color:var(--G);color:white;transform:scale(1.05)}
+.terms-checkbox input:focus-visible ~ .box{box-shadow:0 0 0 3px rgba(14,124,102,.24)}
+.terms-text{font-size:13px;line-height:1.55;color:var(--T);font-weight:500}
+.terms-text strong{color:var(--B);font-weight:800;font-family:'Plus Jakarta Sans',sans-serif}
+.terms-text a{color:var(--G);font-weight:800;text-decoration:underline;text-underline-offset:2px}
+
+.submit-btn{
+  width:100%;padding:18px;
+  background:linear-gradient(135deg, var(--G), var(--GD));color:white;
+  border:none;border-radius:14px;
+  font-size:16px;font-weight:900;
+  font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;
+  transition:background .25s, transform .2s var(--ease-out), box-shadow .25s, opacity .25s, filter .25s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 10px 32px -4px rgba(14,124,102,.45);
+}
+.submit-btn:disabled{
+  opacity:.45;cursor:not-allowed;pointer-events:none;
+  filter:grayscale(.5);
+  box-shadow:none;
+}
+.submit-btn:not(:disabled):hover{background:var(--GD);transform:translateY(-2px);box-shadow:0 14px 36px -6px rgba(14,124,102,.55)}
+
+/* ============================================
+   SCREEN 5 — SUCCESS
+   ============================================ */
+.success-wrap{max-width:560px;margin:0 auto;padding:60px 5% 60px;text-align:center}
+.success-icon{
+  width:104px;height:104px;border-radius:50%;
+  background:linear-gradient(135deg, var(--G), var(--GD));
+  margin:0 auto 24px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:44px;color:white;
+  box-shadow:0 16px 40px rgba(14,124,102,.35);
+  animation:popIn .55s var(--ease-spring) both;
+  position:relative;
+}
+.success-icon::before{
+  content:'';position:absolute;inset:-14px;border-radius:50%;
+  border:2px solid var(--G);opacity:.25;
+  animation:ringExpand 1.8s ease-out infinite;
+}
+@keyframes ringExpand{0%{transform:scale(.92);opacity:.6}100%{transform:scale(1.25);opacity:0}}
+@keyframes popIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.success-title{font-size:26px;font-weight:900;color:var(--B);margin-bottom:10px;letter-spacing:-.02em}
+.success-sub{font-size:14.5px;color:var(--MUT);line-height:1.7;margin-bottom:24px;font-weight:500}
+.success-order-id{
+  display:inline-block;
+  background:linear-gradient(135deg, var(--GL), white);
+  border:1px solid rgba(14,124,102,.25);border-radius:12px;
+  padding:12px 28px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:18px;font-weight:900;color:var(--G);
+  letter-spacing:.08em;margin-bottom:28px;
+}
+.success-steps{
+  text-align:left;background:white;border-radius:16px;
+  border:1px solid var(--BDR);overflow:hidden;margin-bottom:28px;
+  box-shadow:var(--shadow-sm);
+}
+.ss-item{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--BDR)}
+.ss-item:last-child{border:0}
+.ss-ico{
+  width:38px;height:38px;border-radius:11px;
+  background:var(--GL);color:var(--G);
+  display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;
+}
+.ss-txt strong{display:block;font-size:13px;font-weight:800;color:var(--B);font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:2px}
+.ss-txt span{font-size:11.5px;color:var(--MUT);font-weight:500}
+.success-home{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--G);color:white;
+  padding:14px 32px;border-radius:13px;
+  font-weight:800;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;
+  cursor:pointer;border:none;
+  transition:background .2s, transform .2s var(--ease-out);
+}
+.success-home:hover{background:var(--GD);transform:translateY(-1px)}
+
+/* ============================================
+   TOAST
+   ============================================ */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--B);color:white;
+  padding:12px 22px;border-radius:100px;
+  font-size:13px;font-weight:700;z-index:9999;
+  opacity:0;transition:opacity .3s, transform .3s var(--ease-spring);
+  pointer-events:none;white-space:nowrap;
+  box-shadow:var(--shadow-lg);
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media(max-width:640px){
+  .search-wrap{padding:20px 14px 0}
+  .search-hero h1{font-size:22px}
+  .search-hero p{font-size:13px}
+  .search-input-wrap input{padding:14px 16px;font-size:14px}
+  .search-submit{padding:0 18px;height:52px;font-size:13px}
+  .sec-head{padding:22px 14px 12px}
+  .sec-head h2{font-size:16px}
+  .med-wrap{padding:18px 14px 100px}
+  .med-ph-card{padding:14px;gap:12px}
+  .med-ph-img{width:62px;height:62px;border-radius:12px}
+  .pm-section{margin:10px;padding:16px}
+  .pm-hero{height:170px}
+  .acc-img{height:100px}
+  .recap-wrap{padding:20px 14px 60px}
+  .recap-card-head{padding:16px 18px}
+  .recap-ph-badge{margin:12px 18px}
+  .recap-item{padding:12px 18px;gap:12px}
+  .recap-item-ico{width:40px;height:40px;font-size:16px}
+  .recap-total{padding:14px 18px}
+  .recap-total-val{font-size:17px}
+  .form-wrap{padding:20px 14px 60px}
+  .form-card{padding:18px}
+  .uir{padding:12px;gap:10px}
+  .uir-icon{width:38px;height:38px}
+  .uir-value{font-size:13.5px}
+  .uir-verified{font-size:10px;padding:4px 9px}
+  .terms-text{font-size:12.5px}
+  .float-cmd{padding:14px 32px;font-size:14px;bottom:18px}
+}
+
+@media(prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+
+{{ include('link/_navbar_desktop.html.twig') }}
+{{ include('link/_navbar_mobile.html.twig') }}
+
+{# ===== SCREEN 1 : Search Hub ===== #}
+<div class="screen active" id="screenSearch">
+  <div class="search-wrap">
+    <div class="search-hero">
+      <span class="sh-eyebrow">Commande en ligne · Locapharma</span>
+      <h1>Que cherchez-vous aujourd'hui ?</h1>
+      <p>Recherchez un médicament dans toutes les pharmacies, ou parcourez une pharmacie en particulier.</p>
+    </div>
+
+    <div class="search-box">
+      <div class="search-tabs">
+        <div class="stab on" id="tabMed" onclick="switchTab('med')"><i class="fa-solid fa-pills"></i>Par médicament</div>
+        <div class="stab" id="tabPh" onclick="switchTab('ph')"><i class="fa-solid fa-store"></i>Par pharmacie</div>
+      </div>
+      <div class="search-input-wrap">
+        <input type="text" id="mainSearchInput" placeholder="Ex: Paracétamol, Amoxicilline…" autocomplete="off" oninput="onSearchInput()" onkeydown="if(event.key==='Enter')doSearch()">
+        <button class="search-submit" onclick="doSearch()"><i class="fa-solid fa-magnifying-glass"></i>Rechercher</button>
+      </div>
+    </div>
+
+    <div class="search-hint">
+      <span class="label">Suggestions :</span>
+      <span class="chip" onclick="quickSearch('Paracetamol')"><i class="fa-solid fa-pills"></i>Paracétamol</span>
+      <span class="chip" onclick="quickSearch('Amoxicilline')"><i class="fa-solid fa-capsules"></i>Amoxicilline</span>
+      <span class="chip" onclick="quickSearch('Ibuprofene')"><i class="fa-solid fa-tablets"></i>Ibuprofène</span>
+      <span class="chip" onclick="quickSearch('Doliprane')"><i class="fa-solid fa-pills"></i>Doliprane</span>
+      <span class="chip" onclick="quickSearch('Sirop')"><i class="fa-solid fa-bottle-droplet"></i>Sirop</span>
+    </div>
+  </div>
+
+  <div class="sec-head">
+    <div>
+      <h2><i class="fa-solid fa-store"></i>Toutes nos pharmacies partenaires <span class="badge-count" id="phCount">8</span></h2>
+      <p>Cliquez sur une pharmacie pour voir ses médicaments et accessoires.</p>
+    </div>
+  </div>
+
+  <div class="ph-grid-wrap">
+    <div class="ph-grid" id="mainPhGrid"></div>
+    <div class="empty-state" id="mainEmpty" style="display:none">
+      <i class="fa-solid fa-binoculars"></i>
+      <h3>Aucune pharmacie trouvée</h3>
+      <p>Essayez un autre terme de recherche.</p>
+    </div>
+  </div>
+</div>
+
+{# ===== SCREEN 2 : Med results (multi-pharmacy) ===== #}
+<div class="screen" id="screenMed">
+  <div class="med-wrap">
+    <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i>Retour</button>
+
+    <div class="med-query-badge">
+      <div class="ico"><i class="fa-solid fa-pills"></i></div>
+      <div class="txt">
+        <span class="q" id="medQueryTxt">—</span>
+        <span class="c" id="medQueryCount">— pharmacie(s) disponible(s)</span>
+      </div>
+    </div>
+
+    <div class="med-limit-info">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Sélectionnez jusqu'à <strong>3 pharmacies</strong> pour comparer leurs offres et passer une commande groupée.</span>
+    </div>
+
+    <div class="med-limit-warn" id="medWarn">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span><strong>Maximum 3 pharmacies.</strong> Désélectionnez-en une pour en choisir une autre.</span>
+    </div>
+
+    <div id="medPhList"></div>
+    <div class="empty-state" id="medEmpty" style="display:none">
+      <i class="fa-solid fa-face-sad-tear"></i>
+      <h3>Médicament non disponible</h3>
+      <p>Aucune pharmacie partenaire ne dispose de ce médicament en ce moment.</p>
+    </div>
+  </div>
+</div>
+
+{# ===== SCREEN 3 : Recap ===== #}
+<div class="screen" id="screenRecap">
+  <div class="recap-wrap">
+    <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i>Retour</button>
+    <div id="recapContent"></div>
+    <div class="recap-note">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Les prix sont indicatifs. La pharmacie confirmera le total exact lors de la validation de votre commande.</span>
+    </div>
+    <button class="recap-cta" onclick="goOrderForm()">
+      <i class="fa-solid fa-clipboard-check"></i>
+      Finaliser ma commande
+    </button>
+  </div>
+</div>
+
+{# ===== SCREEN 4 : Final order form ===== #}
+<div class="screen" id="screenForm">
+  <div class="form-wrap">
+    <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i>Retour</button>
+
+    <div class="form-card">
+      <div class="form-section-title"><i class="fa-solid fa-user-shield"></i>Vos informations (vérifiées)</div>
+      <div class="user-info-locked">
+        <div class="uir">
+          <div class="uir-icon"><i class="fa-solid fa-user"></i></div>
+          <div class="uir-content">
+            <div class="uir-label">Prénom &amp; Nom</div>
+            <div class="uir-value" id="uName">—</div>
+          </div>
+          <div class="uir-verified"><i class="fa-solid fa-circle-check"></i>Vérifié</div>
+        </div>
+        <div class="uir">
+          <div class="uir-icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="uir-content">
+            <div class="uir-label">Téléphone</div>
+            <div class="uir-value" id="uTel">—</div>
+          </div>
+          <div class="uir-verified"><i class="fa-solid fa-circle-check"></i>Vérifié</div>
+        </div>
+        <div class="uir">
+          <div class="uir-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="uir-content">
+            <div class="uir-label">Email</div>
+            <div class="uir-value" id="uEmail">—</div>
+          </div>
+          <div class="uir-verified"><i class="fa-solid fa-circle-check"></i>Vérifié</div>
+        </div>
+      </div>
+
+      <div class="reassurance-note">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div>
+          <strong>Assurez-vous que vos informations sont correctes</strong>
+          <p>Votre <strong>numéro de téléphone</strong> et votre <strong>email</strong> seront utilisés par la pharmacie pour vous contacter et confirmer la commande. Pour les modifier, rendez-vous dans <a href="#">Mon Profil</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-section-title"><i class="fa-solid fa-truck"></i>Mode de récupération</div>
+      <div class="delivery-options">
+        <div class="del-opt on" id="delRetrait" onclick="selectDel('retrait')">
+          <div class="del-opt-ico pick"><i class="fa-solid fa-store"></i></div>
+          <div class="del-opt-txt"><strong>Retrait en pharmacie</strong><span>Gratuit · Prêt en 30 min</span></div>
+        </div>
+        <div class="del-opt" id="delLivraison" onclick="selectDel('livraison')">
+          <div class="del-opt-ico deliv"><i class="fa-solid fa-truck-fast"></i></div>
+          <div class="del-opt-txt"><strong>Livraison à domicile</strong><span>500 KMF · 45-90 min</span></div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:14px;margin-bottom:0" id="addrGroup">
+        <label class="form-label">Adresse de livraison <span style="color:var(--MUT);font-weight:600;text-transform:none">(facultative)</span></label>
+        <input type="text" class="form-input" placeholder="Quartier, rue, repère…" id="fAddr">
+      </div>
+    </div>
+
+    <div class="form-card" id="ordCard">
+      <div class="form-section-title"><i class="fa-solid fa-file-medical"></i>Ordonnance</div>
+      <div class="rx-required-banner" id="rxBanner" style="display:none">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div><strong>Ordonnance requise</strong><br>Votre commande contient des médicaments sur prescription. Joignez l'ordonnance pour valider la commande.</div>
+      </div>
+      <div class="ord-upload" id="ordUpload">
+        <input type="file" accept="image/*,.pdf" onchange="handleFile(this)">
+        <div class="ord-upload-ico"><i class="fa-solid fa-camera"></i></div>
+        <div class="ord-upload-txt">Photo ou PDF de l'ordonnance</div>
+        <div class="ord-upload-sub">JPG, PNG ou PDF — Max 10 Mo</div>
+      </div>
+      <div class="form-group" style="margin-top:14px;margin-bottom:0">
+        <label class="form-label">Notes pour la pharmacie</label>
+        <textarea class="form-input form-textarea" placeholder="Allergies, substitutions acceptées, instructions…" id="fNotes"></textarea>
+      </div>
+    </div>
+
+    <div class="order-summary-mini" id="orderSummaryMini"></div>
+
+    {# Position notice #}
+    <div class="position-notice">
+      <i class="fa-solid fa-location-dot"></i>
+      <div>
+        <strong>Partage de votre position GPS</strong>
+        <p>Votre position sera transmise à la pharmacie sélectionnée afin de faciliter la livraison, garantir la qualité du service et assurer le suivi de votre commande en cas de besoin urgent.</p>
+      </div>
+    </div>
+
+    {# Terms checkbox (mandatory) #}
+    <div class="terms-wrap" id="termsWrap">
+      <label class="terms-checkbox">
+        <input type="checkbox" id="termsCheck" onchange="toggleTerms()">
+        <span class="box"><i class="fa-solid fa-check"></i></span>
+        <span class="terms-text">
+          <strong>J'accepte les conditions générales</strong><br>
+          J'autorise Locapharma à transmettre mes informations personnelles (nom, téléphone, email) ainsi que ma <strong>position GPS</strong> à la pharmacie sélectionnée afin d'assurer le bon traitement de ma commande. Je consulte les <a href="#" onclick="event.preventDefault()">conditions générales d'utilisation</a> et la <a href="#" onclick="event.preventDefault()">politique de confidentialité</a>.
+        </span>
+      </label>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" disabled onclick="submitOrder()">
+      <i class="fa-solid fa-paper-plane"></i>
+      Envoyer ma commande
+    </button>
+  </div>
+</div>
+
+{# ===== SCREEN 5 : Success ===== #}
+<div class="screen" id="screenSuccess">
+  <div class="success-wrap">
+    <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+    <h2 class="success-title">Commande envoyée !</h2>
+    <p class="success-sub">Votre commande a été transmise à la pharmacie. Vous recevrez une confirmation par SMS dès qu'elle sera prête.</p>
+    <div class="success-order-id" id="successOrderId">#LP-0000</div>
+    <div class="success-steps">
+      <div class="ss-item">
+        <div class="ss-ico"><i class="fa-solid fa-check"></i></div>
+        <div class="ss-txt"><strong>Commande reçue</strong><span>La pharmacie a été notifiée</span></div>
+      </div>
+      <div class="ss-item">
+        <div class="ss-ico"><i class="fa-solid fa-clock"></i></div>
+        <div class="ss-txt"><strong>Préparation en cours</strong><span>Votre commande est en préparation</span></div>
+      </div>
+      <div class="ss-item">
+        <div class="ss-ico"><i class="fa-solid fa-bell"></i></div>
+        <div class="ss-txt"><strong>Notification SMS</strong><span>Vous serez notifié dès que c'est prêt</span></div>
+      </div>
+    </div>
+    <button class="success-home" onclick="goHome()"><i class="fa-solid fa-house"></i>Retour à l'accueil</button>
+  </div>
+</div>
+
+{# ===== Pharmacy modal ===== #}
+<div class="ph-modal" id="phModal">
+  <div class="pm-topbar">
+    <button class="pm-back" onclick="closePhModal()"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="pm-titlebox">
+      <div class="pm-title" id="pmTitle">Pharmacie</div>
+      <div class="pm-sub" id="pmSub">Moroni</div>
+    </div>
+  </div>
+  <div class="pm-body" id="pmBody"></div>
+  <div class="pm-footer" id="pmFooter">
+    <div class="pm-sel-info">
+      <span class="pm-sel-count" id="pmSelCount"><i class="fa-solid fa-cart-shopping"></i><span id="pmSelCountTxt">0 article</span></span>
+      <span class="pm-sel-total" id="pmSelTotal"></span>
+    </div>
+    <button class="pm-cmd-btn" onclick="goRecapFromPharmacy()">
+      <i class="fa-solid fa-arrow-right"></i>Continuer la commande
+    </button>
+  </div>
+</div>
+
+{# Floating Commander button (med search results) #}
+<button class="float-cmd" id="floatCmd" onclick="goRecapFromMed()">
+  <i class="fa-solid fa-cart-shopping"></i>
+  Commander
+  <span class="fc-badge" id="fcBadge">0</span>
+</button>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+/* ============================================
+   USER (simulated profile data - replace with Symfony app.user)
+   ============================================ */
+var USER = {
+  prenom: "Mohammed",
+  nom: "Said",
+  tel: "+269 773 12 34",
+  email: "mohammed.said@locapharma.km"
+};
+
+/* ============================================
+   DATA — Pharmacies
+   ============================================ */
+var PH = [
+  {id:1,name:"Pharmacie Centrale",status:"open",label:"Ouverte",zone:"Moroni Centre",dist:"0.2 km",phone:"+269 773 12 34",img:"https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=600&q=80",hours:"07h30 – 20h00",meds:["Paracetamol","Doliprane","Amoxicilline","Ibuprofene","Aspirine","Metronidazole","Sirop","Vitamine C"]},
+  {id:2,name:"Pharmacie Al-Khair",status:"open",label:"Ouverte",zone:"République",dist:"0.6 km",phone:"+269 773 56 78",img:"https://images.unsplash.com/photo-1626863905121-3b0c0ed7b94a?w=600&q=80",hours:"08h00 – 20h30",meds:["Paracetamol","Ibuprofene","Amoxicilline","Chloroquine","Zinc","Sirop"]},
+  {id:3,name:"Pharmacie Al-Amal",status:"guard",label:"De garde",zone:"Itsandra",dist:"1.1 km",phone:"+269 773 90 11",img:"https://images.unsplash.com/photo-1580281780460-82d277b0e3f8?w=600&q=80",hours:"Garde 24h/24",meds:["Paracetamol","Doliprane","Antibiotique","Serum","Ibuprofene","Metronidazole","Vaccin"]},
+  {id:4,name:"Pharmacie Salama",status:"open",label:"Ouverte",zone:"Coulée",dist:"1.4 km",phone:"+269 773 22 33",img:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",hours:"09h00 – 19h30",meds:["Vitamine C","Zinc","Calcium","Omega 3","Probiotique","Sirop"]},
+  {id:5,name:"Pharmacie Ibn Sina",status:"open",label:"Ouverte",zone:"Badjanani",dist:"1.8 km",phone:"+269 773 44 55",img:"https://images.unsplash.com/photo-1563213126-a4273aed2016?w=600&q=80",hours:"07h00 – 21h00",meds:["Paracetamol","Plantes","Curcuma","Vitamine D","Zinc","Ibuprofene"]},
+  {id:6,name:"Pharmacie Hilal",status:"closed",label:"Fermée",zone:"Magudju",dist:"2.2 km",phone:"+269 773 66 77",img:"https://images.unsplash.com/photo-1580281780460-82d277b0e3f8?w=600&q=80",hours:"08h00 – 18h00",meds:["Paracetamol","Ibuprofene","Antiacide"]},
+  {id:7,name:"Pharmacie Tropicale",status:"open",label:"Ouverte",zone:"Volo-Volo",dist:"2.7 km",phone:"+269 773 88 99",img:"https://images.unsplash.com/photo-1626863905121-3b0c0ed7b94a?w=600&q=80",hours:"08h00 – 19h00",meds:["Chloroquine","Anti-paludeen","Vaccin","Antiparasitaire","Serum"]},
+  {id:8,name:"Pharmacie Nour",status:"open",label:"Ouverte",zone:"Hamramba",dist:"3.3 km",phone:"+269 773 11 22",img:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",hours:"08h30 – 19h30",meds:["Paracetamol","Ibuprofene","Creme bebe","Vitamine bebe","Zinc"]}
+];
+
+/* ============================================
+   DATA — Médicaments avec marqueur ordonnance
+   rx: true => nécessite ordonnance
+   ============================================ */
+var MEDS_DB = [
+  {n:"Paracétamol 500mg", rx:false},
+  {n:"Doliprane 1000mg", rx:false},
+  {n:"Efferalgan 500mg", rx:false},
+  {n:"Ibuprofène 400mg", rx:false},
+  {n:"Aspirine 500mg", rx:false},
+  {n:"Vitamine C 1g", rx:false},
+  {n:"Vitamine D", rx:false},
+  {n:"Zinc 15mg", rx:false},
+  {n:"Sirop pour la toux", rx:false},
+  {n:"Spasfon (douleurs)", rx:false},
+  {n:"Antiacide", rx:false},
+  {n:"Antihistaminique", rx:false},
+  {n:"Crème hydratante bébé", rx:false},
+  {n:"Probiotique", rx:false},
+  {n:"Oméprazole 20mg", rx:false},
+  {n:"Amoxicilline 1g", rx:true},
+  {n:"Azithromycine 500mg", rx:true},
+  {n:"Ciprofloxacine 500mg", rx:true},
+  {n:"Métronidazole 500mg", rx:true},
+  {n:"Metformine 850mg", rx:true},
+  {n:"Amlodipine 5mg", rx:true},
+  {n:"Lisinopril 10mg", rx:true},
+  {n:"Prednisolone 20mg", rx:true},
+  {n:"Ventoline (inhalateur)", rx:true},
+  {n:"Codoliprane", rx:true},
+  {n:"Tramadol 50mg", rx:true},
+  {n:"Diazepam 5mg", rx:true},
+  {n:"Cortisone", rx:true},
+  {n:"Chloroquine (paludisme)", rx:true},
+  {n:"Antibiotique large spectre", rx:true}
+];
+
+/* ============================================
+   DATA — Accessoires AVEC IMAGES RÉELLES
+   ============================================ */
+var ACCESSORIES = [
+  {id:'a1',  name:"Biberon 250ml",       price:1500,  img:"https://images.unsplash.com/photo-1515462277126-2dd0c162007a?w=400&q=80", icon:"fa-baby-bottle"},
+  {id:'a2',  name:"Tire-lait électrique", price:12000, img:"https://images.unsplash.com/photo-1612531385446-f7e6d131e1d0?w=400&q=80", icon:"fa-pump-medical"},
+  {id:'a3',  name:"Thermomètre digital",  price:3500,  img:"https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=400&q=80", icon:"fa-temperature-three-quarters"},
+  {id:'a4',  name:"Tensiomètre",          price:18000, img:"https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80", icon:"fa-heart-pulse"},
+  {id:'a5',  name:"Glucomètre",           price:15000, img:"https://images.unsplash.com/photo-1606206873764-fd15e242df52?w=400&q=80", icon:"fa-droplet"},
+  {id:'a6',  name:"Bandage élastique",    price:800,   img:"https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&q=80", icon:"fa-bandage"},
+  {id:'a7',  name:"Couches bébé (×20)",   price:4500,  img:"https://images.unsplash.com/photo-1607000975469-cdbecd3b0ade?w=400&q=80", icon:"fa-baby"},
+  {id:'a8',  name:"Gel hydroalcoolique",  price:1200,  img:"https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&q=80", icon:"fa-pump-soap"},
+  {id:'a9',  name:"Masques chirurgicaux", price:500,   img:"https://images.unsplash.com/photo-1605600659908-0ef719419d41?w=400&q=80", icon:"fa-head-side-mask"},
+  {id:'a10', name:"Seringues (×10)",      price:600,   img:"https://images.unsplash.com/photo-1632213917477-bd6e9e3b5fbe?w=400&q=80", icon:"fa-syringe"},
+  {id:'a11', name:"Cotons hydrophiles",   price:900,   img:"https://images.unsplash.com/photo-1620735692151-26a7e0748429?w=400&q=80", icon:"fa-cloud"},
+  {id:'a12', name:"Sparadrap 5m",         price:700,   img:"https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=400&q=80", icon:"fa-tape"}
+];
+
+/* ============================================
+   STATE
+   ============================================ */
+var currentTab = 'med';
+var selectedPharmaciesForMed = [];   // ids of pharmacies in med-results screen
+var currentPharmacy = null;
+var selectedAccessories = [];
+var selectedMeds = [];               // [{n, rx}]
+var orderData = {pharmacies:[], items:[], deliveryMode:'retrait', source:''};
+var screenHistory = ['screenSearch'];
+
+/* ============================================
+   NAV
+   ============================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function pushScreen(id){ screenHistory.push(id); showScreen(id); }
+function goBack(){
+  if(document.getElementById('phModal').classList.contains('open')){ closePhModal(); return; }
+  if(screenHistory.length > 1){
+    screenHistory.pop();
+    showScreen(screenHistory[screenHistory.length - 1]);
+  } else { window.history.back(); }
+}
+function goHome(){ window.location.href = '/'; }
+
+/* ============================================
+   SEARCH TABS
+   ============================================ */
+function switchTab(tab){
+  currentTab = tab;
+  document.getElementById('tabMed').className = 'stab' + (tab === 'med' ? ' on' : '');
+  document.getElementById('tabPh').className  = 'stab' + (tab === 'ph'  ? ' on' : '');
+  var input = document.getElementById('mainSearchInput');
+  input.placeholder = tab === 'med' ? 'Ex: Paracétamol, Amoxicilline…' : 'Ex: Pharmacie Centrale…';
+  input.value = '';
+  renderMainGrid(PH);
+}
+
+function onSearchInput(){
+  var q = document.getElementById('mainSearchInput').value.toLowerCase().trim();
+  if(currentTab === 'ph'){
+    renderMainGrid(q ? PH.filter(function(p){ return p.name.toLowerCase().includes(q); }) : PH);
+  }
+}
+
+function quickSearch(term){
+  currentTab = 'med';
+  document.getElementById('tabMed').className = 'stab on';
+  document.getElementById('tabPh').className  = 'stab';
+  document.getElementById('mainSearchInput').value = term;
+  doSearch();
+}
+
+function doSearch(){
+  var q = document.getElementById('mainSearchInput').value.trim();
+  if(!q){ showToast('Entrez un terme de recherche'); return; }
+  if(currentTab === 'ph'){
+    var filtered = PH.filter(function(p){ return p.name.toLowerCase().includes(q.toLowerCase()); });
+    renderMainGrid(filtered);
+    document.getElementById('phCount').textContent = filtered.length;
+    return;
+  }
+  // Med search → list pharmacies that have it
+  selectedPharmaciesForMed = [];
+  updateFloatBtn();
+  var qn = normalizeStr(q);
+  var results = PH.filter(function(p){
+    return p.meds.some(function(m){ return normalizeStr(m).includes(qn); });
+  });
+  document.getElementById('medQueryTxt').textContent = q;
+  document.getElementById('medQueryCount').textContent = results.length + ' pharmacie' + (results.length > 1 ? 's' : '') + ' disponible' + (results.length > 1 ? 's' : '');
+  document.getElementById('medWarn').classList.remove('show');
+  var list = document.getElementById('medPhList');
+  var empty = document.getElementById('medEmpty');
+  if(!results.length){
+    list.innerHTML = ''; empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    list.innerHTML = results.map(function(ph){
+      var matched = ph.meds.filter(function(m){ return normalizeStr(m).includes(qn); });
+      return '<div class="med-ph-card" id="mpc-' + ph.id + '" onclick="toggleMedPh(' + ph.id + ')">' +
+        '<img class="med-ph-img" src="' + ph.img + '" alt="' + ph.name + '" loading="lazy">' +
+        '<div class="med-ph-info">' +
+          '<div class="med-ph-name">' + ph.name + '</div>' +
+          '<div class="med-ph-loc"><i class="fa-solid fa-location-dot"></i>' + ph.zone + ' · ' + ph.dist + '</div>' +
+          '<div class="med-ph-stock"><i class="fa-solid fa-circle-check"></i>' + matched.join(', ') + '</div>' +
+        '</div>' +
+        '<div class="med-ph-check"><i class="fa-solid fa-check"></i></div>' +
+      '</div>';
+    }).join('');
+  }
+  pushScreen('screenMed');
+}
+
+function toggleMedPh(id){
+  var idx = selectedPharmaciesForMed.indexOf(id);
+  if(idx >= 0){
+    selectedPharmaciesForMed.splice(idx, 1);
+    document.getElementById('mpc-' + id).classList.remove('selected');
+  } else {
+    if(selectedPharmaciesForMed.length >= 3){
+      document.getElementById('medWarn').classList.add('show');
+      showToast('Maximum 3 pharmacies');
+      return;
+    }
+    selectedPharmaciesForMed.push(id);
+    document.getElementById('mpc-' + id).classList.add('selected');
+  }
+  updateFloatBtn();
+}
+
+function updateFloatBtn(){
+  var n = selectedPharmaciesForMed.length;
+  document.getElementById('fcBadge').textContent = n;
+  document.getElementById('floatCmd').className = 'float-cmd' + (n > 0 ? ' show' : '');
+}
+
+function goRecapFromMed(){
+  if(!selectedPharmaciesForMed.length) return;
+  var q = document.getElementById('mainSearchInput').value.trim();
+  orderData.pharmacies = PH.filter(function(p){ return selectedPharmaciesForMed.indexOf(p.id) >= 0; });
+  // For med-search flow: 1 medicament across multiple pharmacies
+  orderData.items = [{ id:'med1', name:q, price:0, icon:'fa-solid fa-pills', type:'medicament', rx:false }];
+  orderData.source = 'med';
+  renderRecap();
+  pushScreen('screenRecap');
+  document.getElementById('floatCmd').classList.remove('show');
+}
+
+/* ============================================
+   PHARMACY GRID
+   ============================================ */
+function renderMainGrid(data){
+  var grid = document.getElementById('mainPhGrid');
+  var empty = document.getElementById('mainEmpty');
+  document.getElementById('phCount').textContent = data.length;
+  if(!data.length){ grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = data.map(function(ph){
+    return '<div class="ph-card" onclick="openPhModal(' + ph.id + ')">' +
+      '<div class="ph-card-img">' +
+        '<img src="' + ph.img + '" alt="' + ph.name + '" loading="lazy">' +
+        '<span class="ph-card-badge b-' + ph.status + '"><i class="fa-solid ' + (ph.status === 'guard' ? 'fa-moon' : ph.status === 'open' ? 'fa-check' : 'fa-xmark') + '"></i>' + ph.label + '</span>' +
+      '</div>' +
+      '<div class="ph-card-body">' +
+        '<div class="ph-card-name">' + ph.name + '</div>' +
+        '<div class="ph-card-loc"><i class="fa-solid fa-location-dot"></i>' + ph.zone + ' · ' + ph.dist + '</div>' +
+        '<button class="ph-btn-view" onclick="event.stopPropagation();openPhModal(' + ph.id + ')"><i class="fa-solid fa-store"></i>Voir produits</button>' +
+      '</div></div>';
+  }).join('');
+}
+
+/* ============================================
+   PHARMACY MODAL
+   ============================================ */
+function openPhModal(id){
+  var ph = PH.find(function(p){ return p.id === id; });
+  if(!ph) return;
+  currentPharmacy = ph;
+  selectedAccessories = [];
+  selectedMeds = [];
+  updatePmFooter();
+  document.getElementById('pmTitle').textContent = ph.name;
+  document.getElementById('pmSub').textContent = ph.zone + ' · ' + ph.dist;
+
+  var statusBg = ph.status === 'open' ? 'rgba(18,183,106,.95)' : ph.status === 'guard' ? 'rgba(244,196,48,.96)' : 'rgba(240,68,56,.9)';
+  var statusColor = ph.status === 'guard' ? '#5B3F00' : 'white';
+
+  var accGrid = ACCESSORIES.map(function(acc){
+    return '<div class="acc-item" id="acc-' + acc.id + '" onclick="toggleAcc(\'' + acc.id + '\')">' +
+      '<div class="acc-img">' +
+        '<img src="' + acc.img + '" alt="' + acc.name + '" loading="lazy" onerror="this.classList.add(\'broken\')">' +
+        '<div class="fallback"><i class="fa-solid ' + acc.icon + '"></i></div>' +
+        '<div class="acc-check"><i class="fa-solid fa-check"></i></div>' +
+      '</div>' +
+      '<div class="acc-info">' +
+        '<div class="acc-name">' + acc.name + '</div>' +
+        '<div class="acc-price">' + acc.price.toLocaleString('fr-FR') + ' KMF</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('pmBody').innerHTML =
+    '<div class="pm-hero">' +
+      '<img src="' + ph.img + '" alt="' + ph.name + '" loading="lazy">' +
+      '<div class="pm-hero-overlay">' +
+        '<h2>' + ph.name + '</h2>' +
+        '<div class="meta"><i class="fa-solid fa-location-dot"></i> ' + ph.zone + ' · ' + ph.dist + '</div>' +
+      '</div>' +
+      '<span class="status" style="background:' + statusBg + ';color:' + statusColor + '">' + ph.label + '</span>' +
+    '</div>' +
+
+    '<div class="pm-section">' +
+      '<div class="pm-section-title"><i class="fa-solid fa-magnifying-glass"></i>Rechercher un médicament</div>' +
+      '<div class="med-search-input">' +
+        '<i class="fa-solid fa-pills"></i>' +
+        '<input type="text" id="medSearchInput" placeholder="Tapez un nom de médicament…" autocomplete="off" oninput="onMedSearch()">' +
+      '</div>' +
+      '<div class="med-results-count" id="searchResultsCount"></div>' +
+      '<div id="medSearchResults" class="med-list"></div>' +
+      '<div id="selectedMedsPreview" class="selected-meds-preview">' +
+        '<div class="smp-title">Médicaments sélectionnés</div>' +
+        '<div class="smp-tags" id="selectedMedsTags"></div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="pm-section">' +
+      '<div class="pm-section-title"><i class="fa-solid fa-stethoscope"></i>Accessoires médicaux</div>' +
+      '<div class="acc-grid">' + accGrid + '</div>' +
+    '</div>' +
+
+    '<div class="pm-section">' +
+      '<div class="pm-section-title"><i class="fa-regular fa-clock"></i>Informations</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--T);font-weight:600;margin-bottom:8px"><i class="fa-regular fa-clock" style="color:var(--G);width:16px"></i>Horaires : <strong style="color:var(--B);font-weight:800">' + ph.hours + '</strong></div>' +
+      '<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--T);font-weight:600"><i class="fa-solid fa-phone" style="color:var(--G);width:16px"></i>Téléphone : <strong style="color:var(--B);font-weight:800">' + ph.phone + '</strong></div>' +
+    '</div>';
+
+  document.getElementById('phModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePhModal(){
+  document.getElementById('phModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ============================================
+   MED SEARCH INSIDE PHARMACY
+   ============================================ */
+function onMedSearch(){
+  var input = document.getElementById('medSearchInput');
+  var q = input.value.trim().toLowerCase();
+  var resDiv = document.getElementById('medSearchResults');
+  var cntDiv = document.getElementById('searchResultsCount');
+  if(!q){
+    resDiv.innerHTML = '';
+    cntDiv.innerHTML = '';
+    updateSelectedMedsPreview();
+    return;
+  }
+  var filtered = MEDS_DB.filter(function(m){ return m.n.toLowerCase().includes(q); });
+  if(!filtered.length){
+    resDiv.innerHTML = '<div style="padding:14px;text-align:center;color:var(--MUT);font-size:12.5px;font-weight:600">Aucun médicament trouvé</div>';
+    cntDiv.innerHTML = '';
+  } else {
+    cntDiv.innerHTML = filtered.length + ' médicament' + (filtered.length > 1 ? 's' : '') + ' trouvé' + (filtered.length > 1 ? 's' : '');
+    resDiv.innerHTML = filtered.map(function(med){
+      var sel = selectedMeds.some(function(s){ return s.n === med.n; });
+      var rxBadge = med.rx
+        ? '<span class="med-item-rx rx"><i class="fa-solid fa-file-prescription"></i>Ordonnance</span>'
+        : '<span class="med-item-rx free"><i class="fa-solid fa-check"></i>Libre</span>';
+      return '<div class="med-item' + (sel ? ' selected' : '') + '" onclick="toggleMedSel(' + escAttr(med.n) + ',' + med.rx + ')">' +
+        '<span class="med-item-name">' + med.n + '</span>' +
+        rxBadge +
+        '<div class="med-item-check"><i class="fa-solid fa-check"></i></div>' +
+      '</div>';
+    }).join('');
+  }
+  updateSelectedMedsPreview();
+}
+
+function escAttr(s){ return "'" + s.replace(/'/g, "\\'") + "'"; }
+
+function toggleMedSel(name, rx){
+  var idx = selectedMeds.findIndex(function(m){ return m.n === name; });
+  if(idx >= 0) selectedMeds.splice(idx, 1);
+  else selectedMeds.push({n:name, rx:rx});
+  onMedSearch();
+  updatePmFooter();
+}
+
+function updateSelectedMedsPreview(){
+  var preview = document.getElementById('selectedMedsPreview');
+  var tags = document.getElementById('selectedMedsTags');
+  if(!preview || !tags) return;
+  if(!selectedMeds.length){ preview.classList.remove('show'); return; }
+  preview.classList.add('show');
+  tags.innerHTML = selectedMeds.map(function(m){
+    var cls = m.rx ? 'med-tag rx' : 'med-tag';
+    var dot = m.rx ? '<span class="rx-dot" title="Sur ordonnance"></span>' : '';
+    return '<span class="' + cls + '">' + dot + m.n + ' <span class="x" onclick="event.stopPropagation();removeMedSel(' + escAttr(m.n) + ')"><i class="fa-solid fa-xmark"></i></span></span>';
+  }).join('');
+}
+
+function removeMedSel(name){
+  var idx = selectedMeds.findIndex(function(m){ return m.n === name; });
+  if(idx >= 0) selectedMeds.splice(idx, 1);
+  onMedSearch();
+  updatePmFooter();
+}
+
+/* ============================================
+   ACCESSORIES
+   ============================================ */
+function toggleAcc(id){
+  var acc = ACCESSORIES.find(function(a){ return a.id === id; });
+  if(!acc) return;
+  var idx = selectedAccessories.findIndex(function(a){ return a.id === id; });
+  if(idx >= 0){
+    selectedAccessories.splice(idx, 1);
+    document.getElementById('acc-' + id).classList.remove('selected');
+  } else {
+    if(selectedAccessories.length >= 6){ showToast('Maximum 6 accessoires'); return; }
+    selectedAccessories.push(acc);
+    document.getElementById('acc-' + id).classList.add('selected');
+  }
+  updatePmFooter();
+}
+
+function updatePmFooter(){
+  var totalItems = selectedAccessories.length + selectedMeds.length;
+  var totalPrice = selectedAccessories.reduce(function(s, a){ return s + a.price; }, 0);
+  var footer = document.getElementById('pmFooter');
+  if(totalItems > 0){
+    footer.classList.add('show');
+  } else {
+    footer.classList.remove('show');
+  }
+  document.getElementById('pmSelCountTxt').textContent = totalItems + ' article' + (totalItems > 1 ? 's' : '');
+  document.getElementById('pmSelTotal').textContent = totalPrice > 0 ? totalPrice.toLocaleString('fr-FR') + ' KMF' : '';
+}
+
+function goRecapFromPharmacy(){
+  if(selectedAccessories.length === 0 && selectedMeds.length === 0){
+    showToast('Sélectionnez au moins un médicament ou un accessoire');
+    return;
+  }
+  var items = [];
+  selectedMeds.forEach(function(m){
+    items.push({
+      id: 'med_' + m.n.replace(/\s/g, '_'),
+      name: m.n,
+      price: 0,
+      icon: 'fa-solid fa-pills',
+      type: 'medicament',
+      rx: m.rx
+    });
+  });
+  selectedAccessories.forEach(function(acc){
+    items.push({
+      id: acc.id,
+      name: acc.name,
+      price: acc.price,
+      img: acc.img,
+      icon: 'fa-solid ' + acc.icon,
+      type: 'accessoire',
+      rx: false
+    });
+  });
+  orderData.pharmacies = [currentPharmacy];
+  orderData.items = items;
+  orderData.source = 'pharmacy';
+  closePhModal();
+  renderRecap();
+  pushScreen('screenRecap');
+}
+
+/* ============================================
+   RECAP RENDER
+   ============================================ */
+function renderRecap(){
+  var totalPrice = orderData.items.reduce(function(s, i){ return s + (i.price || 0); }, 0);
+  var html = '';
+  orderData.pharmacies.forEach(function(ph){
+    var itemsHtml = orderData.items.map(function(item){
+      var typeLabel = item.type === 'medicament'
+        ? (item.rx ? 'Médicament sur ordonnance' : 'Médicament')
+        : 'Accessoire médical';
+      var rxPill = item.rx ? '<span class="rx-pill"><i class="fa-solid fa-file-prescription"></i> Rx</span>' : '';
+      var icoContent = item.img
+        ? '<img src="' + item.img + '" alt="" style="width:46px;height:46px;border-radius:12px;object-fit:cover">'
+        : '<i class="' + (item.icon || 'fa-solid fa-pills') + '"></i>';
+      return '<div class="recap-item">' +
+        (item.img
+          ? '<div style="flex-shrink:0">' + icoContent + '</div>'
+          : '<div class="recap-item-ico">' + icoContent + '</div>') +
+        '<div class="recap-item-info">' +
+          '<div class="recap-item-name">' + item.name + '</div>' +
+          '<div class="recap-item-sub">' + typeLabel + (item.rx ? ' ' + rxPill : '') + '</div>' +
+        '</div>' +
+        '<div class="recap-item-price">' + (item.price > 0 ? item.price.toLocaleString('fr-FR') + ' KMF' : 'Sur devis') + '</div>' +
+      '</div>';
+    }).join('');
+
+    html += '<div class="recap-card">' +
+      '<div class="recap-card-head">' +
+        '<div class="ico"><i class="fa-solid fa-store"></i></div>' +
+        '<div class="txt"><h3>' + ph.name + '</h3><p>' + ph.zone + ' · ' + ph.hours + '</p></div>' +
+      '</div>' +
+      '<div class="recap-ph-badge">' +
+        '<i class="fa-solid fa-phone"></i>' +
+        '<div><strong>' + ph.name + '</strong><span>' + ph.phone + '</span></div>' +
+      '</div>' +
+      itemsHtml +
+      (totalPrice > 0 && orderData.source === 'pharmacy'
+        ? '<div class="recap-total"><span class="recap-total-lbl">Total estimé</span><span class="recap-total-val">' + totalPrice.toLocaleString('fr-FR') + ' KMF</span></div>'
+        : '') +
+    '</div>';
+  });
+  document.getElementById('recapContent').innerHTML = html;
+}
+
+/* ============================================
+   ORDER FORM
+   ============================================ */
+function goOrderForm(){
+  // Fill user info (locked)
+  document.getElementById('uName').textContent  = USER.prenom + ' ' + USER.nom;
+  document.getElementById('uTel').textContent   = USER.tel;
+  document.getElementById('uEmail').textContent = USER.email;
+
+  // Show Rx banner if any item requires ordonnance
+  var hasRx = orderData.items.some(function(i){ return i.rx; });
+  document.getElementById('rxBanner').style.display = hasRx ? 'flex' : 'none';
+
+  // Mini summary
+  var totalPrice = orderData.items.reduce(function(s, i){ return s + (i.price || 0); }, 0);
+  var html = '<div class="osm-title"><i class="fa-solid fa-receipt"></i>Résumé de la commande</div>' +
+    orderData.items.map(function(i){
+      return '<div class="osm-row"><span>' + i.name + (i.rx ? ' <span style="color:var(--WARN);font-weight:800;font-size:10px"> · Rx</span>' : '') + '</span><span>' + (i.price > 0 ? i.price.toLocaleString('fr-FR') + ' KMF' : 'Sur devis') + '</span></div>';
+    }).join('') +
+    '<div class="osm-row total"><span>Total estimé</span><span>' + (totalPrice > 0 ? totalPrice.toLocaleString('fr-FR') + ' KMF' : 'Sur devis') + '</span></div>';
+  document.getElementById('orderSummaryMini').innerHTML = html;
+
+  // Reset terms
+  document.getElementById('termsCheck').checked = false;
+  document.getElementById('termsWrap').classList.remove('checked');
+  document.getElementById('submitBtn').disabled = true;
+
+  pushScreen('screenForm');
+}
+
+function selectDel(mode){
+  orderData.deliveryMode = mode;
+  document.getElementById('delRetrait').className   = 'del-opt' + (mode === 'retrait' ? ' on' : '');
+  document.getElementById('delLivraison').className = 'del-opt' + (mode === 'livraison' ? ' on' : '');
+  document.getElementById('addrGroup').style.display = mode === 'livraison' ? 'block' : 'block';
+}
+
+function handleFile(input){
+  if(input.files && input.files[0]){
+    var upload = document.getElementById('ordUpload');
+    upload.classList.add('has-file');
+    upload.querySelector('.ord-upload-txt').textContent = input.files[0].name;
+    upload.querySelector('.ord-upload-ico').innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+  }
+}
+
+function toggleTerms(){
+  var c = document.getElementById('termsCheck');
+  var wrap = document.getElementById('termsWrap');
+  var btn = document.getElementById('submitBtn');
+  if(c.checked){
+    wrap.classList.add('checked');
+    btn.disabled = false;
+  } else {
+    wrap.classList.remove('checked');
+    btn.disabled = true;
+  }
+}
+
+function submitOrder(){
+  if(!document.getElementById('termsCheck').checked){
+    showToast('Vous devez accepter les conditions');
+    return;
+  }
+  // Check Rx upload if needed
+  var hasRx = orderData.items.some(function(i){ return i.rx; });
+  if(hasRx && !document.getElementById('ordUpload').classList.contains('has-file')){
+    showToast('Veuillez joindre votre ordonnance');
+    return;
+  }
+  document.getElementById('successOrderId').textContent = '#LP-' + Math.floor(1000 + Math.random() * 9000);
+  pushScreen('screenSuccess');
+}
+
+/* ============================================
+   HELPERS
+   ============================================ */
+function normalizeStr(s){
+  return s.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[-_\s]/g, '');
+}
+
+function showToast(msg){
+  var t = document.getElementById('toastEl');
+  t.textContent = msg;
+  t.className = 'toast on';
+  clearTimeout(t._t);
+  t._t = setTimeout(function(){ t.className = 'toast'; }, 2800);
+}
+
+/* ============================================
+   INIT
+   ============================================ */
+renderMainGrid(PH);
+</script>
+</body>
+</html>
