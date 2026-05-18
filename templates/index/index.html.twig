@@ -142,36 +142,37 @@ a{text-decoration:none;color:inherit}
 .shape-3{width:250px;height:250px;background:rgba(11,37,69,.35);top:40%;right:20%;animation-delay:5s}
 @keyframes shapeDrift{from{transform:translate(0,0) scale(1)}to{transform:translate(24px,18px) scale(1.06)}}
 
+.hero{min-height:calc(100svh - var(--NAV))}
 .hero-inner{
   position:relative;z-index:1;max-width:1280px;margin:0 auto;width:100%;
-  display:grid;grid-template-columns:1.15fr .85fr;gap:52px;align-items:center;
-  padding:80px 5%;
+  display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,3vw,44px);align-items:center;
+  padding:clamp(20px,4vh,52px) 5%;
 }
 @media(max-width:1024px){
-  .hero-inner{grid-template-columns:1fr;gap:32px;padding:56px 5% 48px}
-  .hero-h1{font-size:clamp(28px,5vw,48px)}
-  .hero-card{max-width:560px}
+  .hero-inner{grid-template-columns:1fr;gap:24px;padding:clamp(20px,4vh,44px) 5%}
+  .hero-h1{font-size:clamp(26px,4.5vw,44px) !important}
+  .hero-card{max-width:560px;margin:0 auto}
 }
-
 @media(max-width:640px){
-  .hero-inner{padding:18px 4%;display:flex;flex-direction:column;width:100%}
-  .hero-eyebrow{margin-bottom:10px;padding:5px 12px;font-size:11px}
-  .hero-h1{font-size:24px;line-height:1.1;margin-bottom:8px}
-  .hero-sub{font-size:13px;line-height:1.6;margin-bottom:14px}
-  .hero-ctas{gap:8px;flex-direction:column;align-items:stretch}
-  .hero-ctas .btn{width:100%;justify-content:center;padding:11px 18px;font-size:13px}
-  .hero-kpis{gap:10px;margin-top:16px}
+  .hero{min-height:auto}
+  .hero-inner{padding:16px 4% 22px;display:flex;flex-direction:column;width:100%;gap:18px}
+  .hero-eyebrow{margin-bottom:8px;padding:4px 11px;font-size:10px}
+  .hero-h1{font-size:22px !important;line-height:1.1;margin-bottom:6px}
+  .hero-sub{font-size:13px;line-height:1.55;margin-bottom:12px;max-width:none}
+  .hero-ctas{gap:8px;flex-direction:column;align-items:stretch;margin-bottom:14px}
+  .hero-ctas .btn{width:100%;justify-content:center;padding:10px 16px;font-size:13px}
+  .hero-kpis{gap:14px;margin-top:0;justify-content:space-between}
   .kpi-n{font-size:18px}
-  .kpi-l{font-size:10px}
-  .kpi-sep{height:24px}
-  .hero-card{display:block;width:100%;margin:0;padding:20px 16px}
-  .quick-grid{grid-template-columns:1fr 1fr;gap:8px}
-  .hero-cross-1, .hero-cross-2{display:none}
+  .kpi-l{font-size:9px;margin-top:3px}
+  .kpi-sep{display:none}
+  .hero-card{display:block;width:100%;margin:0;padding:16px}
+  .quick-grid{grid-template-columns:1fr 1fr;gap:7px}
+  .hero-cross-1,.hero-cross-2{display:none}
 }
 @media(max-width:380px){
-  .hero-h1{font-size:20px}
-  .hero-sub{font-size:11px}
-  .hero-card{padding:16px}
+  .hero-h1{font-size:20px !important}
+  .hero-sub{font-size:12px;margin-bottom:10px}
+  .hero-card{padding:14px}
 }
 
 .hero-eyebrow{
@@ -186,8 +187,8 @@ a{text-decoration:none;color:inherit}
 @keyframes pingRing{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
 
 .hero-h1{
-  font-size:clamp(32px,4.5vw,64px);font-weight:900;line-height:1.07;
-  color:white;margin-bottom:20px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(28px,3.6vw,50px);font-weight:900;line-height:1.06;
+  color:white;margin-bottom:14px;font-family:'Plus Jakarta Sans',sans-serif;
   letter-spacing:-.02em;
 }
 .hero-h1 .word{display:inline-block;opacity:0;transform:translateY(20px);animation:wordIn .7s var(--ease-out) forwards}
@@ -217,23 +218,56 @@ a{text-decoration:none;color:inherit}
 @keyframes underlineDraw{to{opacity:1;transform:scaleX(1)}}
 
 .hero-sub{
-  font-size:17px;color:rgba(255,255,255,.78);line-height:1.78;
-  margin-bottom:36px;max-width:490px;animation:fadeUp .7s var(--ease-out) .5s both;font-weight:500;
+  font-size:clamp(13px,1.05vw,15px);color:rgba(255,255,255,.78);line-height:1.6;
+  margin-bottom:22px;max-width:480px;animation:fadeUp .7s var(--ease-out) .5s both;font-weight:500;
 }
-.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .7s var(--ease-out) .65s both}
-.hero-kpis{display:flex;gap:28px;flex-wrap:wrap;margin-top:48px;animation:fadeUp .7s var(--ease-out) .85s both}
+.hero-ctas{display:flex;gap:10px;flex-wrap:wrap;animation:fadeUp .7s var(--ease-out) .65s both}
+.hero-kpis{display:flex;gap:clamp(14px,1.5vw,24px);flex-wrap:wrap;margin-top:clamp(20px,3vh,32px);animation:fadeUp .7s var(--ease-out) .85s both}
 .kpi{text-align:center}
-.kpi-n{font-size:30px;font-weight:900;color:var(--GOLD);font-family:'Plus Jakarta Sans',sans-serif;line-height:1;display:inline-block}
-.kpi-l{font-size:11px;color:rgba(255,255,255,.65);font-weight:600;margin-top:6px;letter-spacing:.05em;text-transform:uppercase}
-.kpi-sep{width:1px;height:38px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.25),transparent);align-self:center}
+.kpi-n{font-size:clamp(22px,2vw,28px);font-weight:900;color:var(--GOLD);font-family:'Plus Jakarta Sans',sans-serif;line-height:1;display:inline-block}
+.kpi-l{font-size:10px;color:rgba(255,255,255,.65);font-weight:600;margin-top:5px;letter-spacing:.05em;text-transform:uppercase}
+.kpi-sep{width:1px;height:32px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.25),transparent);align-self:center}
 
 .hero-card{
   background:rgba(255,255,255,.09);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
-  border:1px solid rgba(255,255,255,.17);border-radius:22px;
-  padding:28px 26px;animation:fadeRight .8s var(--ease-out) .25s both;
+  border:1px solid rgba(255,255,255,.17);border-radius:18px;
+  padding:18px 18px;animation:fadeRight .8s var(--ease-out) .25s both;
   box-shadow:0 30px 60px -20px rgba(0,0,0,.45);
 }
-.hero-card-ttl{font-size:14px;font-weight:800;color:white;margin-bottom:14px;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:8px}
+.hero-card-ttl{font-size:13px;font-weight:800;color:white;margin-bottom:10px;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:8px}
+
+/* ============================================
+   ISLAND FILTER BUTTONS (hero card)
+   ============================================ */
+.island-filters{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:6px;
+  margin-bottom:14px;padding:5px;
+  background:rgba(0,0,0,.22);border-radius:12px;border:1px solid rgba(255,255,255,.08);
+}
+.island-btn{
+  position:relative;padding:8px 6px;border-radius:8px;border:none;cursor:pointer;
+  background:transparent;color:rgba(255,255,255,.78);
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;
+  font-size:11px;letter-spacing:.02em;
+  transition:background .25s,color .25s,transform .2s var(--ease-spring);
+  display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.1;
+  min-height:42px;justify-content:center;
+}
+.island-btn small{font-size:9px;font-weight:600;opacity:.65;letter-spacing:.03em;text-transform:uppercase}
+.island-btn:hover{background:rgba(255,255,255,.08);color:white}
+.island-btn.active{
+  background:linear-gradient(135deg,var(--GOLD) 0%,var(--GOLD-D) 100%);
+  color:var(--B);
+  box-shadow:0 4px 14px rgba(244,196,48,.4);
+  transform:translateY(-1px);
+}
+.island-btn.active small{opacity:.7}
+.island-btn .dot{
+  position:absolute;top:5px;right:6px;width:5px;height:5px;border-radius:50%;
+  background:var(--GOLD);box-shadow:0 0 0 2px rgba(244,196,48,.2);
+  opacity:0;transition:opacity .25s;
+}
+.island-btn.active .dot{display:none}
 .hero-search-bar{display:flex;background:white;border-radius:11px;overflow:hidden;margin-bottom:16px;box-shadow:0 4px 24px rgba(11,37,69,.25);transition:box-shadow .25s}
 .hero-search-bar:focus-within{box-shadow:0 0 0 3px rgba(244,196,48,.4),0 4px 24px rgba(11,37,69,.25)}
 .hero-search-bar input{flex:1;border:none;outline:none;padding:13px 14px;font-size:14px;color:var(--T);font-family:'Manrope',sans-serif;background:transparent;min-width:0}
@@ -516,25 +550,128 @@ section{padding:72px 5%;position:relative}
 .cov-card-cities i{color:var(--GOLD);font-size:10px}
 @media(max-width:900px){.cov-grid{grid-template-columns:1fr;gap:16px}.cov-card{min-height:320px}.cov-card-body{min-height:320px}}
 
-/* Coverage callout (bottom) */
-.cov-callout{
+/* Coverage carousel (announces / images / stats) */
+.cov-carousel{
   margin-top:36px;max-width:1280px;margin-left:auto;margin-right:auto;
-  background:linear-gradient(135deg,var(--G) 0%,var(--GD) 100%);
-  border-radius:20px;padding:32px 36px;color:white;
-  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
-  position:relative;overflow:hidden;
+  position:relative;height:180px;border-radius:20px;overflow:hidden;
   box-shadow:var(--shadow-glow);
+  background:var(--B);
 }
-.cov-callout::before{
+.cov-slide{
+  position:absolute;inset:0;display:flex;align-items:center;
+  opacity:0;visibility:hidden;
+  transition:opacity .6s var(--ease-out),visibility .6s,transform .8s var(--ease-out);
+  transform:scale(1.02);
+}
+.cov-slide.active{opacity:1;visibility:visible;transform:scale(1)}
+/* Variant 1 : stats */
+.cs-stats{
+  background:linear-gradient(135deg,var(--G) 0%,var(--GD) 100%);
+  padding:28px 36px;color:white;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+}
+.cs-stats::before{
   content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;
-  background:radial-gradient(circle,rgba(244,196,48,.25) 0%, transparent 70%);
+  background:radial-gradient(circle,rgba(244,196,48,.28) 0%, transparent 70%);
   pointer-events:none;
 }
-.cov-callout-txt h3{font-size:22px;font-weight:900;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:6px;letter-spacing:-.01em}
-.cov-callout-txt p{font-size:14px;color:rgba(255,255,255,.85);max-width:520px;line-height:1.6}
-.cov-callout-num{display:flex;align-items:baseline;gap:8px;position:relative}
-.cov-callout-num .big{font-size:64px;font-weight:900;color:var(--GOLD);font-family:'Plus Jakarta Sans',sans-serif;line-height:1;letter-spacing:-.04em}
-.cov-callout-num .lbl{font-size:13px;color:rgba(255,255,255,.7);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.cs-stats-txt h3{font-size:22px;font-weight:900;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:6px;letter-spacing:-.01em}
+.cs-stats-txt p{font-size:14px;color:rgba(255,255,255,.85);max-width:520px;line-height:1.55;margin:0}
+.cs-stats-num{display:flex;align-items:baseline;gap:8px;position:relative;z-index:1}
+.cs-stats-num .big{font-size:60px;font-weight:900;color:var(--GOLD);font-family:'Plus Jakarta Sans',sans-serif;line-height:1;letter-spacing:-.04em}
+.cs-stats-num .lbl{font-size:12px;color:rgba(255,255,255,.78);font-weight:600;text-transform:uppercase;letter-spacing:.08em;line-height:1.3}
+/* Variant 2 : image */
+.cs-image{padding:0}
+.cs-image .cs-img-bg{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  filter:brightness(.55) saturate(1.1);
+}
+.cs-image::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(11,37,69,.85) 0%,rgba(11,37,69,.35) 60%,transparent 100%);
+}
+.cs-image-content{position:relative;z-index:1;padding:28px 36px;color:white;max-width:60%}
+.cs-image-content .tag{
+  display:inline-block;background:rgba(244,196,48,.95);color:var(--B);
+  padding:4px 12px;border-radius:100px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.cs-image-content h3{font-size:22px;font-weight:900;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:4px;letter-spacing:-.01em}
+.cs-image-content p{font-size:13px;color:rgba(255,255,255,.85);line-height:1.5;margin:0}
+/* Variant 3 : announcement text */
+.cs-announce{
+  background:linear-gradient(135deg,#1a3a6e 0%,var(--B) 100%);
+  padding:24px 36px;color:white;
+  display:flex;align-items:center;gap:20px;
+}
+.cs-announce::before{
+  content:'';position:absolute;top:50%;right:-100px;width:300px;height:300px;
+  border-radius:50%;background:radial-gradient(circle,rgba(244,196,48,.18) 0%,transparent 70%);
+  transform:translateY(-50%);
+}
+.cs-announce-ico{
+  flex-shrink:0;width:62px;height:62px;border-radius:18px;
+  background:linear-gradient(135deg,var(--GOLD),var(--GOLD-D));color:var(--B);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  box-shadow:0 8px 22px rgba(244,196,48,.35);
+}
+.cs-announce-txt{position:relative;z-index:1}
+.cs-announce-txt .tag{
+  display:inline-block;background:rgba(244,196,48,.2);color:var(--GOLD);
+  padding:3px 10px;border-radius:100px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:6px;border:1px solid rgba(244,196,48,.3);
+}
+.cs-announce-txt h3{font-size:20px;font-weight:900;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:4px;letter-spacing:-.01em}
+.cs-announce-txt p{font-size:13px;color:rgba(255,255,255,.78);line-height:1.5;margin:0}
+/* Variant 4 : quote */
+.cs-quote{
+  background:linear-gradient(135deg,var(--G) 0%,#0a5e4d 60%,var(--B) 100%);
+  padding:28px 36px;color:white;
+  display:flex;align-items:center;gap:18px;
+}
+.cs-quote-mark{
+  flex-shrink:0;font-size:80px;font-family:Georgia,serif;color:var(--GOLD);
+  line-height:.7;font-weight:900;opacity:.9;
+}
+.cs-quote-txt p{font-size:15px;font-style:italic;line-height:1.55;margin-bottom:10px;color:rgba(255,255,255,.95)}
+.cs-quote-txt .by{font-size:12px;color:var(--GOLD);font-weight:800;letter-spacing:.04em}
+
+/* Carousel controls */
+.cov-arrows{
+  position:absolute;top:50%;left:0;right:0;display:flex;justify-content:space-between;
+  padding:0 12px;transform:translateY(-50%);z-index:2;pointer-events:none;
+}
+.cov-arr{
+  pointer-events:auto;width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.18);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.22);
+  color:white;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  transition:background .2s,transform .25s var(--ease-spring);
+}
+.cov-arr:hover{background:rgba(255,255,255,.32);transform:scale(1.08)}
+.cov-dots{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  display:flex;gap:7px;z-index:2;
+}
+.cov-d{
+  width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.42);
+  cursor:pointer;border:none;padding:0;transition:width .3s var(--ease-out),background .3s;
+}
+.cov-d.on{background:var(--GOLD);width:26px;border-radius:4px}
+
+@media(max-width:820px){
+  .cov-carousel{height:auto;min-height:200px}
+  .cs-stats{flex-direction:column;text-align:center;padding:22px 20px}
+  .cs-stats-num{justify-content:center}
+  .cs-stats-num .big{font-size:44px}
+  .cs-image-content{max-width:none;padding:22px 20px}
+  .cs-announce{padding:18px 20px;flex-direction:column;text-align:center;gap:14px}
+  .cs-quote{padding:22px 20px;flex-direction:column;text-align:center}
+  .cs-quote-mark{font-size:48px}
+  .cov-arrows{padding:0 6px}
+  .cov-arr{width:32px;height:32px;font-size:11px}
+}
 
 /* ============================================
    FOOTER
@@ -726,8 +863,7 @@ section{padding:72px 5%;position:relative}
   .cmd-visual{display:none}
   .fs-info-grid{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr}
-  .cov-callout{flex-direction:column;text-align:center}
-  .cov-callout-num{justify-content:center}
+  /* cov-callout remplacé par cov-carousel — règles spécifiques dans la section carousel */
 }
 @media(max-width:640px){
   body{padding-top:60px;padding-bottom:var(--BOT)}
@@ -748,7 +884,7 @@ section{padding:72px 5%;position:relative}
   section{padding:48px 4%}
   .how-grid::before{display:none}
   .how-step{padding:0 10px}
-  .cov-callout-num .big{font-size:48px}
+  .cs-stats-num .big{font-size:40px}
 }
 @media(max-width:380px){.ph-grid{grid-template-columns:1fr}}
 </style>
@@ -810,6 +946,21 @@ section{padding:72px 5%;position:relative}
     </div>
     <div>
       <div class="hero-card" data-tilt>
+        <div class="hero-card-ttl" style="margin-bottom:8px;color:rgba(255,255,255,.85)"><i class="fa-solid fa-earth-africa" style="color:var(--GOLD)"></i>Filtrer par île</div>
+        <div class="island-filters" role="tablist" aria-label="Filtrer par île">
+          <button type="button" class="island-btn active" data-island="all" onclick="selectIsland('all')">
+            Toutes<small>3 îles</small>
+          </button>
+          <button type="button" class="island-btn" data-island="ngazidja" onclick="selectIsland('ngazidja')">
+            Ngazidja<small>Grande Comore</small>
+          </button>
+          <button type="button" class="island-btn" data-island="ndzwani" onclick="selectIsland('ndzwani')">
+            Ndzwani<small>Anjouan</small>
+          </button>
+          <button type="button" class="island-btn" data-island="mwali" onclick="selectIsland('mwali')">
+            Mwali<small>Mohéli</small>
+          </button>
+        </div>
         <div class="hero-card-ttl"><i class="fa-solid fa-magnifying-glass" style="color:var(--GOLD)"></i>Recherche rapide</div>
         <div class="hero-search-bar">
           <input type="text" id="heroInput" placeholder="Nom d'une pharmacie...">
@@ -861,9 +1012,9 @@ section{padding:72px 5%;position:relative}
 <section class="ph-section" id="pharmacies">
   <div class="ctr">
     <div class="sec-hdr rev">
-      <span class="sec-tag">Partenaires Vérifiés</span>
-      <h2 class="sec-ttl">Pharmacies à Moroni</h2>
-      <p class="sec-sub">Toutes nos pharmacies partenaires, vérifiées et certifiées par l'Ordre des Pharmaciens des Comores</p>
+      <span class="sec-tag" id="phSecTag">Partenaires Vérifiés</span>
+      <h2 class="sec-ttl" id="phSecTitle">Pharmacies à Moroni</h2>
+      <p class="sec-sub" id="phSecSub">Toutes nos pharmacies partenaires, vérifiées et certifiées par l'Ordre des Pharmaciens des Comores</p>
     </div>
     <div class="ph-grid" id="phGrid"></div>
     <div id="noRes"><i class="fa-solid fa-binoculars"></i><p>Aucune pharmacie trouvée</p></div>
@@ -1014,14 +1165,58 @@ section{padding:72px 5%;position:relative}
       </article>
     </div>
 
-    <div class="cov-callout rev">
-      <div class="cov-callout-txt">
-        <h3>Une santé sans frontières insulaires</h3>
-        <p>Que vous soyez à Moroni, Mutsamudu ou Fomboni, Locapharma vous connecte instantanément aux pharmacies, ordonnances et conseils dont vous avez besoin.</p>
+    <div class="cov-carousel rev" id="covCarousel" aria-roledescription="carrousel d'annonces">
+      <!-- Slide 1 : Stats (l'original) -->
+      <div class="cov-slide cs-stats active" data-slide="0">
+        <div class="cs-stats-txt">
+          <h3>Une santé sans frontières insulaires</h3>
+          <p>Que vous soyez à Moroni, Mutsamudu ou Fomboni, Locapharma vous connecte aux pharmacies, ordonnances et conseils dont vous avez besoin.</p>
+        </div>
+        <div class="cs-stats-num">
+          <span class="big" data-count="30" data-suffix="+">0</span>
+          <span class="lbl">Pharmacies<br>partenaires</span>
+        </div>
       </div>
-      <div class="cov-callout-num">
-        <span class="big" data-count="30" data-suffix="+">0</span>
-        <span class="lbl">Pharmacies<br>partenaires</span>
+
+      <!-- Slide 2 : Image (Moroni / Comores) -->
+      <div class="cov-slide cs-image" data-slide="1">
+        <div class="cs-img-bg" style="background-image:url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1400&q=80')"></div>
+        <div class="cs-image-content">
+          <span class="tag"><i class="fa-solid fa-bullhorn"></i> Annonce</span>
+          <h3>Nouveau service : Livraison express</h3>
+          <p>Recevez vos médicaments en moins de 30 minutes à Moroni, Mutsamudu et Fomboni.</p>
+        </div>
+      </div>
+
+      <!-- Slide 3 : Annonce textuelle -->
+      <div class="cov-slide cs-announce" data-slide="2">
+        <div class="cs-announce-ico"><i class="fa-solid fa-shield-heart"></i></div>
+        <div class="cs-announce-txt">
+          <span class="tag">Partenariat officiel</span>
+          <h3>Certifié par l'Ordre National des Pharmaciens</h3>
+          <p>Toutes nos pharmacies partenaires sont vérifiées et agréées par l'autorité comorienne.</p>
+        </div>
+      </div>
+
+      <!-- Slide 4 : Témoignage -->
+      <div class="cov-slide cs-quote" data-slide="3">
+        <div class="cs-quote-mark">&ldquo;</div>
+        <div class="cs-quote-txt">
+          <p>Grâce à Locapharma, j'ai trouvé une pharmacie de garde à 2h du matin pour mon enfant. Un service indispensable aux Comores.</p>
+          <div class="by">— Fatima M., Moroni</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="cov-arrows" aria-hidden="true">
+        <button type="button" class="cov-arr" onclick="covMove(-1)" aria-label="Slide précédente"><i class="fa-solid fa-chevron-left"></i></button>
+        <button type="button" class="cov-arr" onclick="covMove(1)" aria-label="Slide suivante"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+      <div class="cov-dots" id="covDots">
+        <button type="button" class="cov-d on" onclick="covGo(0)" aria-label="Slide 1"></button>
+        <button type="button" class="cov-d"    onclick="covGo(1)" aria-label="Slide 2"></button>
+        <button type="button" class="cov-d"    onclick="covGo(2)" aria-label="Slide 3"></button>
+        <button type="button" class="cov-d"    onclick="covGo(3)" aria-label="Slide 4"></button>
       </div>
     </div>
   </div>
@@ -1118,65 +1313,96 @@ section{padding:72px 5%;position:relative}
    DATA
    ============================================ */
 const PH = [
-  { id:1,name:"Pharmacie Centrale",status:"open",label:"Ouverte",
+  { id:1,island:"ngazidja",name:"Pharmacie Centrale",status:"open",label:"Ouverte",
     address:"Place de l'Indépendance, Moroni Centre",zone:"Moroni Centre",dist:"0.2 km",
     phone:"+269 773 12 34",email:"centrale@pharma.km",rating:4.8,reviews:234,
     lat:-11.7014,lng:43.2551,
     desc:"Pharmacie historique de Moroni depuis 1994, installée au cœur de la capitale. Équipe de pharmaciens diplômés, large gamme de médicaments importés, accessoires médicaux et produits de parapharmacie haut de gamme. Conseil personnalisé garanti pour chaque patient.",
     hours:[{d:"Lun–Ven",t:"07h30–20h00"},{d:"Samedi",t:"08h00–18h00"},{d:"Dimanche",t:"Fermé"}],
     imgs:["https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=900&q=80","https://images.unsplash.com/photo-1563213126-a4273aed2016?w=900&q=80","https://images.unsplash.com/photo-1580281780460-82d277b0e3f8?w=900&q=80"] },
-  { id:2,name:"Pharmacie Al-Khair",status:"open",label:"Ouverte",
+  { id:2,island:"ngazidja",name:"Pharmacie Al-Khair",status:"open",label:"Ouverte",
     address:"Avenue de la République, Moroni",zone:"République",dist:"0.6 km",
     phone:"+269 773 56 78",email:"alkhair@pharma.km",rating:4.6,reviews:187,
     lat:-11.7035,lng:43.2538,
     desc:"Pharmacie Al-Khair, votre partenaire de confiance pour toute la famille. Stock complet de médicaments génériques et de marque. Personnel bilingue français/arabe pour mieux vous accueillir et vous conseiller.",
     hours:[{d:"Lun–Sam",t:"08h00–20h30"},{d:"Dimanche",t:"09h00–13h00"}],
     imgs:["https://images.unsplash.com/photo-1626863905121-3b0c0ed7b94a?w=900&q=80","https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80"] },
-  { id:3,name:"Pharmacie Al-Amal",status:"guard",label:"De garde",
+  { id:3,island:"ngazidja",name:"Pharmacie Al-Amal",status:"guard",label:"De garde",
     address:"Route Hôpital El-Maarouf, Itsandra",zone:"Itsandra",dist:"1.1 km",
     phone:"+269 773 90 11",email:"alaval@pharma.km",rating:4.9,reviews:312,
     lat:-11.6958,lng:43.2590,
     desc:"Pharmacie Al-Amal, de garde cette nuit pour vous servir en urgence. Spécialisée en pédiatrie et soins d'urgence. Pharmacie référente de l'Hôpital El-Maarouf. Équipe formée aux urgences pharmaceutiques 24h/24.",
     hours:[{d:"Lun–Ven",t:"08h00–21h00"},{d:"Week-end",t:"08h00–22h00"},{d:"Garde nuit",t:"22h00–08h00"}],
     imgs:["https://images.unsplash.com/photo-1580281780460-82d277b0e3f8?w=900&q=80","https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=900&q=80"] },
-  { id:4,name:"Pharmacie Salama",status:"open",label:"Ouverte",
+  { id:4,island:"ngazidja",name:"Pharmacie Salama",status:"open",label:"Ouverte",
     address:"Centre Commercial Coulée, Moroni",zone:"Coulée",dist:"1.4 km",
     phone:"+269 773 22 33",email:"salama@pharma.km",rating:4.4,reviews:96,
     lat:-11.7082,lng:43.2502,
     desc:"Pharmacie Salama au cœur du quartier Coulée. Cosmétique naturelle, compléments alimentaires et produits de parapharmacie sélectionnés. Ambiance chaleureuse, conseils bienveillants, accueil professionnel.",
     hours:[{d:"Lun–Sam",t:"09h00–19h30"},{d:"Dimanche",t:"Fermé"}],
     imgs:["https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80","https://images.unsplash.com/photo-1563213126-a4273aed2016?w=900&q=80"] },
-  { id:5,name:"Pharmacie Ibn Sina",status:"open",label:"Ouverte",
+  { id:5,island:"ngazidja",name:"Pharmacie Ibn Sina",status:"open",label:"Ouverte",
     address:"Rue des Djins, Badjanani, Moroni",zone:"Badjanani",dist:"1.8 km",
     phone:"+269 773 44 55",email:"ibnsina@pharma.km",rating:4.9,reviews:428,
     lat:-11.7050,lng:43.2570,
     desc:"Référence en phytothérapie et médecine traditionnelle complémentaire aux Comores. Pharmaciens chercheurs passionnés, produits locaux et importés de qualité premium. Conseil expert pour les traitements naturels.",
     hours:[{d:"Lun–Ven",t:"07h00–21h00"},{d:"Samedi",t:"08h00–20h00"},{d:"Dimanche",t:"10h00–14h00"}],
     imgs:["https://images.unsplash.com/photo-1563213126-a4273aed2016?w=900&q=80","https://images.unsplash.com/photo-1626863905121-3b0c0ed7b94a?w=900&q=80"] },
-  { id:6,name:"Pharmacie Hilal",status:"closed",label:"Fermée",
+  { id:6,island:"ngazidja",name:"Pharmacie Hilal",status:"closed",label:"Fermée",
     address:"Quartier Magudju, Moroni",zone:"Magudju",dist:"2.2 km",
     phone:"+269 773 66 77",email:"hilal@pharma.km",rating:4.2,reviews:53,
     lat:-11.7100,lng:43.2470,
     desc:"Pharmacie Hilal au service du quartier Magudju. Médicaments génériques, produits d'hygiène et articles de puériculture. Équipe accueillante et tarifs accessibles. Réouverture demain à 08h00.",
     hours:[{d:"Lun–Sam",t:"08h00–18h00"},{d:"Dimanche",t:"Fermé"}],
     imgs:["https://images.unsplash.com/photo-1580281780460-82d277b0e3f8?w=900&q=80"] },
-  { id:7,name:"Pharmacie Tropicale",status:"open",label:"Ouverte",
+  { id:7,island:"ngazidja",name:"Pharmacie Tropicale",status:"open",label:"Ouverte",
     address:"Rue du Port, Volo-Volo, Moroni",zone:"Volo-Volo",dist:"2.7 km",
     phone:"+269 773 88 99",email:"tropical@pharma.km",rating:4.7,reviews:201,
     lat:-11.6990,lng:43.2620,
     desc:"Spécialiste en pathologies tropicales et vaccins de voyage. Partenaire officiel du Centre de Médecine du Voyage de Moroni. Anti-paludéens en stock permanent, traitements prophylactiques certifiés.",
     hours:[{d:"Lun–Ven",t:"08h00–19h00"},{d:"Samedi",t:"09h00–17h00"},{d:"Dimanche",t:"Sur RDV"}],
     imgs:["https://images.unsplash.com/photo-1626863905121-3b0c0ed7b94a?w=900&q=80","https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=900&q=80"] },
-  { id:8,name:"Pharmacie Nour",status:"open",label:"Ouverte",
+  { id:8,island:"ngazidja",name:"Pharmacie Nour",status:"open",label:"Ouverte",
     address:"Cité des Orangers, Hamramba, Moroni",zone:"Hamramba",dist:"3.3 km",
     phone:"+269 773 11 22",email:"nour@pharma.km",rating:4.5,reviews:118,
     lat:-11.7140,lng:43.2530,
     desc:"Pharmacie Nour, votre pharmacie de quartier à Hamramba. Livraison rapide sous 30 minutes dans le quartier. Produits naturels, cosmétique bio et articles de maternité soigneusement sélectionnés.",
     hours:[{d:"Lun–Sam",t:"08h30–19h30"},{d:"Dimanche",t:"09h00–12h00"}],
-    imgs:["https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80","https://images.unsplash.com/photo-1580281780460-82d277b0e3f8?w=900&q=80"] }
+    imgs:["https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80","https://images.unsplash.com/photo-1580281780460-82d277b0e3f8?w=900&q=80"] },
+  /* === Anjouan (Ndzwani) === */
+  { id:9,island:"ndzwani",name:"Pharmacie Mutsamudu",status:"open",label:"Ouverte",
+    address:"Avenue du Front de Mer, Mutsamudu",zone:"Mutsamudu Centre",dist:"— Anjouan",
+    phone:"+269 771 22 14",email:"mutsamudu@pharma.km",rating:4.7,reviews:142,
+    lat:-12.1656,lng:44.3974,
+    desc:"Pharmacie principale de Mutsamudu, capitale d'Anjouan. Approvisionnement régulier en médicaments importés, conseils en français et en shindzwani. Service de garde rotatif pour toute l'île.",
+    hours:[{d:"Lun–Sam",t:"08h00–20h00"},{d:"Dimanche",t:"09h00–13h00"}],
+    imgs:["https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=900&q=80","https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80"] },
+  { id:10,island:"ndzwani",name:"Pharmacie Domoni",status:"guard",label:"De garde",
+    address:"Centre-ville, Domoni",zone:"Domoni",dist:"— Anjouan",
+    phone:"+269 771 88 77",email:"domoni@pharma.km",rating:4.6,reviews:88,
+    lat:-12.2547,lng:44.5314,
+    desc:"Pharmacie de Domoni assurant la garde de la côte est d'Anjouan. Médicaments essentiels et conseil de proximité dans une équipe à taille humaine.",
+    hours:[{d:"Lun–Sam",t:"08h00–19h00"},{d:"Garde nuit",t:"19h00–07h00"}],
+    imgs:["https://images.unsplash.com/photo-1580281780460-82d277b0e3f8?w=900&q=80","https://images.unsplash.com/photo-1563213126-a4273aed2016?w=900&q=80"] },
+  /* === Mohéli (Mwali) === */
+  { id:11,island:"mwali",name:"Pharmacie Fomboni",status:"open",label:"Ouverte",
+    address:"Boulevard de l'Indépendance, Fomboni",zone:"Fomboni Centre",dist:"— Mohéli",
+    phone:"+269 772 45 99",email:"fomboni@pharma.km",rating:4.5,reviews:64,
+    lat:-12.2806,lng:43.7411,
+    desc:"Pharmacie principale de Mohéli, à Fomboni. Couverture sanitaire des villages alentours, médicaments génériques et soins de proximité dans la plus petite île de l'archipel.",
+    hours:[{d:"Lun–Ven",t:"08h00–18h30"},{d:"Samedi",t:"09h00–17h00"},{d:"Dimanche",t:"Fermé"}],
+    imgs:["https://images.unsplash.com/photo-1626863905121-3b0c0ed7b94a?w=900&q=80","https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=900&q=80"] }
 ];
 
+const ISLAND_LABELS = {
+  all:      { fr:"Toutes les îles",    title:"Pharmacies à travers les Comores", capital:"Comores", short:"3 îles" },
+  ngazidja: { fr:"Grande Comore",      title:"Pharmacies en Grande Comore",      capital:"Moroni",  short:"Ngazidja" },
+  ndzwani:  { fr:"Anjouan",            title:"Pharmacies à Anjouan",             capital:"Mutsamudu", short:"Ndzwani" },
+  mwali:    { fr:"Mohéli",             title:"Pharmacies à Mohéli",              capital:"Fomboni", short:"Mwali" }
+};
+
 let showAll = false, favs = new Set(), curImgs = [], curIdx = 0, galTimer = null, curPh = null;
+let currentIsland = 'all';
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isTouch = matchMedia('(hover: none)').matches;
 
@@ -1228,8 +1454,54 @@ function render(data){
 function filterPharma(){
   const q = document.getElementById('mainSearch').value.toLowerCase().trim();
   showAll = false;
-  render(q ? PH.filter(p => p.name.toLowerCase().includes(q) || p.zone.toLowerCase().includes(q)) : PH);
+  let data = PH;
+  if(currentIsland !== 'all') data = data.filter(p => p.island === currentIsland);
+  if(q) data = data.filter(p => p.name.toLowerCase().includes(q) || p.zone.toLowerCase().includes(q));
+  render(data);
 }
+
+/* ============================================
+   ISLAND FILTER — change the platform scope
+   ============================================ */
+function selectIsland(code){
+  if(!ISLAND_LABELS[code]) return;
+  currentIsland = code;
+
+  // Toggle active button
+  document.querySelectorAll('.island-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.island === code);
+  });
+
+  // Update pharmacy section title + subtitle
+  const lbl = ISLAND_LABELS[code];
+  const ttl = document.getElementById('phSecTitle');
+  const sub = document.getElementById('phSecSub');
+  if(ttl) ttl.textContent = lbl.title;
+  if(sub) sub.textContent = code === 'all'
+    ? "Toutes nos pharmacies partenaires, vérifiées et certifiées par l'Ordre des Pharmaciens des Comores"
+    : `Pharmacies certifiées sur l'île de ${lbl.fr} — Capitale : ${lbl.capital}`;
+
+  // Re-apply filter (clears search if it'd hide everything)
+  filterPharma();
+
+  // Smooth scroll to pharmacies
+  goTo('pharmacies');
+
+  // Toast feedback
+  showToast('Filtre activé : ' + lbl.fr);
+
+  // Persist choice in URL hash for shareability
+  try { history.replaceState(null, '', '#ile=' + code); } catch(_){}
+}
+
+// Restore from URL hash on load (e.g. shared link)
+(function initIslandFromHash(){
+  const m = (location.hash || '').match(/#ile=(all|ngazidja|ndzwani|mwali)/);
+  if(m){
+    // defer so render() has run first
+    setTimeout(() => selectIsland(m[1]), 50);
+  }
+})();
 function heroSearch(){
   const q = document.getElementById('heroInput').value.trim();
   if(!q) return;
@@ -1539,6 +1811,45 @@ if(!reduceMotion && !isTouch){
     btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
   });
 }
+
+/* ============================================
+   COVERAGE CAROUSEL (slides auto-rotation)
+   ============================================ */
+(function initCovCarousel(){
+  const slides = document.querySelectorAll('#covCarousel .cov-slide');
+  const dots   = document.querySelectorAll('#covCarousel .cov-d');
+  if(!slides.length) return;
+  let idx = 0;
+  let timer = null;
+  const DELAY = 5000;
+
+  function show(i){
+    idx = (i + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+    dots.forEach((d, k)   => d.classList.toggle('on',     k === idx));
+  }
+  function start(){
+    if(reduceMotion) return;
+    stop();
+    timer = setInterval(() => show(idx + 1), DELAY);
+  }
+  function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+
+  window.covMove = (dir) => { show(idx + dir); start(); };
+  window.covGo   = (i)   => { show(i);          start(); };
+
+  // Pause on hover (desktop)
+  const car = document.getElementById('covCarousel');
+  car.addEventListener('mouseenter', stop);
+  car.addEventListener('mouseleave', start);
+
+  // Pause when tab hidden (saves battery)
+  document.addEventListener('visibilitychange', () => {
+    document.hidden ? stop() : start();
+  });
+
+  start();
+})();
 
 /* ============================================
    INIT
