@@ -1,0 +1,978 @@
+{# templates/suivicommande/index.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Suivi de commande — Locapharma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --G:#0E7C66;--GD:#0a5e4d;--GL:#e1f5ee;--GXL:#f0faf7;
+  --B:#0B2545;--BM:#1a3a6e;--BD:#061632;
+  --GOLD:#F4C430;--GOLD-D:#d9a90f;
+  --T:#1D2939;--MUT:#667085;--LT:#F2F4F7;--BDR:#E4E7EC;
+  --W:#fff;--ERR:#F04438;--OK:#12B76A;--WARN:#F79009;--INFO:#4A9FFF;
+  --shadow:0 2px 16px rgba(11,37,69,.07);
+  --shadow-md:0 10px 30px rgba(11,37,69,.12);
+  --shadow-lg:0 24px 60px -20px rgba(11,37,69,.28);
+  --shadow-glow:0 16px 40px -12px rgba(14,124,102,.5);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --nav-mobile-h:64px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',sans-serif;color:var(--T);background:#EEF3F8;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--G);border-radius:3px}
+:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(14,124,102,.35);border-radius:8px}
+
+/* ANIMATIONS */
+@keyframes scrIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes ping{0%{transform:scale(1);opacity:.85}100%{transform:scale(3);opacity:0}}
+@keyframes pulse-soft{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.04);opacity:.9}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* SCREENS */
+.screen{display:none}
+.screen.active{display:block;animation:scrIn .4s var(--ease) both}
+.wrap{max-width:880px;margin:0 auto;padding:0 5%}
+@media(max-width:640px){.wrap{padding:0 14px}}
+@media(max-width:768px){.screen{padding-bottom:calc(var(--nav-mobile-h) + var(--safe-b))}}
+
+/* ============================================================
+   STEP RAIL
+   ============================================================ */
+.steps-rail{
+  position:sticky;top:0;z-index:400;background:rgba(255,255,255,.96);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--BDR);box-shadow:0 2px 16px rgba(11,37,69,.05);
+}
+.sr-inner{max-width:880px;margin:0 auto;padding:0 5%;height:58px;display:flex;align-items:center;justify-content:center;gap:14px}
+.sr-steps{display:flex;align-items:center;gap:6px}
+.sr-step{display:flex;align-items:center;gap:8px;opacity:.45;transition:opacity .4s}
+.sr-step.on,.sr-step.done{opacity:1}
+.sr-dot{width:24px;height:24px;border-radius:50%;flex-shrink:0;background:var(--LT);border:2px solid var(--BDR);display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:10.5px;font-weight:900;color:var(--MUT);transition:.35s var(--spring)}
+.sr-step.on .sr-dot{background:var(--G);border-color:var(--G);color:#fff;transform:scale(1.08)}
+.sr-step.done .sr-dot{background:var(--GL);border-color:var(--G);color:var(--G)}
+.sr-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;font-weight:800;color:var(--T)}
+.sr-line{width:24px;height:2px;background:var(--BDR);border-radius:2px;transition:background .4s}
+.sr-step.done + .sr-line{background:var(--G)}
+@media(max-width:760px){.sr-inner{height:50px;padding:0 14px}.sr-label{display:none}.sr-dot{width:22px;height:22px;font-size:10px}.sr-line{width:14px}}
+@media(max-width:380px){.sr-line{width:10px}.sr-steps{gap:4px}}
+
+/* ============================================================
+   ✨ PAGE HEADER COMPACT (remplace le gros hero)
+   ============================================================ */
+.page-header{
+  background:linear-gradient(135deg,var(--B) 0%,var(--BM) 60%,#1e3a6e 100%);
+  color:#fff;padding:18px 5%;position:relative;overflow:hidden;
+}
+.page-header::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:24px 24px;
+  mask-image:radial-gradient(ellipse at 80% 50%,#000 0%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse at 80% 50%,#000 0%,transparent 70%);
+  pointer-events:none;
+}
+.page-header::after{
+  content:'';position:absolute;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(244,196,48,.12),transparent 70%);
+  top:-130px;right:-80px;pointer-events:none;
+}
+.ph-in{max-width:880px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;position:relative;z-index:1}
+.ph-left{display:flex;align-items:center;gap:14px;min-width:0;flex:1}
+.ph-icon{
+  width:46px;height:46px;border-radius:13px;flex-shrink:0;
+  background:rgba(244,196,48,.18);border:1px solid rgba(244,196,48,.4);
+  display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--GOLD);
+  position:relative;
+}
+.ph-icon::after{content:'';position:absolute;inset:-3px;border-radius:16px;border:1px solid rgba(244,196,48,.25);animation:pulse-soft 2.4s ease-in-out infinite}
+.ph-txt{min-width:0;flex:1}
+.ph-eyebrow{font-size:10.5px;font-weight:800;color:rgba(244,196,48,.95);letter-spacing:.08em;text-transform:uppercase;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:8px}
+.ph-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--GOLD);position:relative}
+.ph-eyebrow .dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--GOLD);animation:ping 2.2s cubic-bezier(0,0,.2,1) infinite}
+.ph-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:900;color:#fff;letter-spacing:-.015em;margin-top:3px;line-height:1.2}
+.ph-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.ph-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(8px);border-radius:11px;padding:8px 13px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;color:#fff;font-weight:700;
+}
+.ph-chip i{color:var(--GOLD);font-size:11px}
+.ph-chip b{font-weight:900}
+.ph-chip .sep{width:1px;height:14px;background:rgba(255,255,255,.2)}
+@media(max-width:640px){
+  .page-header{padding:14px 14px}
+  .ph-in{gap:12px}
+  .ph-icon{width:40px;height:40px;font-size:16px;border-radius:11px}
+  .ph-title{font-size:15.5px}
+  .ph-eyebrow{font-size:9.5px}
+  .ph-chip{font-size:11px;padding:6px 11px}
+}
+@media(max-width:480px){
+  .ph-in{flex-direction:column;align-items:stretch}
+  .ph-right{justify-content:flex-start}
+  .ph-chip{flex:1;justify-content:center}
+}
+
+/* ============================================================
+   ✨ CONTENU PRINCIPAL
+   ============================================================ */
+.content-wrap{max-width:880px;margin:0 auto;padding:18px 5% 60px;position:relative;z-index:5}
+@media(max-width:640px){.content-wrap{padding:14px 14px 50px}}
+
+/* Card de base */
+.card{background:#fff;border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--BDR);overflow:hidden;margin-bottom:14px;animation:fadeUp .45s var(--ease) both}
+.card-head{padding:14px 20px;border-bottom:1px solid var(--BDR);display:flex;align-items:center;gap:13px;background:linear-gradient(180deg,#fff,#fcfdff)}
+.card-head-ico{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
+.card-head-ico.gold{background:linear-gradient(135deg,#FFFAEB,#FEF5D7);border:1px solid #FEDF89;color:var(--GOLD-D)}
+.card-head-ico.green{background:linear-gradient(135deg,var(--GL),#D7EFE5);border:1px solid rgba(14,124,102,.25);color:var(--G)}
+.card-head-ico.navy{background:linear-gradient(135deg,#EEF2FF,#E0E7FF);border:1px solid #C7D2FE;color:var(--B)}
+.card-head-ico.danger{background:linear-gradient(135deg,#FEF3F2,#FBD9D5);border:1px solid #FECDCA;color:var(--ERR)}
+.card-head-txt{flex:1;min-width:0}
+.card-head-tt{font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;font-weight:900;color:var(--B);letter-spacing:-.01em;line-height:1.25;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card-head-tt .badge{background:var(--G);color:#fff;font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:100px;font-family:'Plus Jakarta Sans',sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.card-head-tt .badge.gold{background:linear-gradient(135deg,var(--GOLD),var(--GOLD-D));color:var(--B)}
+.card-head-sub{font-size:11.5px;color:var(--MUT);font-weight:600;margin-top:2px}
+.card-body{padding:18px 20px}
+@media(max-width:480px){.card-head{padding:12px 15px}.card-body{padding:14px 15px}}
+
+/* ============================================================
+   ✨ TRUST BAR
+   ============================================================ */
+.trust-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;animation:fadeUp .45s var(--ease) .06s both}
+@media(max-width:560px){.trust-bar{grid-template-columns:1fr 1fr;gap:8px}}
+@media(max-width:360px){.trust-bar{grid-template-columns:1fr}}
+.trust-item{background:#fff;border:1px solid var(--BDR);border-radius:13px;padding:11px 13px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);transition:.22s var(--ease)}
+.trust-item:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:rgba(14,124,102,.25)}
+.trust-item-ico{width:32px;height:32px;border-radius:9px;background:var(--GL);color:var(--G);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:1px solid rgba(14,124,102,.2)}
+.trust-item-txt{min-width:0;flex:1}
+.trust-item-tt{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:900;color:var(--B);line-height:1.25;letter-spacing:-.005em}
+.trust-item-sub{font-size:10px;color:var(--MUT);font-weight:600;margin-top:1px;line-height:1.4}
+
+/* ============================================================
+   DEMANDE INITIALE
+   ============================================================ */
+.req-summary{display:flex;flex-wrap:wrap;gap:7px}
+.req-chip{display:inline-flex;align-items:center;gap:7px;background:var(--LT);border:1px solid var(--BDR);border-radius:100px;padding:7px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;font-weight:700;color:var(--T)}
+.req-chip i{color:var(--G);font-size:10.5px}
+.req-chip .qty{background:var(--B);color:#fff;font-size:9.5px;font-weight:900;padding:2px 7px;border-radius:100px;margin-left:3px}
+.req-chip.rx i{color:var(--GOLD-D)}
+
+/* ============================================================
+   MÉDICAMENTS RÉPONSE
+   ============================================================ */
+.resp-intro{display:flex;align-items:flex-start;gap:11px;background:linear-gradient(135deg,var(--GL),#fff);border:1px solid rgba(14,124,102,.2);border-radius:12px;padding:12px 15px;margin-bottom:14px}
+.resp-intro i{color:var(--G);font-size:16px;margin-top:1px;flex-shrink:0}
+.resp-intro-txt{font-size:12px;color:var(--T);font-weight:600;line-height:1.55}
+.resp-intro-txt b{color:var(--B);font-weight:800}
+
+.med-list{display:flex;flex-direction:column;gap:10px}
+.med-card{
+  display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;
+  padding:14px 15px;background:#fff;border:2px solid var(--BDR);border-radius:14px;
+  transition:.25s var(--ease);position:relative;overflow:hidden;cursor:pointer;
+}
+.med-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3.5px;background:var(--MUT);opacity:.25;transition:.25s}
+.med-card.checked{border-color:var(--G);background:linear-gradient(135deg,#fff,var(--GXL));box-shadow:0 6px 16px -4px rgba(14,124,102,.16)}
+.med-card.checked::before{background:linear-gradient(180deg,var(--G),var(--GD));opacity:1}
+.med-card:hover{transform:translateY(-2px);border-color:rgba(14,124,102,.4);box-shadow:0 8px 18px -6px rgba(11,37,69,.12)}
+
+.med-chk{width:28px;height:28px;border-radius:8px;border:2px solid var(--BDR);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:transparent;font-size:11px;transition:.22s var(--spring)}
+.med-card.checked .med-chk{background:linear-gradient(135deg,var(--G),var(--GD));border-color:var(--G);color:#fff;box-shadow:0 4px 10px -2px rgba(14,124,102,.45)}
+
+.med-info{min-width:0;display:flex;flex-direction:column;gap:4px}
+.med-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:900;color:var(--B);line-height:1.25;display:flex;align-items:center;gap:7px;flex-wrap:wrap;letter-spacing:-.005em}
+.med-tag{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:900;padding:3px 7px;border-radius:100px;font-family:'Plus Jakarta Sans',sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.med-tag.rx{background:#FFFAEB;color:#B54708;border:1px solid #FEDF89}
+.med-tag.free{background:var(--GL);color:var(--G);border:1px solid rgba(14,124,102,.25)}
+
+.med-dose{font-size:11px;color:var(--MUT);font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.med-dose i{color:var(--G);font-size:9px}
+.med-desc{font-size:11px;color:var(--MUT);font-weight:500;line-height:1.5;margin-top:2px}
+
+.med-price-block{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
+.med-qty{font-size:10px;color:var(--MUT);font-weight:700;display:inline-flex;align-items:center;gap:4px;font-family:'Plus Jakarta Sans',sans-serif}
+.med-qty .x{background:var(--B);color:#fff;padding:2px 6px;border-radius:5px;font-size:9px;font-weight:900}
+.med-unit{font-size:9.5px;color:var(--MUT);font-weight:600}
+.med-total{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:900;color:var(--G);letter-spacing:-.01em;line-height:1.1}
+.med-card:not(.checked) .med-total{color:var(--MUT);text-decoration:line-through;text-decoration-color:rgba(102,112,133,.5)}
+
+@media(max-width:520px){
+  .med-card{grid-template-columns:auto 1fr;grid-template-rows:auto auto;gap:10px 12px;padding:13px}
+  .med-chk{grid-row:1;grid-column:1}
+  .med-info{grid-row:1;grid-column:2}
+  .med-price-block{grid-row:2;grid-column:1/3;flex-direction:row;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px dashed var(--BDR);margin-top:2px}
+  .med-name{font-size:13px}
+}
+
+/* ============================================================
+   FACTURE
+   ============================================================ */
+.invoice{background:linear-gradient(180deg,#fff,#fafbfc);border:1px solid var(--BDR);border-radius:14px;overflow:hidden;margin-top:14px}
+.invoice-head{padding:12px 16px;background:linear-gradient(135deg,#fcfdff,#fff);border-bottom:1px solid var(--BDR);display:flex;align-items:center;gap:10px}
+.invoice-head i{color:var(--G);font-size:13px}
+.invoice-head-tt{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:900;color:var(--B);letter-spacing:-.005em}
+.invoice-head .ref{margin-left:auto;font-size:10px;color:var(--MUT);font-weight:700;background:var(--LT);border:1px solid var(--BDR);padding:3px 10px;border-radius:100px;font-family:'Plus Jakarta Sans',sans-serif}
+.invoice-rows{padding:8px 16px}
+.inv-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;font-size:12.5px;border-bottom:1px dashed var(--BDR)}
+.inv-row:last-of-type{border:none}
+.inv-row-l{color:var(--MUT);font-weight:700;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.inv-row-l i{color:var(--MUT);font-size:10.5px;width:13px;text-align:center;flex-shrink:0}
+.inv-row-l span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inv-row-v{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--T);flex-shrink:0;margin-left:10px}
+.inv-row.deducted{opacity:.5}
+.inv-row.deducted .inv-row-v{text-decoration:line-through}
+
+.inv-total{padding:15px 16px;background:linear-gradient(135deg,var(--G),var(--GD));color:#fff;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
+.inv-total::before{content:'';position:absolute;top:-50%;right:-10%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.13),transparent 70%);pointer-events:none}
+.inv-total-l{font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:9px;position:relative;z-index:1}
+.inv-total-l-ico{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:12px;backdrop-filter:blur(8px)}
+.inv-total-v{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:900;letter-spacing:-.02em;position:relative;z-index:1}
+
+/* ============================================================
+   ACTION BAR (sticky footer)
+   ============================================================ */
+.action-bar{
+  background:#fff;border-top:1px solid var(--BDR);
+  padding:13px 5% calc(13px + var(--safe-b)) 5%;
+  box-shadow:0 -6px 22px rgba(11,37,69,.08);
+  position:sticky;bottom:0;z-index:50;margin-top:16px;
+}
+@media(max-width:640px){.action-bar{padding:12px 14px calc(12px + var(--safe-b)) 14px}}
+.action-bar-in{max-width:880px;margin:0 auto;display:flex;gap:9px;align-items:stretch}
+.btn-action{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:900;border:none;cursor:pointer;transition:.25s var(--spring);min-height:48px;letter-spacing:.005em;flex:1;position:relative;overflow:hidden}
+.btn-action::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s var(--ease)}
+.btn-action:hover::before{transform:translateX(100%)}
+.btn-primary{background:linear-gradient(135deg,var(--G),var(--GD));color:#fff;box-shadow:0 8px 22px -8px rgba(14,124,102,.55)}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--shadow-glow)}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;background:#cbd0d8;box-shadow:none}
+.btn-primary i:last-child{transition:transform .25s}
+.btn-primary:not(:disabled):hover i:last-child{transform:translateX(4px)}
+.btn-ghost{background:#fff;color:var(--T);border:1.5px solid var(--BDR);flex:0 0 auto;padding:13px 16px}
+.btn-ghost:hover{background:#FEF3F2;color:var(--ERR);border-color:#FECDCA}
+@media(max-width:480px){.btn-ghost span{display:none}.btn-ghost{padding:13px 14px}}
+
+/* ============================================================
+   ÉCRAN PAIEMENT
+   ============================================================ */
+.pay-options{display:flex;flex-direction:column;gap:11px}
+.pay-card{
+  display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;
+  padding:16px;background:#fff;border:2px solid var(--BDR);border-radius:14px;
+  cursor:pointer;transition:.25s var(--ease);position:relative;overflow:hidden;
+}
+.pay-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3.5px;background:var(--MUT);opacity:.25;transition:.25s}
+.pay-card:hover:not(.disabled){transform:translateY(-2px);border-color:rgba(14,124,102,.4);box-shadow:0 8px 22px -8px rgba(14,124,102,.18)}
+.pay-card.selected{border-color:var(--G);background:linear-gradient(135deg,#fff,var(--GXL));box-shadow:0 8px 24px -8px rgba(14,124,102,.22)}
+.pay-card.selected::before{background:linear-gradient(180deg,var(--G),var(--GD));opacity:1}
+.pay-card.disabled{opacity:.65;cursor:not-allowed;background:linear-gradient(135deg,#fafbfc,#fff)}
+
+.pay-ico{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;position:relative;border:1.5px solid;transition:.25s var(--spring)}
+.pay-ico.cash{background:linear-gradient(135deg,var(--GL),#D7EFE5);color:var(--G);border-color:rgba(14,124,102,.3)}
+.pay-ico.online{background:linear-gradient(135deg,#EEF4FF,#DBEAFE);color:#2563eb;border-color:#C7D7FE}
+.pay-card.selected .pay-ico{transform:scale(1.06)}
+
+.pay-info{min-width:0;flex:1}
+.pay-tt{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:900;color:var(--B);line-height:1.25;display:flex;align-items:center;gap:7px;flex-wrap:wrap;letter-spacing:-.01em}
+.pay-tt .soon{background:linear-gradient(135deg,var(--GOLD),var(--GOLD-D));color:var(--B);font-size:9px;font-weight:900;padding:3px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;font-family:'Plus Jakarta Sans',sans-serif;animation:pulse-soft 2.4s ease-in-out infinite}
+.pay-tt .recommended{background:var(--GL);color:var(--G);font-size:9px;font-weight:900;padding:3px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid rgba(14,124,102,.3)}
+.pay-desc{font-size:11.5px;color:var(--MUT);font-weight:600;margin-top:3px;line-height:1.5}
+
+.pay-radio{width:24px;height:24px;border-radius:50%;border:2px solid var(--BDR);background:#fff;flex-shrink:0;position:relative;transition:.22s var(--spring)}
+.pay-radio::after{content:'';position:absolute;inset:5px;border-radius:50%;background:var(--G);transform:scale(0);transition:.22s var(--spring)}
+.pay-card.selected .pay-radio{border-color:var(--G)}
+.pay-card.selected .pay-radio::after{transform:scale(1)}
+.pay-card.disabled .pay-radio{opacity:.4}
+
+@media(max-width:480px){.pay-card{padding:13px;gap:10px}.pay-ico{width:42px;height:42px;font-size:17px}.pay-tt{font-size:13px}.pay-desc{font-size:11px}}
+
+.pickup-info{margin-top:13px;background:linear-gradient(135deg,#FFFAEB,#FEF5D7);border:1px solid #FEDF89;border-radius:13px;padding:14px;display:none;animation:fadeUp .35s var(--ease) both}
+.pickup-info.show{display:block}
+.pickup-info-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed rgba(244,196,48,.4)}
+.pickup-info-head i{color:var(--GOLD-D);font-size:15px}
+.pickup-info-head strong{font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:900;color:var(--B)}
+.pickup-info-rows{display:flex;flex-direction:column;gap:7px}
+.pickup-row{display:flex;align-items:flex-start;gap:9px;font-size:11.5px;color:var(--T);font-weight:600;line-height:1.55}
+.pickup-row i{color:var(--GOLD-D);font-size:10.5px;width:13px;text-align:center;margin-top:3px;flex-shrink:0}
+.pickup-row b{color:var(--B);font-weight:800}
+
+/* ============================================================
+   ÉCRAN SUCCESS
+   ============================================================ */
+.success-wrap{max-width:560px;margin:0 auto;padding:36px 5% 50px;text-align:center}
+.success-ico-big{
+  width:100px;height:100px;border-radius:50%;margin:0 auto 22px;
+  background:linear-gradient(135deg,var(--GL),#D7EFE5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:44px;color:var(--G);
+  box-shadow:0 0 0 14px rgba(14,124,102,.07), 0 18px 44px -10px rgba(14,124,102,.38);
+  animation:pop .55s var(--spring) both;position:relative;
+}
+.success-ico-big::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px dashed rgba(14,124,102,.3);animation:float 3s ease-in-out infinite}
+.success-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:900;color:var(--B);margin-bottom:9px;letter-spacing:-.02em;animation:fadeUp .55s var(--ease) .1s both}
+.success-sub{font-size:14px;color:var(--MUT);line-height:1.65;margin-bottom:22px;animation:fadeUp .55s var(--ease) .18s both}
+.success-id{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--GL),#fff);border:1.5px solid rgba(14,124,102,.3);border-radius:13px;padding:11px 20px;font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:900;color:var(--G);letter-spacing:.06em;margin-bottom:26px;box-shadow:0 4px 12px -3px rgba(14,124,102,.2);animation:fadeUp .55s var(--ease) .26s both}
+.success-id i{font-size:13px}
+
+.success-info-card{text-align:left;background:#fff;border-radius:16px;border:1px solid var(--BDR);overflow:hidden;margin-bottom:22px;box-shadow:var(--shadow);animation:fadeUp .55s var(--ease) .34s both}
+.success-info-card .card-head{padding:13px 16px}
+.success-info-rows{padding:0}
+.success-info-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--BDR)}
+.success-info-row:last-child{border:none}
+.success-info-row-ico{width:34px;height:34px;border-radius:10px;background:var(--GL);color:var(--G);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:1px solid rgba(14,124,102,.2)}
+.success-info-row-txt{flex:1;min-width:0}
+.success-info-row-tt{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:800;color:var(--B);line-height:1.3}
+.success-info-row-sub{font-size:11px;color:var(--MUT);font-weight:600;margin-top:2px;line-height:1.45}
+
+.success-actions{display:flex;flex-direction:column;gap:9px;animation:fadeUp .55s var(--ease) .42s both}
+.success-home{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(135deg,var(--G),var(--GD));color:#fff;padding:13px 24px;border-radius:12px;font-weight:900;font-size:13.5px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;transition:.22s var(--spring);min-height:48px}
+.success-home:hover{transform:translateY(-2px);box-shadow:var(--shadow-glow)}
+.success-secondary{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:#fff;color:var(--T);padding:13px 24px;border-radius:12px;font-weight:800;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:1.5px solid var(--BDR);transition:.22s;min-height:46px}
+.success-secondary:hover{background:var(--LT);color:var(--B);border-color:var(--G)}
+@media(max-width:480px){.success-wrap{padding:26px 14px 40px}.success-title{font-size:21px}.success-ico-big{width:86px;height:86px;font-size:36px}}
+
+/* ============================================================
+   CONFIRM DIALOG
+   ============================================================ */
+.confirm{position:fixed;inset:0;z-index:9500;background:rgba(11,37,69,.65);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.confirm.open{opacity:1;pointer-events:all}
+.confirm-box{background:#fff;border-radius:20px;max-width:420px;width:100%;padding:26px 24px;text-align:center;box-shadow:var(--shadow-lg);transform:scale(.9);transition:transform .35s var(--spring)}
+.confirm.open .confirm-box{transform:scale(1)}
+.confirm-ico{width:62px;height:62px;border-radius:17px;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.confirm-ico.danger{background:linear-gradient(135deg,#FEF3F2,#FBD9D5);color:var(--ERR);box-shadow:0 8px 22px -6px rgba(240,68,56,.4)}
+.confirm-ico.warn{background:linear-gradient(135deg,#FFFAEB,#FEF5D7);color:var(--GOLD-D);box-shadow:0 8px 22px -6px rgba(244,196,48,.4)}
+.confirm-ico.success{background:linear-gradient(135deg,var(--GL),#D7EFE5);color:var(--G);box-shadow:0 8px 22px -6px rgba(14,124,102,.4)}
+.confirm-box h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:900;color:var(--B);margin-bottom:9px;letter-spacing:-.01em}
+.confirm-box p{font-size:12.5px;color:var(--MUT);font-weight:600;line-height:1.65;margin-bottom:20px}
+.confirm-box p b{color:var(--B);font-weight:800}
+.confirm-btns{display:flex;gap:10px}
+.confirm-btns button{flex:1;padding:12px;border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:900;cursor:pointer;border:none;transition:.22s var(--spring);min-height:46px;display:flex;align-items:center;justify-content:center;gap:7px}
+.confirm-no{background:var(--LT);color:var(--MUT);border:1px solid var(--BDR)!important}
+.confirm-no:hover{background:#fff;color:var(--B)}
+.confirm-yes-danger{background:linear-gradient(135deg,var(--ERR),#DC2626);color:#fff;box-shadow:0 8px 22px -6px rgba(240,68,56,.5)}
+.confirm-yes-danger:hover{transform:translateY(-2px);box-shadow:0 12px 30px -8px rgba(240,68,56,.6)}
+.confirm-yes{background:linear-gradient(135deg,var(--G),var(--GD));color:#fff;box-shadow:0 8px 22px -6px rgba(14,124,102,.55)}
+.confirm-yes:hover{transform:translateY(-2px);box-shadow:var(--shadow-glow)}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast{position:fixed;left:50%;bottom:calc(22px + var(--safe-b) + var(--nav-mobile-h));transform:translateX(-50%) translateY(24px);background:var(--B);color:#fff;padding:12px 22px;border-radius:100px;font-size:12.5px;font-weight:700;z-index:9999;opacity:0;transition:.32s var(--spring);pointer-events:none;white-space:nowrap;box-shadow:var(--shadow-md);font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:9px;max-width:calc(100vw - 24px)}
+@media(min-width:769px){.toast{bottom:calc(22px + var(--safe-b))}}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast i{color:var(--GOLD)}
+.toast.success i{color:var(--OK)}
+.toast.error i{color:#fca5a5}
+.toast.warn i{color:var(--GOLD)}
+
+/* ============================================================
+   BACK BUTTON (en haut des écrans 2)
+   ============================================================ */
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--BDR);box-shadow:var(--shadow);
+  color:var(--B);padding:9px 15px;border-radius:11px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:800;
+  cursor:pointer;transition:.22s var(--spring);margin-bottom:14px;min-height:40px
+}
+.back-btn i{font-size:11px;transition:transform .22s}
+.back-btn:hover{background:var(--GL);color:var(--G);border-color:rgba(14,124,102,.3)}
+.back-btn:hover i{transform:translateX(-3px)}
+
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+{# Navbars conservées #}
+{{ include('link/_navbar_desktop.html.twig') }}
+{{ include('link/_navbar_mobile.html.twig') }}
+
+{# ===== STEP RAIL ===== #}
+<div class="steps-rail">
+  <div class="sr-inner">
+    <div class="sr-steps">
+      <div class="sr-step done" data-step="1"><span class="sr-dot"><i class="fa-solid fa-check" style="font-size:9px"></i></span><span class="sr-label">Demande envoyée</span></div>
+      <div class="sr-line"></div>
+      <div class="sr-step on" data-step="2" id="srResp"><span class="sr-dot">2</span><span class="sr-label">Réponse pharmacie</span></div>
+      <div class="sr-line"></div>
+      <div class="sr-step" data-step="3" id="srPay"><span class="sr-dot">3</span><span class="sr-label">Paiement</span></div>
+      <div class="sr-line"></div>
+      <div class="sr-step" data-step="4" id="srDone"><span class="sr-dot">4</span><span class="sr-label">Confirmation</span></div>
+    </div>
+  </div>
+</div>
+
+{# ============================================================
+   ÉCRAN 1 : RÉPONSE DE LA PHARMACIE
+   ============================================================ #}
+<div class="screen active" id="screenResponse">
+
+  {# HEADER COMPACT (remplace le gros hero) #}
+  <header class="page-header">
+    <div class="ph-in">
+      <div class="ph-left">
+        <div class="ph-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+        <div class="ph-txt">
+          <div class="ph-eyebrow"><span class="dot"></span>Réponse reçue</div>
+          <h1 class="ph-title">Suivi de votre commande</h1>
+        </div>
+      </div>
+      <div class="ph-right">
+        <div class="ph-chip">
+          <i class="fa-solid fa-hashtag"></i>
+          <b id="hdrOrderRef">LP-2847</b>
+        </div>
+        <div class="ph-chip">
+          <i class="fa-solid fa-store"></i>
+          <b id="hdrPhName">Pharmacie Centrale</b>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content-wrap">
+
+    {# Trust bar #}
+    <div class="trust-bar">
+      <div class="trust-item">
+        <div class="trust-item-ico"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="trust-item-txt">
+          <div class="trust-item-tt">Pharmacien agréé</div>
+          <div class="trust-item-sub">Pharmacie certifiée</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-item-ico"><i class="fa-solid fa-tags"></i></div>
+        <div class="trust-item-txt">
+          <div class="trust-item-tt">Prix vérifiés</div>
+          <div class="trust-item-sub">Aucun frais caché</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-item-ico"><i class="fa-solid fa-handshake-angle"></i></div>
+        <div class="trust-item-txt">
+          <div class="trust-item-tt">Qualité garantie</div>
+          <div class="trust-item-sub">Médicaments d'origine</div>
+        </div>
+      </div>
+    </div>
+
+    {# Demande initiale #}
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-ico navy"><i class="fa-solid fa-clipboard-list"></i></div>
+        <div class="card-head-txt">
+          <div class="card-head-tt">Votre demande initiale</div>
+          <div class="card-head-sub">Ce que vous aviez demandé à la pharmacie</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="req-summary" id="reqSummary"></div>
+      </div>
+    </div>
+
+    {# Réponse de la pharmacie #}
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-ico green"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="card-head-txt">
+          <div class="card-head-tt">Médicaments disponibles <span class="badge">Vérifié</span></div>
+          <div class="card-head-sub">Cochés par défaut — décochez ce que vous ne souhaitez pas</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="resp-intro">
+          <i class="fa-solid fa-circle-info"></i>
+          <div class="resp-intro-txt">
+            <b>Bonne nouvelle :</b> la pharmacie dispose des médicaments demandés. Vérifiez la liste, décochez ceux que vous ne voulez plus, le total se met à jour automatiquement.
+          </div>
+        </div>
+
+        <div class="med-list" id="medList"></div>
+
+        {# Facture #}
+        <div class="invoice">
+          <div class="invoice-head">
+            <i class="fa-solid fa-receipt"></i>
+            <span class="invoice-head-tt">Facture estimée</span>
+            <span class="ref" id="invRef">#LP-2847</span>
+          </div>
+          <div class="invoice-rows" id="invoiceRows"></div>
+          <div class="inv-total">
+            <div class="inv-total-l">
+              <div class="inv-total-l-ico"><i class="fa-solid fa-coins"></i></div>
+              <span>Total à payer</span>
+            </div>
+            <div class="inv-total-v" id="invTotal">0 KMF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  {# Action bar (sticky) #}
+  <div class="action-bar">
+    <div class="action-bar-in">
+      <button class="btn-action btn-ghost" onclick="askAbandon()">
+        <i class="fa-solid fa-xmark"></i>
+        <span>Abandonner</span>
+      </button>
+      <button class="btn-action btn-primary" id="continueBtn" onclick="goPayment()">
+        <i class="fa-solid fa-check"></i>
+        Valider et poursuivre
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+{# ============================================================
+   ÉCRAN 2 : CHOIX DU PAIEMENT
+   ============================================================ #}
+<div class="screen" id="screenPayment">
+
+  {# HEADER COMPACT pour le paiement #}
+  <header class="page-header">
+    <div class="ph-in">
+      <div class="ph-left">
+        <div class="ph-icon"><i class="fa-solid fa-wallet"></i></div>
+        <div class="ph-txt">
+          <div class="ph-eyebrow"><span class="dot"></span>Étape 3 sur 4</div>
+          <h1 class="ph-title">Choisissez votre paiement</h1>
+        </div>
+      </div>
+      <div class="ph-right">
+        <div class="ph-chip">
+          <i class="fa-solid fa-hashtag"></i>
+          <b id="hdrOrderRef2">LP-2847</b>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content-wrap">
+    <button class="back-btn" onclick="goBackToResponse()"><i class="fa-solid fa-arrow-left"></i>Retour à la réponse</button>
+
+    {# Récapitulatif final compact #}
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-ico green"><i class="fa-solid fa-bag-shopping"></i></div>
+        <div class="card-head-txt">
+          <div class="card-head-tt">Votre commande <span class="badge" id="payItemsBadge">0 article</span></div>
+          <div class="card-head-sub">Récapitulatif final avant paiement</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="paySummary" style="display:flex;flex-direction:column;gap:8px"></div>
+        <div class="inv-total" style="margin-top:13px;border-radius:13px">
+          <div class="inv-total-l">
+            <div class="inv-total-l-ico"><i class="fa-solid fa-coins"></i></div>
+            <span>Total à régler</span>
+          </div>
+          <div class="inv-total-v" id="payTotal">0 KMF</div>
+        </div>
+      </div>
+    </div>
+
+    {# Options de paiement #}
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-ico gold"><i class="fa-solid fa-credit-card"></i></div>
+        <div class="card-head-txt">
+          <div class="card-head-tt">Mode de paiement</div>
+          <div class="card-head-sub">Choisissez une option ci-dessous</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="pay-options">
+
+          <div class="pay-card selected" id="payCash" onclick="selectPayment('cash')">
+            <div class="pay-ico cash"><i class="fa-solid fa-money-bill-wave"></i></div>
+            <div class="pay-info">
+              <div class="pay-tt">Paiement en espèces <span class="recommended">Recommandé</span></div>
+              <div class="pay-desc">Payez directement à la pharmacie lors du retrait de votre commande.</div>
+            </div>
+            <div class="pay-radio"></div>
+          </div>
+
+          <div class="pay-card disabled" id="payOnline" onclick="selectPayment('online')">
+            <div class="pay-ico online"><i class="fa-solid fa-credit-card"></i></div>
+            <div class="pay-info">
+              <div class="pay-tt">Paiement en ligne <span class="soon"><i class="fa-solid fa-clock" style="font-size:8px"></i> Bientôt</span></div>
+              <div class="pay-desc">Carte bancaire, mobile money — fonctionnalité en cours de déploiement.</div>
+            </div>
+            <div class="pay-radio"></div>
+          </div>
+
+        </div>
+
+        <div class="pickup-info show" id="pickupInfo">
+          <div class="pickup-info-head">
+            <i class="fa-solid fa-circle-info"></i>
+            <strong>Comment ça se passe ?</strong>
+          </div>
+          <div class="pickup-info-rows">
+            <div class="pickup-row">
+              <i class="fa-solid fa-1"></i>
+              <span><b>Confirmez votre commande</b> en cliquant sur le bouton ci-dessous. La pharmacie commencera la préparation immédiatement.</span>
+            </div>
+            <div class="pickup-row">
+              <i class="fa-solid fa-2"></i>
+              <span><b>Recevez une notification</b> par SMS dès que votre commande est prête à être récupérée.</span>
+            </div>
+            <div class="pickup-row">
+              <i class="fa-solid fa-3"></i>
+              <span><b>Rendez-vous à la pharmacie</b> avec votre référence et réglez en espèces lors du retrait.</span>
+            </div>
+            <div class="pickup-row">
+              <i class="fa-solid fa-store"></i>
+              <span><b id="pickupPh">Pharmacie Centrale</b> · <span id="pickupAddr">Moroni Centre, près de la Mosquée du Vendredi</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# Action bar #}
+  <div class="action-bar">
+    <div class="action-bar-in">
+      <button class="btn-action btn-ghost" onclick="goBackToResponse()">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Retour</span>
+      </button>
+      <button class="btn-action btn-primary" id="confirmPayBtn" onclick="confirmOrder()">
+        <i class="fa-solid fa-check"></i>
+        Confirmer la commande
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+{# ============================================================
+   ÉCRAN 3 : COMMANDE VALIDÉE
+   ============================================================ #}
+<div class="screen" id="screenSuccess">
+  <div class="success-wrap">
+    <div class="success-ico-big"><i class="fa-solid fa-check"></i></div>
+    <h2 class="success-title">Commande confirmée !</h2>
+    <p class="success-sub">Votre commande a été validée et transmise à la pharmacie. Vous recevrez une notification par SMS dès qu'elle sera prête.</p>
+
+    <div class="success-id">
+      <i class="fa-solid fa-hashtag"></i>
+      <span id="successRef">LP-2847</span>
+    </div>
+
+    <div class="success-info-card">
+      <div class="card-head">
+        <div class="card-head-ico green"><i class="fa-solid fa-route"></i></div>
+        <div class="card-head-txt">
+          <div class="card-head-tt">Prochaines étapes</div>
+          <div class="card-head-sub">Voici ce qui va se passer</div>
+        </div>
+      </div>
+      <div class="success-info-rows">
+        <div class="success-info-row">
+          <div class="success-info-row-ico"><i class="fa-solid fa-boxes-packing"></i></div>
+          <div class="success-info-row-txt">
+            <div class="success-info-row-tt">Préparation par la pharmacie</div>
+            <div class="success-info-row-sub" id="successPhInfo">La pharmacie prépare votre commande</div>
+          </div>
+        </div>
+        <div class="success-info-row">
+          <div class="success-info-row-ico"><i class="fa-solid fa-bell"></i></div>
+          <div class="success-info-row-txt">
+            <div class="success-info-row-tt">Notification de disponibilité</div>
+            <div class="success-info-row-sub">SMS + notification dès que c'est prêt</div>
+          </div>
+        </div>
+        <div class="success-info-row">
+          <div class="success-info-row-ico"><i class="fa-solid fa-money-bill-wave"></i></div>
+          <div class="success-info-row-txt">
+            <div class="success-info-row-tt">Paiement en espèces au retrait</div>
+            <div class="success-info-row-sub">Total : <strong id="successTotal" style="color:var(--G)">0 KMF</strong></div>
+          </div>
+        </div>
+        <div class="success-info-row">
+          <div class="success-info-row-ico"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="success-info-row-txt">
+            <div class="success-info-row-tt" id="successPhName">Pharmacie</div>
+            <div class="success-info-row-sub" id="successPhAddr">Adresse</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-actions">
+      <button class="success-home" onclick="goHome()">
+        <i class="fa-solid fa-house"></i>
+        Retour à l'accueil
+      </button>
+      <button class="success-secondary" onclick="callPharmacy()">
+        <i class="fa-solid fa-phone"></i>
+        Contacter la pharmacie
+      </button>
+    </div>
+  </div>
+</div>
+
+{# CONFIRM DIALOG #}
+<div class="confirm" id="confirmDlg">
+  <div class="confirm-box">
+    <div class="confirm-ico danger" id="confirmIco"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h3 id="confirmTitle">Confirmer ?</h3>
+    <p id="confirmText">Êtes-vous sûr ?</p>
+    <div class="confirm-btns">
+      <button class="confirm-no" onclick="closeConfirm()"><i class="fa-solid fa-xmark"></i>Annuler</button>
+      <button id="confirmYes" class="confirm-yes-danger"><i class="fa-solid fa-check"></i>Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+/* ============================================================
+   DONNÉES MOCK
+   ============================================================ */
+var orderData = {
+  ref: "{{ order_ref ?? 'LP-2847' }}",
+  pharmacy: {
+    name: "{{ pharmacy_name ?? 'Pharmacie Centrale' }}",
+    zone: "{{ pharmacy_zone ?? 'Moroni Centre' }}",
+    phone: "{{ pharmacy_phone ?? '+269 773 12 34' }}",
+    address: "{{ pharmacy_address ?? 'Moroni Centre, près de la Mosquée du Vendredi' }}"
+  },
+  requestedItems: [
+    {name: "Paracétamol 500mg", qty: 2, rx: false},
+    {name: "Amoxicilline 1g", qty: 1, rx: true}
+  ],
+  responseItems: [
+    {id:1,name:"Paracétamol 500mg",dose:"Comprimé pelliculé · Boîte de 20",description:"Antalgique, antipyrétique. À prendre en cas de douleurs et de fièvre.",qty:2,price:800,rx:false,checked:true},
+    {id:2,name:"Amoxicilline 1g",dose:"Sachet poudre · Boîte de 14",description:"Antibiotique β-lactamine. Traitement des infections bactériennes selon prescription.",qty:1,price:2500,rx:true,checked:true}
+  ],
+  paymentMethod: 'cash'
+};
+
+function showScreen(id, stepNum){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  updateStepRail(stepNum);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateStepRail(stepNum){
+  var steps=[{id:'srResp',n:2},{id:'srPay',n:3},{id:'srDone',n:4}];
+  steps.forEach(function(s){
+    var el=document.getElementById(s.id);
+    el.classList.remove('on','done');
+    if(s.n<stepNum)el.classList.add('done');
+    else if(s.n===stepNum)el.classList.add('on');
+  });
+  steps.forEach(function(s){
+    var el=document.getElementById(s.id);
+    var dot=el.querySelector('.sr-dot');
+    if(el.classList.contains('done'))dot.innerHTML='<i class="fa-solid fa-check" style="font-size:9px"></i>';
+    else dot.textContent=s.n;
+  });
+}
+
+function goBackToResponse(){showScreen('screenResponse',2);}
+function goHome(){window.location.href="{{ path('app_index') ?? '/' }}";}
+function callPharmacy(){window.location.href="tel:"+orderData.pharmacy.phone.replace(/\s/g,'');}
+
+function fmtMoney(n){return n.toLocaleString("fr-FR")+" KMF";}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function initResponseScreen(){
+  document.getElementById('hdrOrderRef').textContent=orderData.ref;
+  document.getElementById('hdrOrderRef2').textContent=orderData.ref;
+  document.getElementById('hdrPhName').textContent=orderData.pharmacy.name;
+  document.getElementById('invRef').textContent='#'+orderData.ref;
+
+  document.getElementById('reqSummary').innerHTML=orderData.requestedItems.map(function(it){
+    var ico=it.rx?'fa-file-prescription':'fa-pills';
+    return '<span class="req-chip '+(it.rx?'rx':'')+'"><i class="fa-solid '+ico+'"></i>'+escapeHtml(it.name)+'<span class="qty">×'+it.qty+'</span></span>';
+  }).join('');
+
+  renderMedList();
+  updateInvoice();
+}
+
+function renderMedList(){
+  var list=document.getElementById('medList');
+  list.innerHTML=orderData.responseItems.map(function(m,idx){
+    var tag=m.rx
+      ?'<span class="med-tag rx"><i class="fa-solid fa-file-prescription"></i>Ordonnance</span>'
+      :'<span class="med-tag free"><i class="fa-solid fa-check"></i>Sans ordo</span>';
+    return '<div class="med-card '+(m.checked?'checked':'')+'" onclick="toggleMed('+idx+')">'+
+      '<div class="med-chk"><i class="fa-solid fa-check"></i></div>'+
+      '<div class="med-info">'+
+        '<div class="med-name">'+escapeHtml(m.name)+tag+'</div>'+
+        '<div class="med-dose"><i class="fa-solid fa-pills"></i>'+escapeHtml(m.dose)+'</div>'+
+        '<div class="med-desc">'+escapeHtml(m.description)+'</div>'+
+      '</div>'+
+      '<div class="med-price-block">'+
+        '<div class="med-qty">Qté <span class="x">×'+m.qty+'</span></div>'+
+        '<div class="med-total">'+fmtMoney(m.price*m.qty)+'</div>'+
+        '<div class="med-unit">'+fmtMoney(m.price)+' / unité</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function toggleMed(idx){
+  orderData.responseItems[idx].checked=!orderData.responseItems[idx].checked;
+  renderMedList();updateInvoice();
+}
+
+function updateInvoice(){
+  var rows=document.getElementById('invoiceRows');
+  var subtotal=0;var html='';
+  orderData.responseItems.forEach(function(m){
+    var line=m.price*m.qty;
+    var cls=m.checked?'':'deducted';
+    if(m.checked)subtotal+=line;
+    html+='<div class="inv-row '+cls+'">'+
+      '<div class="inv-row-l"><i class="fa-solid '+(m.checked?'fa-circle-check':'fa-circle-xmark')+'" style="color:'+(m.checked?'var(--G)':'var(--MUT)')+'"></i><span>'+escapeHtml(m.name)+' <span style="color:var(--MUT);font-weight:600;font-size:11px">×'+m.qty+'</span></span></div>'+
+      '<div class="inv-row-v">'+fmtMoney(line)+'</div>'+
+    '</div>';
+  });
+  html+='<div class="inv-row"><div class="inv-row-l"><i class="fa-solid fa-truck"></i><span>Frais de service</span></div><div class="inv-row-v" style="color:var(--G)">Gratuit</div></div>';
+  rows.innerHTML=html;
+  document.getElementById('invTotal').textContent=fmtMoney(subtotal);
+  var hasChecked=orderData.responseItems.some(function(m){return m.checked;});
+  document.getElementById('continueBtn').disabled=!hasChecked;
+}
+
+function goPayment(){
+  var checked=orderData.responseItems.filter(function(m){return m.checked;});
+  if(!checked.length){showToast('Sélectionnez au moins un médicament','error');return;}
+  initPaymentScreen();
+  showScreen('screenPayment',3);
+}
+
+function initPaymentScreen(){
+  var checked=orderData.responseItems.filter(function(m){return m.checked;});
+  var total=checked.reduce(function(s,m){return s+m.price*m.qty;},0);
+  document.getElementById('payItemsBadge').textContent=checked.length+' article'+(checked.length>1?'s':'');
+  document.getElementById('paySummary').innerHTML=checked.map(function(m){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--LT);border-radius:10px;font-size:12px">'+
+      '<div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1">'+
+        '<i class="fa-solid '+(m.rx?'fa-file-prescription':'fa-pills')+'" style="color:var(--G);font-size:12px"></i>'+
+        '<span style="font-weight:700;color:var(--B);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHtml(m.name)+'</span>'+
+        '<span style="background:var(--B);color:#fff;padding:2px 6px;border-radius:5px;font-size:9.5px;font-weight:900;flex-shrink:0">×'+m.qty+'</span>'+
+      '</div>'+
+      '<div style="font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:900;color:var(--G);flex-shrink:0;margin-left:10px">'+fmtMoney(m.price*m.qty)+'</div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('payTotal').textContent=fmtMoney(total);
+  document.getElementById('pickupPh').textContent=orderData.pharmacy.name;
+  document.getElementById('pickupAddr').textContent=orderData.pharmacy.address;
+  selectPayment('cash',true);
+}
+
+function selectPayment(method,silent){
+  if(method==='online'){showToast('Le paiement en ligne sera bientôt disponible','warn');return;}
+  orderData.paymentMethod=method;
+  document.getElementById('payCash').classList.toggle('selected',method==='cash');
+  document.getElementById('payOnline').classList.toggle('selected',method==='online');
+  document.getElementById('pickupInfo').classList.toggle('show',method==='cash');
+  document.getElementById('confirmPayBtn').disabled=false;
+  if(!silent)showToast('Mode « Espèces sur place » sélectionné','success');
+}
+
+function confirmOrder(){
+  if(orderData.paymentMethod!=='cash'){showToast('Sélectionnez un mode de paiement disponible','error');return;}
+  showConfirmDialog({
+    type:'success',
+    title:'Confirmer la commande ?',
+    text:'La pharmacie sera notifiée immédiatement et commencera la préparation. Vous paierez en espèces lors du retrait.',
+    btnLabel:'Oui, confirmer',
+    btnClass:'confirm-yes',
+    btnIcon:'fa-check',
+    onYes:function(){finalizeOrder();}
+  });
+}
+
+function finalizeOrder(){
+  var checked=orderData.responseItems.filter(function(m){return m.checked;});
+  var total=checked.reduce(function(s,m){return s+m.price*m.qty;},0);
+  document.getElementById('successRef').textContent=orderData.ref;
+  document.getElementById('successTotal').textContent=fmtMoney(total);
+  document.getElementById('successPhName').textContent=orderData.pharmacy.name;
+  document.getElementById('successPhAddr').textContent=orderData.pharmacy.address;
+  document.getElementById('successPhInfo').textContent=orderData.pharmacy.name+' prépare votre commande';
+  showScreen('screenSuccess',4);
+  showToast('Commande confirmée !','success');
+  setTimeout(function(){
+    document.getElementById('srDone').classList.remove('on');
+    document.getElementById('srDone').classList.add('done');
+    var dot=document.getElementById('srDone').querySelector('.sr-dot');
+    dot.innerHTML='<i class="fa-solid fa-check" style="font-size:9px"></i>';
+  },600);
+}
+
+function askAbandon(){
+  showConfirmDialog({
+    type:'danger',
+    title:'Abandonner cette commande ?',
+    text:'Vous allez <b>annuler définitivement</b> votre commande #'+orderData.ref+'. La pharmacie en sera notifiée. Cette action est irréversible.',
+    btnLabel:'Oui, abandonner',
+    btnClass:'confirm-yes-danger',
+    btnIcon:'fa-ban',
+    onYes:function(){showToast('Commande abandonnée','success');setTimeout(goHome,1200);}
+  });
+}
+
+function showConfirmDialog(opts){
+  var ico=document.getElementById('confirmIco');
+  ico.className='confirm-ico '+(opts.type||'danger');
+  ico.innerHTML='<i class="fa-solid '+(opts.type==='danger'?'fa-triangle-exclamation':opts.type==='warn'?'fa-circle-exclamation':'fa-circle-check')+'"></i>';
+  document.getElementById('confirmTitle').textContent=opts.title;
+  document.getElementById('confirmText').innerHTML=opts.text;
+  var btn=document.getElementById('confirmYes');
+  btn.className=opts.btnClass||'confirm-yes-danger';
+  btn.innerHTML='<i class="fa-solid '+(opts.btnIcon||'fa-check')+'"></i>'+opts.btnLabel;
+  btn.onclick=function(){closeConfirm();if(opts.onYes)opts.onYes();};
+  document.getElementById('confirmDlg').classList.add('open');
+}
+function closeConfirm(){document.getElementById('confirmDlg').classList.remove('open');}
+
+function showToast(msg,type){
+  type=type||'info';
+  var t=document.getElementById('toastEl');
+  var ic='fa-circle-info';
+  if(type==='success')ic='fa-circle-check';
+  else if(type==='error')ic='fa-triangle-exclamation';
+  else if(type==='warn')ic='fa-circle-exclamation';
+  t.innerHTML='<i class="fa-solid '+ic+'"></i>'+msg;
+  t.className='toast '+type+' on';
+  clearTimeout(t._timer);t._timer=setTimeout(function(){t.className='toast';},3000);
+}
+
+document.getElementById('confirmDlg').addEventListener('click',function(e){if(e.target===this)closeConfirm();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('confirmDlg').classList.contains('open'))closeConfirm();});
+
+initResponseScreen();
+</script>
+</body>
+</html>
